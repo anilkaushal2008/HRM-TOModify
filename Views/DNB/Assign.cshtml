@@ -1,0 +1,214 @@
+﻿@model HRM.Models.DnbAssignFeeStructureViewModel.AssignFeeStructureViewModel
+@{
+    ViewBag.Title = "Assign Fee Structure";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+<br />
+<div class="container col-12">
+    <div class="card shadow-lg border-0">
+        <div class="card-body">
+            <h3 class="text-black bold">
+                <i class="bi bi-cash-coin me-2"></i> Academic Officer view - Assign Fee Structure
+            </h3>
+            <hr />
+
+            @Html.HiddenFor(m => m.StudentId)
+            @Html.HiddenFor(m => m.StartDate)
+            @Html.HiddenFor(m=>m.StudentName)
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Student name</label>
+                    <input type="text" class="form-control" id="studentname" value="@Model.StudentName" readonly />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Number of Years</label>
+                    <input type="number" class="form-control" id="DurationInYears" min="1" max="10" placeholder="Enter duration" />
+                </div>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md d-flex align-items-end">
+                <button type="button" class="btn btn-outline-success btn-block" id="generateYears">
+                    <i class="bi bi-plus-circle"></i> Generate Yearly Structure
+                </button>
+            </div>
+        </div>
+        <hr />
+
+        <div id="yearContainer" class="mt-4" style="display:none;">
+            <h5 class="text-orange" align="center">Year-wise Fee Structure Preview, You can be edit this structure</h5>
+            <table class="table table-bordered table-striped mt-2">
+                <thead class="bg-success text-white">
+                    <tr>
+                        <th>Year</th>
+                        <th>Payable To</th>
+                        <th>Amount (₹)</th>
+                        <th>Due Date</th>
+                    </tr>
+                </thead>
+                <tbody id="yearRows"></tbody>
+                <tfoot>
+                    <tr id="totalRow">
+                        <td colspan="2" class="text-end fw-bold">Total:</td>
+                        <td colspan="2" id="totalAmount" class="fw-bold">₹ 0</td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <div class="text-end mt-3">
+                <button type="button" class="btn btn-success" id="btnConfirmSave">
+                    <i class="bi bi-check-circle"></i> Confirm & Save
+                </button>
+                <button type="button" class="btn btn-secondary" id="btnCancel">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts {
+    <script type="text/javascript">
+    $(document).ready(function () {
+
+        // generate fee structure on click
+        $(document).on("click", "#generateYears", function () {
+            let durationStr = $("#DurationInYears").val().trim();
+            let duration = parseInt(durationStr, 10);
+            if (!duration || duration <= 0) {
+                alert("Please enter valid duration.");
+                return;
+            }
+
+            $("#yearRows").empty();
+            $("#yearContainer").show();
+
+            let startYear = new Date("@Model.StartDate").getFullYear();
+
+            for (let i = 1; i <= duration; i++) {
+                let payable = (i === 1) ? "Govt Body" : "Institution";
+                let amount = (i === 1) ? 125000 : 90000;
+                let dueDate = `${startYear + (i - 1)}-03-31`;
+
+                let row = `
+                    <tr>
+                        <td><input type="hidden" name="YearlyFees[${i - 1}].YearNumber" value="${i}" /> Year ${i}</td>
+                        <td>
+                            <select name="YearlyFees[${i - 1}].PayableTo" class="form-control">
+                                <option value="Govt Body" ${payable === 'Govt Body' ? 'selected' : ''}>Govt Body</option>
+                                <option value="Institution" ${payable === 'Institution' ? 'selected' : ''}>Institution</option>
+                            </select>
+                        </td>
+                        <td><input type="number" name="YearlyFees[${i - 1}].Amount" class="form-control fee-amount" value="${amount}" /></td>
+                        <td><input type="date" name="YearlyFees[${i - 1}].DueDate" class="form-control" value="${dueDate}" /></td>
+                    </tr>`;
+                $("#yearRows").append(row);
+            }
+            updateTotal();
+        });
+
+        // calculate total on change
+        $(document).on("input", ".fee-amount", function () {
+            updateTotal();
+        });
+
+        // cancel preview
+        $(document).on("click", "#btnCancel", function () {
+            $("#yearContainer").hide();
+            $("#DurationInYears").val("");
+        });
+
+        // confirm & save structure
+        $(document).on("click", "#btnConfirmSave", function () {
+            if (!confirm("Are you sure you want to save this structure?")) return;
+
+            let data = {
+                StudentId: $("input[name='StudentId']").val(),
+                StartDate: $("input[name='StartDate']").val(),
+                YearlyFees: []
+            };
+
+            $("#yearRows tr").each(function (index) {
+                data.YearlyFees.push({
+                    YearNumber: $(this).find("input[name^='YearlyFees']").val(),
+                    PayableTo: $(this).find("select").val(),
+                    Amount: $(this).find("input[type='number']").val(),
+                    DueDate: $(this).find("input[type='date']").val()
+                });
+            });
+
+            $.ajax({
+                url: '@Url.Action("Assign", "DNB")',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: function (res) {
+                    if (res.success) {
+                        alert(res.message);
+                        window.location.href = '@Url.Action("DNbEmpList", "DNB")';
+                    } else {
+                        alert("Error: " + res.message);
+                    }
+                },
+                error: function (err) {
+                    alert("Server error: " + err.statusText);
+                }
+            });
+        });
+
+        function updateTotal() {
+            let total = 0;
+            $(".fee-amount").each(function () {
+                total += parseFloat($(this).val()) || 0;
+            });
+            $("#totalAmount").text("₹ " + total.toLocaleString());
+        }
+    });
+    </script>
+
+    <style>
+        .card {
+            border-radius: 10px;
+        }
+
+        table input, table select {
+            font-size: 0.9rem;
+        }
+
+        table td {
+            vertical-align: middle;
+        }
+    </style>
+    <style>
+        /* 👇 Add nice spacing and shadow to year container */
+        #yearContainer {
+            margin-top: 30px; /* space above */
+            margin-bottom: 25px; /* space below */
+            padding: 20px; /* inner spacing */
+            background-color: #f8f9fa; /* light background for contrast */
+            border: 1px solid #dee2e6; /* subtle border */
+            border-radius: 10px; /* smooth corners */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05); /* soft shadow */
+        }
+
+            /* Table styling inside container */
+            #yearContainer table {
+                margin-top: 10px;
+            }
+
+            /* Buttons spacing */
+            #yearContainer .btn {
+                min-width: 150px;
+                margin-left: 10px;
+            }
+
+        /* 🌟 Outer container: page-level spacing */
+        .container {
+            margin-top: 40px;
+            margin-bottom: 60px;
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+    </style>
+}

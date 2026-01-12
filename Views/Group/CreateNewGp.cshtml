@@ -1,0 +1,68 @@
+﻿@model HRM.Models.tblGroupMaster
+@using System.Web;
+@using System.Web.Optimization;
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "CreateNewGp";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+        Html.EnableClientValidation(true);
+    }
+
+
+    using (Html.BeginForm("CreateNewGp", "Group", FormMethod.Post))
+    {
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <br />
+        <div class="col-md-10" style="color:black">
+            <h3 style="font-style:initial"> Create Group Master Control Panel</h3>
+        </div>
+        <hr />
+
+        <div class="form-body">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.vchGpName, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.vchGpName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.vchGpName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-6">
+                        <input type="submit" value="Create" class="btn  btn-primary" />
+                        @{ string ViewAllGp = Session["ViewGpMaster"].ToString();
+                            if (ViewAllGp == "True")
+                            {
+                                <div align="right">
+                                    <a href="@Url.Action("ViewAllGroup", "Group")">
+                                        <div class="btn btn-primary">
+                                            <h6 align="center" class="fas fa-hand-point-right">
+                                                View all group
+                                            </h6>
+                                        </div>
+                                    </a>
+                                </div>
+                            }
+                            }
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+                                }
+                            }
+                            else
+                            {
+                                Html.RenderAction("_SessionError1", "Home");
+                            }
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+}

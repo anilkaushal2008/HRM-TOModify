@@ -1,0 +1,19 @@
+﻿@{
+    ViewBag.Title = "SetAuthorization";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">Authorization message view</h4>
+        <hr />
+        @{Html.RenderAction("SendAuthorizationWithMsg", "Authorization");
+        }
+    </div>
+</div>
+@section Scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+}

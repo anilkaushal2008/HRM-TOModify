@@ -1,0 +1,29 @@
+﻿@model HRM.Models.IndusCompanies
+@{
+    Html.EnableClientValidation(true);
+}
+@Html.LabelFor(g => g.intPK, new { @class = "text-dark" })
+@Html.DropDownListFor(g => g.intPK, new List<SelectListItem> {
+                                     new SelectListItem { Text="Indus Hospital", Value="4"},
+                                     new SelectListItem { Text="Indus Super Speciality Hospital", Value="3"},
+                                     new SelectListItem{ Text="Indus Hygiea",Value="2"},
+                                     new SelectListItem {Text= "Indus International Hospital", Value="14" },
+                                     new SelectListItem{ Text="Indus Fatehgarh Sahib Hospital",Value="15"},
+                                     new SelectListItem{ Text="KS Homecare",Value="16"},
+                                     new SelectListItem{ Text="Mehndiratta Hospital",Value="21"},
+                                     new SelectListItem{ Text="VellMed Tricity Hospital",Value="22"},
+                                     new SelectListItem{ Text="My Hospital",Value="23"},
+                                     new SelectListItem{ Text="KS Pharma Solutions",Value="24"},
+                                     new SelectListItem{ Text="Bharat Heart and Super Specialty Hospital",Value="25"},
+                                     new SelectListItem{ Text="Panchkula Indus Super Speciality Hospital",Value="26"},
+                                     }, "Select Your Branch", new { @class = "form-control" })
+@Html.ValidationMessageFor(g => g.intPK, "", new { @class = "text-danger" })
+@section script{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+}
+
+@*Indus Super Speciality Hospital, Panchkula
+(A unit of K&SANT TRICITY HOSPITAL PRIVATE LIMITED)*@

@@ -1,0 +1,332 @@
+﻿@model HRM.Models.tblEmpAssesmentMas
+
+@{
+    ViewBag.Title = "FillAssesment";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    Html.EnableClientValidation(true);
+}
+
+@using (Html.BeginForm("SaveData", "Assesment", FormMethod.Post, new { id = "NewAss" }))
+ {
+    @Html.AntiForgeryToken()
+    <div class="form">
+    <br />
+    <div class="col-10">
+        <h3 class="card-title" style="color:black">Fill employee assessment view</h3>
+    </div>
+    <div align="right">
+        <a href="@Url.Action("ViewAssignedAss", "Assesment")">
+            <div class="btn btn-primary">
+                <h6 align="center" class="fas fa-hand-point-right">
+                    Return to view all assessment
+                </h6>
+            </div>
+        </a>
+    </div>
+    
+    <hr/>
+
+    @if (TempData["Success"] != null)
+        {
+        <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <p class="alert alert-danger" id="errormsg">@TempData["Error"]</p>
+    }
+    @Html.HiddenFor(model => model.intid, new { @id = "assempid" })
+
+    <h4 class="col-10" style="color:black">Selected person details</h4>
+    <dl class="dl-horizontal">
+        <div class="col-10">
+            <div class="row">
+                <div class="col-md-4">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.vchName)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.vchName)
+                    </dd>
+                </div>
+                <div class="col-md-4">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.decExperience)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.decExperience)
+                    </dd>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.vchWorkedArea)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.vchWorkedArea)
+                    </dd>
+                </div>
+                <div class="col-md-4">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.dtAssign)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.dtAssign)
+                    </dd>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-10">
+                    <dt>
+                        Hiring For Position
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model=>model.tblPositionCategoryMas.vchPosCatName) 
+                    </dd>
+                </div>
+           </div>
+</dl>
+    <hr />
+    @*<div class="card">
+        <div class="card-body">*@
+    <div class="col-12">
+        <h3 class="card-title"></h3>
+        <div class="table">
+            <table class="table table-sm col-12">
+                <thead class="bg-primary text-white col-12">
+                    <tr>
+                        <th>
+                            Question
+                        </th>
+                        <th>
+                            Answer
+                        </th>
+                        <th>
+                            Range/Selection
+                        </th>
+                </thead>
+                <tbody class="border border-primary" id="tblbdy">
+                    @if (ViewBag.AllQuest != null)
+                    {
+
+                        foreach (var item in ViewBag.AllQuest)
+                        {
+
+                    <tr>
+                        @*For All question*@
+                        <th>
+                            <label id="quest" style="color:black" class="col-12">@item.Text</label>
+                            <label id="qid" hidden="hidden">@item.Value</label>
+                        </th>
+
+                        @*For all answer inputs*@
+                        @if (item.Value == "1" || item.Value == "2")
+                        {
+                            <th>
+                                <input type="number" id="numberAns" min="1" max="25" required="required" class="form-control" />
+                            </th>
+                        }
+                        @if (item.Value == "3" || item.Value == "4")
+                        {
+                            <th>
+                                <input type="number" id="numberAns2" min="1" max="20" required="required" class="form-control" />
+                            </th>
+                        }
+                        @if (item.Value == "5")
+                        {
+                            <th>
+                                <input type="number" id="numberAns3" min="1" max="10" required="required" class="form-control" />
+                            </th>
+                        }
+
+                        @if (item.Value == "6" || item.Value == "7" || item.Value == "8")
+                        {
+                            <th>
+                                <input type="checkbox" id="checkq" class="form-control" value="@item.Value" />
+                                @*<input type="hidden" id="checqval" value="@item.Value" />*@
+                            </th>
+                        }
+                        @if (item.Value == "9" || item.Value == "10" || item.Value == "11" || item.Value == "12")
+                        {
+                            <th>
+                                <label id="qrange1" class="form-group" align="center">Auto calculated field</label>
+                            </th>
+                        }
+
+                        @*For Range Lables*@
+                        @if (item.Value == "1" || item.Value == "2")
+                        {
+                            <th>
+                                <label id="qrange1" class="col-6" align="center">25</label>
+                            </th>
+                        }
+
+                        @if (item.Value == "3" || item.Value == "4")
+                        {
+                            <th>
+                                <label id="qrange1" class="col-6" align="center">20</label>
+                            </th>
+                        }
+                        @if (item.Value == "5")
+                        {
+                            <th>
+                                <label id="qrange1" class="col-6" align="center">10</label>
+                            </th>
+                        }
+                        @if (item.Value == "6" || item.Value == "7" || item.Value == "8" || item.Value == "9" || item.Value == "10" || item.Value == "11" || item.Value == "12")
+                        {
+                            <th>
+                                <label id="qrange1" class="col-6" align="center">Yes/No</label>
+                            </th>
+                        }
+                    </tr>
+                        }
+                    }
+
+                    else
+                    {
+                        <p class="alert alert-danger" id="errormsg">No question avilable for current assessment</p>
+                    }
+                </tbody>
+
+            </table>
+            <label class="align-content-lg-center" style="color:black">Special remarks having bearing on candidate selection (Max 250 characters):</label>
+            <input type="text" class="form-control" id="spRemarks" /><br />
+            <div class="form-group" align="center">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="button" value="Save Assesment" class="btn btn-primary btn-block" onclick="SaveData()" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+}
+
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script type="text/javascript">
+        //Get sum of all number question and select 
+        //function for get all assesment inputs
+        var SaveData = function () {
+            if ($("#NewAss").valid()){
+                //alert("valid")
+                var numberarray1 = new Array();
+                var numberarray2 = new Array();
+                var numberarray3 = new Array();
+                var checkedarray = new Array();
+                var uncheckedarray = new Array();
+                var spclRemark = "";
+                var Fnumberinput1 = "";
+                var Fnumberinput2 = "";
+                var Fnumberinput3 = "";
+                var Fyesinput = "";
+                var Fnoinput = "";
+                var finalremarks = "";
+                var EmpID = "";
+                var AssempId = $("#assempid").val();
+                $("#tblbdy input[id=numberAns]").each(function () {
+                    numberarray1.push($(this).val());
+                })
+                $("#tblbdy input[id=numberAns2]").each(function () {
+                    numberarray2.push($(this).val());
+                })
+                $("#tblbdy input[id=numberAns3]").each(function () {
+                    numberarray3.push($(this).val());
+                })
+
+                $("#tblbdy input[type=checkbox]").each(function () {
+                    var ischecked = $(this).is(":checked", true);
+                    var isUnchecked = $(this).is(":unchecked", true);
+                    if (ischecked) {
+                        checkedarray.push($(this).val());
+                    }
+                    if (isUnchecked) {
+                        uncheckedarray.push($(this).val());
+                    }
+                })
+                spclRemark = $("#spRemarks").val();
+
+                if (numberarray1 != "" && numberarray2 != "" && numberarray3 != "") {
+                    if (checkedarray != null) {
+                        Fnumberinput1 = numberarray1.toString();
+                        Fnumberinput2 = numberarray2.toString();
+                        Fnumberinput3 = numberarray3.toString();
+                        Fyesinput = checkedarray.toString();
+                        Fnoinput = uncheckedarray.toString();
+                        finalremarks = spclRemark.toString();
+                        EmpID = AssempId.toString();
+
+                        $.ajax({
+                            url: "/Assesment/SaveData",
+                            type: "POST",
+                            dataType: "JSON",
+                            data: {
+                                EmpID: EmpID,
+                                numberinput1: Fnumberinput1,
+                                numberinput2: Fnumberinput2,
+                                numberinput3: Fnumberinput3,
+                                Yescheck: Fyesinput,
+                                Nocheck: Fnoinput,
+                                remarks: finalremarks
+                            },
+                            success: function (result) {
+                                //code here
+                                if (result.Success == "1") {
+                                    alert(result.output1);
+                                }
+                                if (result.Success == "2") {
+                                    alert(result.output2);
+                                }
+                                if (result.Success == "3") {
+                                    alert(result.output3);
+                                }
+                                if (result.Success == "4") {
+                                    alert(result.output4);
+                                }
+                                if (result.Success == "5") {
+                                    alert(result.output5);
+                                }
+                                if (result.Success == "6") {
+                                    alert(result.output6);
+                                    window.location = "/Assesment/ViewAssignedAss";
+                                }
+                                if (result.Success == "7") {
+                                    alert(result.output7);
+                                }
+                                if (result.Success == "8") {
+                                    alert(result.output8);
+                                }
+                                if (result.Success == "9") {
+                                    alert(result.output9);
+                                }
+                                if (result.Success == "10") {
+                                    alert(result.output10);
+                                }
+                                if (result.Success == "11") {
+                                    alert(result.output11);
+                                }
+                            }
+                        })
+                    }
+                    else {
+                        //return false
+                    }
+                }
+                else {
+                    alert("Enter all questions marks in number!")
+                    return false
+                }
+            }
+        }
+    </script>
+
+}
+
+

@@ -1,0 +1,84 @@
+﻿@model HRM.Models.tblLetterAppointMas
+
+@{
+    ViewBag.Title = "ViewAppointMas";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<div class="col-12">
+    <div class="card">
+        <br />
+
+        <div class="card-body" style="background-color: aliceblue">
+            <h3 class="card-title">Intership Master Letter Detail View</h3>
+            <div align="right">
+                <a href="@Url.Action("IndexInterShip", "Template")">
+                    <div class="btn btn-primary">
+                        <h6 align="center" class="fas fa-hand-point-right"></h6>
+                        Back to view all internship master
+                    </div>
+                </a>
+            </div>
+            <hr />
+            <div>
+                <dl class="dl-horizontal col-10" style="color:black">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.vchMasType)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.vchMasType)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.vchMasLetterCode)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.vchMasLetterCode)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.vchMasHeading)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.vchMasHeading)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.vchForGender)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.vchForGender)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.dtCreated)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.dtCreated)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.vchMasName)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.vchMasName)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.TextMasContent)
+                    </dt>
+
+                    <dd>
+                        @Html.TextAreaFor(model => model.TextMasContent, htmlAttributes: new { @disabled = "disabled", @rows = "20", @size = "2500", @class = "form-control", @style = "background-color:aliceblue" })
+
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>

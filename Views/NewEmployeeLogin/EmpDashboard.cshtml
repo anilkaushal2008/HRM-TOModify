@@ -1,0 +1,238 @@
+﻿@using System.Web
+@{
+    // LINK TO THE MASTER LAYOUT
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Dashboard";
+}
+
+@if (Session["Ename"] != null)
+{
+    <style>
+        /* Dashboard Specific Enhancements */
+        .modern-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 24px;
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+
+            .modern-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+                border-color: var(--accent);
+            }
+
+        .festive-banner {
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            border-radius: 24px;
+            padding: 40px;
+            color: white;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 25px -5px rgba(99, 102, 241, 0.3);
+        }
+
+            .festive-banner h1 {
+                font-weight: 800;
+                font-size: 2.5rem;
+                margin-bottom: 10px;
+            }
+
+        .sparkle {
+            position: absolute;
+            right: -20px;
+            bottom: -20px;
+            font-size: 8rem;
+            opacity: 0.15;
+        }
+
+        .icon-box {
+            width: 50px;
+            height: 50px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+
+        .btn-action {
+            border-radius: 12px;
+            padding: 10px 20px;
+            font-weight: 700;
+            transition: 0.3s;
+            width: 100%;
+            border: none;
+            margin-top: 10px;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary-modern {
+            background: var(--accent);
+            color: white;
+        }
+
+            .btn-primary-modern:hover {
+                background: #4338ca;
+                color: white;
+                transform: scale(1.02);
+            }
+
+        .notification-item {
+            padding: 15px;
+            border-bottom: 1px solid var(--border);
+            transition: 0.2s;
+        }
+
+            .notification-item:hover {
+                background: rgba(0,0,0,0.02);
+            }
+
+            .notification-item:last-child {
+                border-bottom: none;
+            }
+
+        .support-wrapper {
+            margin-bottom: 50px;
+        }
+    </style>
+
+    <!-- BANNER SECTION -->
+    @*<div class="festive-banner">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1>Happy New Year 2026! 🎇</h1>
+                <p class="lead mb-0">Wishing you a year full of productivity and success, <strong>@Session["Ename"]</strong> Ji. Thanks for being a member of the Indus Family.</p>
+            </div>
+        </div>
+        <i class="fas fa-glass-cheers sparkle"></i>
+    </div>*@
+
+    if (ViewBag.Message != null)
+    {
+        <div class="alert alert-info border-0 shadow-sm mb-4" style="border-radius: 12px;">
+            <i class="fas fa-info-circle mr-2"></i> @ViewBag.Message
+        </div>
+    }
+
+    <!-- MAIN DASHBOARD GRID -->
+    <div class="row">
+        <div class="col-lg-9">
+            <div class="row">
+                @{
+                    bool isConsultant = Session["IsConsultant"]?.ToString() == "True";
+                    int Empid = Convert.ToInt32(Session["Empid"]?.ToString() ?? "0");
+                }
+
+                <!-- COMMON LEAVE CARD (Now visible to everyone) -->
+                <div class="col-md-4 mb-4">
+                    <div class="modern-card text-center">
+                        <div class="icon-box bg-primary text-white mx-auto"><i class="fas fa-calendar-check"></i></div>
+                        <h5 class="font-weight-bold">Leave Portal</h5>
+                        <p class="text-muted small">Manage your applications and track leave history.</p>
+                        <a href="@Url.Action("ApplyLeave", "Leave")" class="btn btn-primary-modern btn-action">Apply Now</a>
+                    </div>
+                </div>
+
+                @if (!isConsultant)
+                {
+                    <!-- NORMAL EMPLOYEE SPECIFIC -->
+                    if (Session["IsDnbStudent"]?.ToString() == "True")
+                    {
+                        <div class="col-md-4 mb-4">
+                            <div class="modern-card text-center">
+                                <div class="icon-box bg-success text-white mx-auto"><i class="fas fa-graduation-cap"></i></div>
+                                <h5 class="font-weight-bold">Fee Details</h5>
+                                <p class="text-muted small">View academic fee slips and payments.</p>
+                                <a href="@Url.Action("StudentView", "NewEmployeeLogin")" class="btn btn-success btn-action" style="background:#10b981; color:white;">View Slips</a>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <!-- CONSULTANT / DOCTOR HUB SPECIFIC -->
+                    <div class="col-md-4 mb-4">
+                        <div class="modern-card text-center">
+                            <i class="fas fa-file-invoice-dollar text-success fa-3x mb-3"></i>
+                            <h6 class="font-weight-bold">Salary Slips</h6>
+                            <a href="@Url.Action("IndexSlips", "NewEmployeeLogin")" class="btn btn-outline-success btn-action">Open Requests</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="modern-card text-center">
+                            <i class="fas fa-tasks text-warning fa-3x mb-3"></i>
+                            <h6 class="font-weight-bold">KRA Performance</h6>
+                            <a href="@Url.Action("IndexKRA", "NewEmployeeLogin")" class="btn btn-outline-warning btn-action">Check Analytics</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="modern-card text-center">
+                            <i class="fas fa-shield-alt text-info fa-3x mb-3"></i>
+                            <h6 class="font-weight-bold">TDS Certificate</h6>
+                            <a href="@Url.Action("IndexTDS", "NewEmployeeLogin")" class="btn btn-outline-info btn-action">Download PDF</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="modern-card text-center">
+                            <i class="fas fa-university text-danger fa-3x mb-3"></i>
+                            <h6 class="font-weight-bold">Accounts Ledger</h6>
+                            <a href="@Url.Action("LedgerIndex", "NewEmployeeLogin")" class="btn btn-outline-danger btn-action">View Ledger</a>
+                        </div>
+                    </div>
+                }
+
+                <!-- COMMON PROFILE CARD -->
+                <div class="col-md-4 mb-4">
+                    <div class="modern-card text-center">
+                        <i class="fas fa-user-shield text-secondary fa-3x mb-3"></i>
+                        <h6 class="font-weight-bold">My Profile</h6>
+                        <a href="@Url.Action("ProfileDetail", "NewEmployeeLogin", new { id = Empid })" class="btn btn-outline-secondary btn-action">Manage Identity</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT SIDEBAR (ALERTS) -->
+        <div class="col-lg-3">
+            <div class="modern-card">
+                <h6 class="font-weight-bold text-primary mb-4"><i class="fas fa-bell mr-2"></i>Important Alerts</h6>
+                <div class="small">
+                    <div class="notification-item">
+                        <strong>Leave Approvals</strong><br />
+                        <span class="text-muted">Requests processed within 48 hours by VP HR.</span>
+                    </div>
+                    <div class="notification-item">
+                        <strong>Salary Timeline</strong><br />
+                        <span class="text-muted">Standard 72-hour creation window for certificates.</span>
+                    </div>
+                    <div class="notification-item">
+                        <strong>Update Cycle</strong><br />
+                        <span class="text-muted">KRA/TDS updated on the 25th of each month.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SUPPORT SECTION -->
+    <div class="row mt-4 support-wrapper">
+        <div class="col-lg-9">
+            <div class="modern-card bg-light border-0 text-center p-5" style="background-color: rgba(0,0,0,0.02) !important;">
+                <h5 class="text-success font-weight-bold mb-3"><i class="fas fa-video mr-2"></i> Employee Support</h5>
+                <p class="text-muted mb-4">Learn how to use the portal effectively with our guided video tutorial.</p>
+                <a href="~/Content/DemoVideo/Employee_NewLeaveDemo.mp4" target="_blank" class="btn btn-success rounded-pill px-5 shadow-sm font-weight-bold">Watch Demo Video</a>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    @Html.Action("_SessionError", "NewEmployeeLogin")
+}

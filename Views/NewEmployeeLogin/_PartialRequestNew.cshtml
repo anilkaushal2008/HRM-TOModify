@@ -1,0 +1,71 @@
+﻿<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+@model HRM.Models.ConsultantSlipRequestModel
+@{
+    Layout = "";
+}
+<div class="modal fade" id="_PartialRequestNew" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header btn-success">
+                <h5 class="modal-title">New request salary certificate</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("RequestSlip", "NewEmployeeLogin", FormMethod.Post))
+                {
+                    <div class="form-group">
+                        <label>Select Option:</label><br />
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="selectionType" id="selectQuarter" value="Quarter" checked />
+                            <label class="form-check-label" for="selectQuarter">Quarter</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="selectionType" id="selectMonth" value="MonthRange" />
+                            <label class="form-check-label" for="selectMonth">From Month to Month</label>
+                        </div>
+                    </div>
+                    @Html.HiddenFor(m => m.fk_empid)
+                    <div id="quarterSection" class="form-group">
+                        <div class="form-group col-md-6">
+                            @Html.Label("Selected Qurater")<br />
+                            @Html.DropDownListFor(model => model.fk_quarterid, new SelectList(ViewBag.AllQurater, "Text", "Value"), new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.fk_quarterid, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div id="monthSelection" class="form-row" style="display:none;">
+                        <div class="form-group col-md-6">
+                            <label for="fromMonth">From Month *</label>
+                            @Html.DropDownListFor(model => model.fromMonth, new SelectList(ViewBag.AllMonths, "Text", "Value"), new { @class = "form-control" })
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="toMonth">To Month *</label>
+                            @Html.DropDownListFor(model => model.toMonth, new SelectList(ViewBag.AllMonths, "Text", "Value"), new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-success" style="color:black">Send request</button>}
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+<script src="~/Scripts/jqueryui/jquery-ui.js"></script>
+<script>
+    $(document).ready(function () {
+        $('input[name="selectionType"]').change(function () {
+            if ($('#selectQuarter').is(':checked')) {
+                $('#quarterSection').show();
+                $('#quarterSection select').prop('disabled', false);
+                $('#monthSelection').hide();
+            } else if ($('#selectMonth').is(':checked')) {
+                $('#quarterSection').hide();
+                $('#quarterSection select').prop('disabled', true);
+                $('#monthSelection').show();
+            }
+        });
+    });
+</script>

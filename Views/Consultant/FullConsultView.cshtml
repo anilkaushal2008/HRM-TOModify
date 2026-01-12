@@ -1,0 +1,79 @@
+﻿@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "FullConsultView";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    }
+    using (Html.BeginForm())
+    {
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title" align="center">
+                    <h3 style="color:black;font-weight:bold">Consultant Detail View</h3>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col-8">
+                        @{ Html.RenderAction("PartialConsultMas", "Consultant");}
+                    </div>
+                    <div class="col-4">
+                        @{ Html.RenderAction("PartialConsultProfile", "Consultant");}
+                    </div>
+                </div>
+                <hr />
+                @{ Html.RenderAction("PartialConsultDetail", "Consultant");}
+                @{
+                    Html.RenderAction("PartialConsultRegistration", "Consultant");
+                    Html.RenderAction("PartialConsultMOU", "Consultant");
+                    Html.RenderAction("PartialConsultDocument", "Consultant");
+                }
+            </div>
+        </div>
+    }
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+@section scripts {
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>  
+    <script type="text/javascript">
+        //update button action
+        $(document).on("click", ".open-modal", function () {
+            var id = $(this).data("id");
+            $.get('/Consultant/GetDetailForPAN', { id: id }, function (data) {
+                $('#modalContainer').html(data);
+                $('#_PartialUpPAN').modal('show');
+            });
+        });
+
+        //PAN validation
+        $(document).ready(function () {
+            // Custom PAN Validation Method
+            $.validator.addMethod("panformat", function (value, element) {
+                return this.optional(element) || /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(value);
+            }, "Please enter a valid PAN Number (e.g., ABCDE1234F)");
+
+            // Apply validation on form
+            $("form").validate({
+                rules: {
+                    vchPANNUmber: {
+                        required: true,
+                        panformat: true
+                    }
+                },
+                messages: {
+                    vchPANNUmber: {
+                        required: "PAN Number is required",
+                        panformat: "Invalid PAN Number format"
+                    }
+                }
+            });
+        });
+    </script>
+}
+
+

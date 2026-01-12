@@ -1,0 +1,57 @@
+﻿@model IEnumerable<HRM.Models.tblDocDetails>
+
+@{
+    ViewBag.Title = "ViewEmpDoc";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<br />
+<div class="col-lg-12">
+    @if (TempData["Success"] != null)
+    {
+        <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+    }
+    <div class="card">
+
+        <div class="card-body">
+            <h3 class="card-title">
+                Employee qualification document view
+            </h3>
+            <div class="table-responsive" align="center">
+                <table class="table table-sm col-12">
+                    <thead class="bg-success text-white col-12">
+                        <tr>
+                            <th>
+                                Document Name
+                            </th>                   
+                            <th>
+                                Action
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="border border-success">
+                        @if (TempData["Empty"] != null)
+                        {
+                            <p class="alert alert-danger" id="successMessage">@TempData["Empty"]</p>
+                        }
+                        else
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.vchdocname)
+                                    </td>
+                                  
+                                    <td>
+                                        <a href="@Url.Content("~/Uploads/" + @item.vchfilename)" target="_blank">View</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

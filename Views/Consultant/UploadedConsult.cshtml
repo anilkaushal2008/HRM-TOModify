@@ -1,0 +1,84 @@
+﻿@model IEnumerable<HRM.Models.tblEmpAssesmentMas>
+@if (Session["descript"] != null)
+    {
+        {
+            ViewBag.Title = "UploadedConsult";
+            Layout = "~/Views/Shared/_LayoutMain.cshtml";
+        }
+
+    <div class="card">
+        <div class="card-body" style="background-color:aliceblue">
+            <br />
+            <h3 class="" style="color:black;font-weight:bold" align="center">All Consultant Completed Upload View</h3>          
+            <div class="card-body">
+                @if (TempData["Empty"] != null)
+                {
+                    <p align="center" class="alert alert-danger" id="empty">@TempData["Empty"]</p>
+                }
+                @if (TempData["Error"] != null)
+                {
+                    <p align="center" class="alert alert-danger" id="empty1">@TempData["Error"]</p>
+                }
+                @if (ViewBag.Error != null)
+                {
+                    <p align="center" class="alert alert-danger" id="empty2">@ViewBag.Error</p>
+                }
+                @if (TempData["Success"] != null)
+                {
+                    <p align="center" class="alert alert-success" id="empty3">@TempData["Success"]</p>
+                }
+                @if (ViewBag.Success != null)
+                {
+                    <p align="center" class="alert alert-success" id="success">@ViewBag.Success</p>
+                }                
+                <table class="table table-sm table-striped table-responsive-lg" style="font-size:90%">
+
+                    <thead class="bg-success col-12">
+                        <tr style="color:black">
+                            <th>
+                                Name
+                            </th>
+                            <th>
+                                Mobile
+                            </th>
+                            <th>
+                                DOJ
+                            </th>
+                            <th>
+                                Actions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="border border-success">
+                        @if (Model != null)
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.vchName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.vchMobile)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.dtDOJ)
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-primary btn-sm text-white" href="@Url.Action("GenerateConsultCode","Consultant",new { id = item.intid })">GenerateCode</a>
+                                        @*&nbsp;
+                                <a class="btn btn-success btn-sm text-white">ViewDetail</a>*@
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+            </div>
+        </div>
+            }
+            else
+            {
+                Html.RenderAction("_SessionError1", "Home");
+            }

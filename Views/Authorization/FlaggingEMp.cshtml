@@ -1,0 +1,81 @@
+﻿@model HRM.Models.tblEmpAssesmentMas
+    @{ 
+        Layout = "";
+    }
+@if (Session["descript"] != null)
+{
+
+    if (Model != null)
+    {
+        <div class="card">
+            <div class="card-body">
+                <dl class="dl-horizontal">
+                    <h3 style="color: black; font-weight: bold; color: Highlight">Flagging detail</h3>
+                    <br />
+
+                    @*<div class="row" style="color:black">
+                        <div class="col-md-3">*@
+                    <dt>
+                        <label>Flagging Assigned</label>
+                    </dt>
+                    <dd>
+                        @{ if (Model.BitIsFlaggingEmp == true)
+                            {
+                                if (Model.BitIsGreenFlagging == true)
+                                {
+                                    <label><span style="color:green;font-weight:900">Green</span></label>
+                                }
+                                if (Model.BitIsOrangeFlagging == true)
+                                {
+                                    <label><span style="color:orange;font-weight:900">Orange</span></label>
+                                }
+                                if (Model.BitIsRedFlagging == true)
+                                {
+                                    <label><span style="color: red; font-weight: 900">Red</span></label>
+                                }
+
+                            }
+                            else
+                            {
+                                <label><span>N/A</span></label>
+                            }
+                        }
+                    </dd>
+                    <dt>
+                        Remarks
+                    </dt>
+                    <dd>
+                        @if (Model.vchAssDeactiveRemarks != null)
+                        {
+                            <label><span style="color: black; font-weight: normal">@Model.vchAssDeactiveRemarks</span></label>
+                        }
+                        else
+                        {
+                            <label><span style="color: black; font-weight: normal">N/A</span></label>
+                        }
+                    </dd>
+                    <dt>
+                        Transfer Received Remarks
+                    </dt>
+                    <dd>
+                        @if (Model.vchReceiveRemarks != null)
+                        {
+                            <label><span style="color: black; font-weight: normal">@Model.vchReceiveRemarks</span></label>
+                        }
+                        else
+                        {
+                            <label><span style="color: black; font-weight: normal">N/A</span></label>
+                        }
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    }
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+
+
+

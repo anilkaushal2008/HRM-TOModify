@@ -1,0 +1,108 @@
+﻿@model HRM.Models.tblinternship
+@if (Session["id"] != null)
+{
+    {
+        ViewBag.Title = "InernshipEdit";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+        Html.EnableClientValidation(true);
+    }
+    using (Html.BeginForm("InernshipEdit", "Template", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-horizontal">
+            @if (TempData["Success"] != null)
+            {
+                <p align="center" class="alert alert-success" id="success">@TempData["Success"]</p>
+            }
+            @if (TempData["Error"] != null)
+            {
+                <p align="center" class="alert alert-danger" id="Empty">@TempData["Error"]</p>
+            }
+            <div class="col-lg-12">
+                <br />
+                <hr />
+                <h3 style="color:black">Update Training Letter</h3>
+                <div class="row col-12">
+                    @Html.HiddenFor(model => model.intid)
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.vchGender)<span style="color:red">*</span>
+                            @Html.DropDownListFor(model => model.vchGender, ViewBag.GenderList as SelectList, "Select department", htmlAttributes: new { @id = "selectedDpt", @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.vchGender, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.vchName)
+                            @Html.EditorFor(model => model.vchName, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.vchName, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.vchFatherName)
+                            @Html.EditorFor(model => model.vchFatherName, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.vchFatherName, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row col-12">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            @Html.Label("Old from date")<br />
+                            @Html.Label("", ViewBag.dtDOS as string, new { htmlAttributes = new { @readonly = "readonly", @type = "text", @class = "form-control" } })
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            @Html.Label("Update from date")
+                            @Html.EditorFor(model => model.dtDOS, new { htmlAttributes = new { @type = "date", @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.dtDOS, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            @Html.Label("Old To Date")<br />
+                            @Html.Label("", ViewBag.dtDOE as string, new { htmlAttributes = new { @readonly = "readonly", @type = "text", @class = "form-control" } })
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            @Html.Label("Update To Date")
+                            @Html.EditorFor(model => model.dtDOE, new { htmlAttributes = new { @type = "date", @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.dtDOE, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row col-12">
+                    <div class="col-12">
+                        <div class="form-group">
+                            @Html.Label("Update Content")
+                            @Html.TextAreaFor(model => model.txtContent, htmlAttributes: new { @class = "form-control", @rows = "9", @size = "1500" })
+                            @Html.ValidationMessageFor(model => model.txtContent, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12" align="center">
+                    <div class="form-group">
+                        <input type="submit" value="Update" class="btn btn-success" /> &nbsp;&nbsp;&nbsp;&nbsp;
+                        <a href="@Url.Action("NewLetter", "Template")" class="btn btn-outline-danger">Cancel</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/Scripts/jquery-ui.js"></script>
+}
+
+

@@ -1,0 +1,94 @@
+﻿@model IEnumerable<HRM.Models.tblGroupMaster>
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "ViewAllGroup";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    }
+
+
+    <div class="card">
+        <div class="card-body">
+            @if (TempData["Success"] != null)
+            {
+                <p class="alert alert-success" id="successMessage" align="center">@TempData["Success"]</p>
+            }
+            @if (TempData["Error"] != null)
+            {
+                <p class="alert alert-danger" id="errorMessage" align="center">@TempData["Error"]</p>
+            }
+            <h3 class="card-title">All group master View</h3>
+            @{ string CreateGp = Session["GpMaster"].ToString();
+                if (CreateGp == "True")
+                {
+                    <div align="right">
+                        <a href="@Url.Action("CreateNewGp", "Group")">
+                            <div class="btn btn-primary">
+                                <h6 align="center" class="fas fa-hand-point-right">
+                                    Add New Group Master
+                                </h6>
+                            </div>
+                        </a>
+                    </div>
+                }
+            }
+            @if (Model == null)
+            {
+                <h2><font color="red">No record found</font></h2>
+                <br />
+            }
+
+            <div class="table">
+                <table class="table table-sm col-12">
+                    <thead class="bg-primary text-white col-12">
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.vchGpName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.dtCreated)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.vchCreatedBy)
+                            </th>
+                            @{ string Edit1 = Session["EditGpMaster"].ToString();
+                                if (Edit1 == "True")
+                                {
+                                    <th>Actions</th>
+                                }
+                            }
+                        </tr>
+                    </thead>
+                    <tbody class="border border-primary">
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.vchGpName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.dtCreated)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.vchCreatedBy)
+                                </td>
+                                @{ string Edit2 = Session["EditGpMaster"].ToString();
+                                    if (Edit2 == "True")
+                                    {
+                                        <td>
+                                            @Html.ActionLink("Edit", "GroupEdit", new { id = item.intid })
+                                        </td>
+                                    }
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}

@@ -1,0 +1,82 @@
+﻿@model IEnumerable<HRM.Models.tblPosDocMap>
+    @{ Layout = "";}
+@if (Session["descript"] != null)
+{
+    <div class="card">
+        <h3 class="col-10" style="color: black; font-weight: bold; color: Highlight">Employee Document Details</h3>
+        @if (Model != null)
+        {
+            <div class="card-body">
+                <h4 class="card-title" style="color: Highlight">Compulsory</h4>
+                <table class="table table-sm">
+                    <thead class="">
+                        <tr style="color:black">
+                            <th>
+                                Document Name
+                            </th>
+                            <th>
+                                Upload DateTime
+                            </th>
+                            <th>
+                                Action
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="">
+                        @foreach (var item in Model)
+                        {
+
+
+<tr style="color:black">
+                                <td>
+                                    @if (item.bitRequireForPartialToComplete == true)
+                                    {
+                                        <label class="required">@item.tblDocMas.vchdocname</label>
+                                    }
+                                    else
+                                    {
+                                    @Html.DisplayFor(model => item.tblDocMas.vchdocname)
+                                    }
+                                </td>
+                                <td>
+                                    @{if (item.dt_TempUploaded !=null)
+                                        {
+                                            @Html.DisplayFor(model => item.dt_TempUploaded)
+                                        }
+                                        else
+                                        {
+                                            @Html.Label("Pending")
+                                        }
+
+
+}
+                                </td>
+                                <td>
+                                    @{if (item.ComparedFileName != null)
+                                        {
+                                            <a href="@Url.Content("~/Content/Uploads/" + @item.ComparedFileName)" target="_blank">View</a>
+                                        }
+                                        else
+                                        {                                           
+                                            @Html.ActionLink("Upload", "UploadNewDoc", new { id = item.fk_TempEmpId, docid = item.fk_docid }, htmlAttributes: new { @style = "color:orangered" })
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <p class="alert alert-danger" id="empty" align="center">@TempData["Empty"]</p>
+        }
+    </div>
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+
+

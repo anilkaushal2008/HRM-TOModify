@@ -1,0 +1,248 @@
+﻿@model IEnumerable<HRM.Models.DnbFeeVerificationViewModel>
+@{
+    ViewBag.Title = "Fee Verification";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<style>
+    /* 💎 Card Styling */
+    .verification-card {
+        background: #fff;
+        transition: all 0.3s ease-in-out;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+        border-radius: 1rem !important;
+    }
+
+        .verification-card:hover {
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+            transform: translateY(-3px);
+        }
+
+    /* ✨ Table Row Hover */
+    #verificationTable tbody tr:hover {
+        background-color: #f8fbff;
+        transition: 0.2s;
+    }
+
+    /* 🧾 Header & Spacing */
+    th {
+        font-weight: 600;
+        font-size: 0.9rem;
+        white-space: nowrap;
+    }
+
+    td {
+        font-size: 0.88rem;
+        vertical-align: middle;
+    }
+
+    /* 🌐 Responsive Adjustments */
+    @@media (max-width: 992px) {
+        th, td {
+            font-size: 0.8rem;
+        }
+
+        h3 {
+            font-size: 1.1rem !important;
+        }
+
+        .input-group {
+            max-width: 100% !important;
+            margin-top: 10px;
+        }
+
+        .verify-btn, .btn-outline-info {
+            font-size: 0.75rem;
+            padding: 3px 6px;
+        }
+
+        .badge {
+            font-size: 0.7rem;
+        }
+    }
+
+    @@media (max-width: 576px) {
+        .card-body {
+            padding: 0.5rem !important;
+        }
+
+        .input-group-text {
+            padding: 0.3rem 0.5rem;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+    }
+</style>
+
+<div class="container-fluid mt-4">
+
+    <!-- 🔹 Header -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+        <h3 class="font-weight-bolder mb-0 text-dark">
+            <i class="bi bi-cash-stack me-2 text-primary"></i> Pending Fee Verifications
+        </h3>
+
+        <!-- 🔍 Search -->
+        <div class="input-group" style="max-width: 300px;">
+            <span class="input-group-text bg-light"><i class="bi bi-search"></i></span>
+            <input type="text" id="searchBox" class="form-control" placeholder="Search by name or ID...">
+        </div>
+    </div>
+
+    <!-- 🔹 Card Container -->
+    <div class="card verification-card border-0 shadow-lg rounded-4">
+        <div class="card-body p-3">
+
+            <!-- 🔹 Responsive Table -->
+            <div class="table-responsive">
+                <table class="table table-hover align-middle" id="verificationTable">
+                    <thead class="table-light bg-primary text-white">
+                        <tr>
+                            <th>Name</th>
+                            <th>Employee ID</th>
+                            <th>Year</th>
+                            <th>Amount (₹)</th>
+                            <th>Mode</th>
+                            <th>Ref.No.</th>
+                            <th>Submitted</th>
+                            <th>Screenshot</th>
+                            <th>Status</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (!Model.Any())
+                        {
+                            <tr>
+                                <td colspan="11" class="text-center text-muted py-4">
+                                    <i class="bi bi-inbox display-6 d-block mb-2"></i>
+                                    No pending records found
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            foreach (var item in Model)
+                            {
+                                var statusClass = item.Status == "Verified" ? "success"
+                                                : item.Status == "Rejected" ? "danger"
+                                                : "warning";
+
+                                <tr>
+                                    <td class="fw-semibold">@item.StudentName</td>
+                                    <td>@item.EmployeeId</td>
+                                    <td>@item.YearNumber</td>
+                                    <td>@item.Amount.ToString("N2")</td>
+                                    <td>@item.PaymentMode</td>
+                                    <td>@item.PaymentReferenceNo</td>
+                                    <td>@item.SubmittedDate.ToShortDateString()</td>
+                                    <td>
+                                        <a href="@item.PaymentScreenshotPath"
+                                           target="_blank"
+                                           class="btn btn-outline-info btn-sm px-2 py-1">
+                                            <i class="bi bi-eye"></i> View
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-pill bg-@statusClass text-white px-2 py-1">@item.Status</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <button class="btn btn-sm btn-success verify-btn px-2 py-1"
+                                                data-id="@item.SubmissionId">
+                                            <i class="bi bi-check-circle me-1"></i> Verify
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Modal container -->
+<div id="modalContainer"></div>
+
+@section Scripts {
+    @*<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>*@
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        //Client-side search filter
+        $("#searchBox").on("keyup", function () {
+            const value = $(this).val().toLowerCase();
+            $("#verificationTable tbody tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+            });
+        });
+        //Load verification modal dynamically
+        $(function () {
+    $(".verify-btn").on("click", function () {
+        const id = $(this).data("id");
+
+        $.get('@Url.Action("Verify", "DNB")', { id }, function (html) {
+            $("#modalContainer").html(html);
+
+            const modalEl = document.getElementById('verifyModal');
+            const verifyModal = new bootstrap.Modal(modalEl, { backdrop: 'static', keyboard: true });
+
+            if ($.validator && $.validator.unobtrusive) {
+                $.validator.unobtrusive.parse($(modalEl));
+            }
+
+            //Save button click
+            $("#saveVerify").off("click").on("click", function () {
+                const $form = $("#verifyForm");
+                if (!$form.valid()) return;
+
+                const token = $form.find('input[name="__RequestVerificationToken"]').val();
+                const data = $form.serialize();
+
+                $("#saveVerify").prop("disabled", true).html('<span class="spinner-border spinner-border-sm me-1"></span>Saving...');
+
+                $.ajax({
+                    url: '@Url.Action("VerifySlip", "DNB")',
+                    type: 'POST',
+                    data: data,
+                    headers: { 'RequestVerificationToken': token },
+                    success: function (res) {
+                        $("#saveVerify").prop("disabled", false).html('<i class="bi bi-save me-1"></i> Save');
+
+                        if (res && res.success) {
+                            // ✅ Modern SweetAlert success message
+                            Swal.fire({
+                                icon: "success",
+                                title: "Verification Successful!",
+                                text: "Payment has been verified successfully.",
+                                showConfirmButton: false,
+                                timer: 8000,
+                                timerProgressBar: true
+                            });
+                            verifyModal.hide();
+                            location.reload();
+                        } else {
+                            alert(res.message || "Error saving verification.");
+                        }
+                    },
+                    error: function (xhr) {
+                        $("#saveVerify").prop("disabled", false).html('<i class="bi bi-save me-1"></i> Save');
+                        alert("Network/Server error: " + xhr.status + " " + xhr.statusText);
+                    }
+                });
+            });
+
+            modalEl.addEventListener('hidden.bs.modal', function () {
+                $("#modalContainer").empty();
+            });
+
+            verifyModal.show();
+        });
+    });
+});
+    </script>
+}

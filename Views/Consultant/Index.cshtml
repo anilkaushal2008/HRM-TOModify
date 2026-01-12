@@ -1,0 +1,180 @@
+﻿@model IEnumerable<HRM.Models.tblEmpAssesmentMas>
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "   ";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    }
+
+    <link href="//cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <div class="card">
+    
+        <div class="card-body">
+            <div align="right">
+                <a class="btn btn-primary fas fa-hand-point-right" href="@Url.Action("NewConsultant", "Consultant")">                    
+                     New Consultant 
+                </a>
+            </div>
+            <h3 class="card-title">All Consultant View</h3>
+
+            @if (TempData["Success"] != null)
+            {
+                <p class="alert alert-success" id="tsuccess" align="center">@TempData["Success"]</p>
+            }
+            @if (TempData["Empty"] != null)
+            {
+                <p class="alert alert-danger" id="tempty" align="center">@TempData["Empty"]</p>
+            }
+            @if (TempData["Error"] != null)
+            {
+                <p class="alert alert-danger" id="terror" align="center">@TempData["Error"]</p>
+            }
+            @if (ViewBag.Success != null)
+            {
+                <p class="alert alert-success" id="vSuccess" align="center">@ViewBag.Success</p>
+            }
+            @if (ViewBag.Error != null)
+            {
+                <p class="alert alert-danger" id="error" align="center">@ViewBag.Error</p>
+            }
+            @if (ViewBag.Empty != null)
+            {
+                <p class="alert alert-danger" id="vSuccess" align="center">@ViewBag.Empty</p>
+            }
+            <table id="indexpage" class="table table-sm" style="font-size:90%">
+                <thead class="bg-primary text-white col-12">
+                    <tr>
+                        <th>
+                            Employee Code
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.vchName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.tblDeptMas.vchdeptname)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.tblDesignationMas.vchdesignation)
+                        </th>
+                        <th>
+                            DOJ
+                        </th>
+                        <th>
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="border border-primary">
+                    @if (Model != null)
+                    {
+                        foreach (var item in Model)
+                        {
+
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.vchEmpFcode)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.vchName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.tblDeptMas.vchdeptname)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.tblDesignationMas.vchdesignation)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.dtDOJ)
+                                </td>
+                                <td>
+                                    <a class="btn btn-success btn-sm" href="@Url.Action("FullConsultView", "Consultant", new { id = item.intid })">ViewDetail</a>
+                                    @{
+                                        if (Session["HRAdmin"] != null)
+                                        {
+                                            string HRadmin = Session["HrAdmin"].ToString();
+                                            if (HRadmin == "True")
+                                            {
+                                                <a class="btn btn-primary btn-sm" href="@Url.Action("MoreDocUpload","Consultant",new { id = item.intid })">UploadMore</a>
+                                            }
+                                        }
+                                    }
+                                    @{
+                                        if (Session["HrAdmin"] != null)
+                                        {
+                                            string HRadmin = Session["HrAdmin"].ToString();
+                                            if (HRadmin == "True")
+                                            {
+                                                <button class="confirmButton btn btn-danger btn-sm" id="btnDeactive" data-record-id="@item.intid">De-Activate?</button>
+                                            }
+                                        }
+                                    }
+                                    @{ if (Session["KRAUpload"] != null)
+                                        {
+                                            string isAllowedUp = Session["KRAUpload"].ToString();
+                                            if (isAllowedUp == "True")
+                                            {
+                                                <a class="btn btn-outline-dark btn-sm" href="@Url.Action("KRADetail","Consultant",new { id = item.intid })">KRADetail</a>
+                                            }
+                                        }
+                                    }
+                                    @{ if (Session["LedgerUpload"] != null)
+                                        {
+                                            string isAllowedUp = Session["LedgerUpload"].ToString();
+                                            if (isAllowedUp == "True")
+                                            {
+                                                <a class="btn btn-outline-dark btn-sm" href="@Url.Action("IndexLedger","Consultant",new { id = item.intid })">Ledger</a>
+                                            }
+                                        }
+                                    }
+                                    @{ if (Session["TDSUpload"] != null)
+                                        {
+                                            string isAllowedUp = Session["TDSUpload"].ToString();
+                                            if (isAllowedUp == "True")
+                                            {
+                                                <a class="btn btn-outline-dark btn-sm" href="@Url.Action("TDSIndex","Consultant",new { id = item.intid })">TDS</a>
+                                            }
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#indexpage').DataTable();
+        });
+
+        //confirmation for change status
+        document.querySelectorAll('.confirmButton').forEach(function (button) {
+            button.addEventListener('click', function () {
+                var recordid = this.getAttribute("data-record-id");
+                if (!confirm("Are your sure you want to lock consultant uploads?")) {
+                    //do nothing
+                }
+                else {
+                    window.location.href = '/Consultant/ConsultDeactivation/' + recordid;
+                }
+
+            });
+        });
+
+
+
+
+    </script>
+} 

@@ -1,0 +1,374 @@
+﻿@model HRM.Models.tblExperienceDetail
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "ConsultantExpEdit";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    }
+    using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div class="row">
+            <div class="col-12">
+                <div class="card" style="font-size:90%;background-color:aliceblue">
+                    <div class="card-body col-12">
+                        <h3 class="card-title">Consultant Experience Update View</h3>
+                        @if (TempData["Error"] != null)
+                        {
+                            <p align="center" class="alert alert-danger" id="empty">@TempData["Error"]</p>
+                        }
+                        @if (ViewBag.Error != null)
+                        {
+                            <p align="center" class="alert alert-danger" id="empty">@ViewBag.Error</p>
+                        }
+                        @if (TempData["Success"] != null)
+                        {
+                            <p align="center" class="alert alert-success" id="empty">@TempData["Success"]</p>
+                        }
+                        @if (ViewBag.Success != null)
+                        {
+                            <p align="center" class="alert alert-success" id="success">@ViewBag.Success</p>
+                        }
+
+                        <h6 class="card-subtitle"></h6>
+                        <div align="right">
+                            <a class="btn btn-primary fa fa-hand-point-right" href="@Url.Action("ViewConsultantExpAll", "Template")">
+                                &nbsp; View All Letter
+                            </a>
+                        </div>
+                        <hr />
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        @Html.HiddenFor(model => model.intid)
+                        <div align="left" class="form-group">
+                            <h5 class="card-title">You want to select existing HRMS employee<span style="color:red">*</span></h5>
+                            <fieldset class="radio form-group">
+                                <label class="radio">
+                                    Yes
+                                    @Html.RadioButtonFor(model => model.bitIshMRMSemp, "true", htmlAttributes: new { @id = "Repyes" })
+                                </label>
+                                <label class="radio">
+                                    No
+                                    @Html.RadioButtonFor(model => model.bitIshMRMSemp, "false", htmlAttributes: new { @id = "Repno" })
+                                </label>
+                                @Html.ValidationMessageFor(model => model.bitIshMRMSemp, "", new { @class = "text-danger" })
+                            </fieldset>
+                        </div>
+                        <div class="row col-12" id="ifyeshrms">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    @Html.LabelFor(Model => Model.intHRMSid, "Search/Update Employee", htmlAttributes: new { @class = "control-label col-md-6 required" })
+                                    <div class="col-md-12">
+                                        @Html.DropDownListFor(model => model.vchEmpCode, ViewBag.Employees as SelectList, Model.vchEmpCode, htmlAttributes: new { @id = "hrms_id", @class = "form-select", @style = "width: 100%;" })
+                                        @Html.ValidationMessageFor(model => model.intHRMSid, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+
+                        <div class="row col-12">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.fk_Masid, "Select letter master", htmlAttributes: new { @class = "control-label col-md-6 required" })
+                                    <div class="col-md-12">
+                                        @Html.DropDownListFor(model => model.fk_Masid, ViewBag.MasType as SelectList, Model.tblExperienceMas.vchName, htmlAttributes: new { @id = "MasType", @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.fk_Masid, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.vchName, htmlAttributes: new { @class = "control-label col-md-6 required" })
+                                    <div class="col-md-12">
+                                        @Html.EditorFor(model => model.vchName, new { htmlAttributes = new { @id = "name", @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.vchName, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.vchFatherName, htmlAttributes: new { @class = "control-label col-md-6 required" })
+                                    <div class="col-md-12">
+                                        @Html.EditorFor(model => model.vchFatherName, new { htmlAttributes = new { @id = "fathername", @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.vchFatherName, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row col-12" id="HRMSData">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.vchState, htmlAttributes: new { @class = "control-label col-md-6 required" })
+                                    <div class="col-md-12">
+                                        @Html.EditorFor(model => model.vchState, new { htmlAttributes = new { @id = "estate", @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.vchState, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.vchCity, htmlAttributes: new { @class = "control-label col-md-6 required" })
+                                    <div class="col-md-12">
+                                        @Html.EditorFor(model => model.vchCity, new { htmlAttributes = new { @id = "ecity", @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.vchCity, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.vchAddress, htmlAttributes: new { @class = "control-label col-md-6 required" })
+                                    <div class="col-md-12">
+                                        @Html.EditorFor(model => model.vchAddress, new { htmlAttributes = new { @id = "eaddress", @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.vchAddress, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row col-12">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.vchGender, htmlAttributes: new { @class = "control-label col-md-6 required" })
+                                    <div class="col-md-12">
+                                        @Html.DropDownListFor(model => model.vchGender, ViewBag.GenderList as SelectList, Model.vchGender, htmlAttributes: new { @id = "selectGender", @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.vchGender, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.fk_department, "Update department", htmlAttributes: new { @class = "control-label col-md-6 required" })
+                                    <div class="col-md-12">
+                                        @Html.DropDownListFor(model => model.fk_department, ViewBag.SelectDpt as SelectList, null, htmlAttributes: new { @id = "selectDept", @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.fk_department, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.fk_designationId, htmlAttributes: new { @class = "control-label col-md-6 required" })
+                                    <div class="col-md-12">
+                                        @Html.DropDownListFor(model => model.fk_designationId, ViewBag.SelectDesi as SelectList, "Select designation", htmlAttributes: new { @id = "selectDesi", @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.fk_designationId, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row col-12">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.dtSdate, htmlAttributes: new { @class = "control-label col-md-6 required" })
+                                    @*@Html.LabelFor(model => model.dtSdate, "Entered date:" + Model.dtSdate.ToString("dd/MM/yyyy"), htmlAttributes: new { @Style = "color:black", @class = "control-label col-md-6", @disabled = "disabled" })*@
+                                    <div class="col-md-12">
+                                        @Html.EditorFor(model => model.dtSdate, new { htmlAttributes = new { @id = "sdate", @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.dtSdate, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.dtEdate, htmlAttributes: new { @class = "control-label col-md-6 required" })
+                                    <div class="col-md-12">
+                                        @Html.EditorFor(model => model.dtEdate, new { htmlAttributes = new { @id = "edate", @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.dtEdate, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.dtRelieving, htmlAttributes: new { @class = "control-label col-md-6 required" })
+                                    <div class="col-md-12">
+                                        @Html.EditorFor(model => model.dtRelieving, new { htmlAttributes = new { @id = "rdate", @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.dtRelieving, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row col-12">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.txtContent, htmlAttributes: new { @class = "control-label col-md-12 required" })
+                                        <div class="col-md-12">
+                                            @Html.TextAreaFor(model => model.txtContent, htmlAttributes: new { @class = "form-control", @id = "Content", @rows = "30", @size = "2500" })
+                                            @Html.ValidationMessageFor(model => model.txtContent, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row col-12">
+                                <div class="col-12" align="center">
+                                    <div class="form-group">
+                                        <div align="center" class="col-md-offset-2 col-md-10">
+                                            <input type="submit" value="Save" class="btn btn-success" /> &nbsp;&nbsp;&nbsp;&nbsp;
+                                            <a href="@Url.Action("ViewEmpExpAll", "Template")" class="btn btn-danger btn-group-lg">Cancel</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+}
+
+@section Scripts {
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/Content/Select2/js/select2.js"></script>
+    <script src="~/Content/Select2/js/select2.min.js"></script>   
+    <script src="~/Content/assets/extra-libs/taskboard/js/jquery-ui.min.js"></script>
+    <script type="text/javascript">
+        //for edit date
+        $(document).ready(function () {
+            $("#sdate").datepicker({
+                //minDate: puranidt12,
+                //maxDate:"+1M",
+                dateFormat: 'dd/MM/yy',
+                changeMonth: true,
+                changeYear: true,
+                yearRange: '1990:2030'
+            })
+        });
+        $(document).ready(function () {
+            $("#edate").datepicker({
+                //minDate: puranidt12,
+                //maxDate:"+1M",
+                dateFormat: 'dd/MM/yy',
+                changeMonth: true,
+                changeYear: true,
+                yearRange: '1990:2030'
+            })
+        });
+        $(document).ready(function () {
+            $("#rdate").datepicker({
+                //minDate: puranidt12,
+                //maxDate:"+1M",
+                dateFormat: 'dd/MM/yy',
+                changeMonth: true,
+                changeYear: true,
+                yearRange: '1990:2030'
+            })
+        });
+        //radio checked if HRMS employee
+        //$("#ifyeshrms").attr("Hidden", true);
+        $("#Repyes").click(function () {
+            if ($(this).is(':checked')) {
+                $("#ifyeshrms").attr("Hidden", false);
+            }
+        });
+        $("#Repno").click(function () {
+            if ($(this).is(':checked')) {
+                $("#ifyeshrms").attr("Hidden", true);
+            }
+        });
+        $(document).ready(function () {
+            $('#hrms_id').select2();
+        });
+
+        //for selection master type content
+        //$(document).ready(function () {
+                 $('#MasType').change(function () {
+                     // Get the selected option value
+                     var selectedOption = $(this).val();
+                     if (selectedOption != "") {
+                         // Make an AJAX request to the controller action with the selected option
+                         $.ajax({
+                             url: '@Url.Action("GetExpContent", "Template")',
+                             type: 'GET',
+                             dataType: 'json',
+                             data: { selectedOption: selectedOption },
+                             success: function (data) {
+                                 // Handle the data returned from the controller
+                                 var result = data.Result;
+
+                                 //Update an element with the result
+                                 $("#Content").val(result);
+
+                                 // Additional logic based on the result...
+                             },
+                             error: function (error) {
+                                 //console.error('Error fetching data:', error);
+                                 //error = "Select master type";
+                                 //alert(error);
+                                 //alert(JSON.stringify(error));
+                             }
+                         });
+                     }
+                 });
+       // });
+
+        //Get employee detail function
+       // $(document).ready(function () {
+            $('#hrms_id').change(function () {
+                // Get the selected option value
+                var empid = $(this).val();
+                if (empid != "") {
+                    // Make an AJAX request to the controller action with the selected option
+                    $.ajax({
+                        url: '@Url.Action("GetExphrmsid", "Template")',
+                        type: 'GET',
+                        dataType: 'json',
+                        data: { empid: empid },
+                        success: function (data) {
+                            if (!data.alertmessage) {
+                                // Handle the data returned from the controller
+                                var name = data.vchname;
+                                var empcode = data.vchempcode;
+                                var fathername = data.fathername;
+                                var city = data.city;
+                                var state = data.state;
+                                var address = data.add;
+                                var dept = data.deptid;
+                                var desi = data.desiid;
+                                var Gender = data.vchgender;
+                                // Update an element with the result
+                                $("#name").val(name);
+                                $("#fathername").val(fathername);
+                                $("#estate").val(state);
+                                $("#ecity").val(city);
+                                $("#eaddress").val(address);
+                                $("#selectDept").val(dept);
+                                $("#selectDesi").val(desi);
+                                $("#selectGender").val(Gender);
+                            }
+                            //error message from Server side
+                            else {
+                                alert(data.alertmessage);
+                            }
+                        },
+                        error: function (xhr, textStatus, errorThrown) {
+                            // Handle errors
+                            console.log("Error: " + errorThrown);
+                            //alert(error.alertmsg);
+                            // Display a user-defined error message
+                            if (xhr.responseJSON && xhr.responseJSON.error) {
+                                alert(xhr.responseJSON.error);
+                            } else {
+                                alert("An unexpected error occurred.");
+                            }
+                        }
+                    });
+                }
+            })
+      // });
+
+
+
+    </script>
+}
+
+

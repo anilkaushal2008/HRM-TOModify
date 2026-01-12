@@ -1,0 +1,136 @@
+﻿@model IEnumerable<HRM.Models.tblEmpAssesmentMas>
+@{
+    ViewBag.Title = "AllByPassCodeEmp";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+<div class="col-lg-12">
+    <div class="card">
+        <div class="card-body">
+            <h3 class="card-title">All Bypass Employee Completed Upload View</h3>
+            @if (TempData["Error"] != null)
+            {
+                <p align="center" class="alert alert-danger" id="empty">@TempData["Error"]</p>
+            }
+            @if (ViewBag.Error != null)
+            {
+                <p align="center" class="alert alert-danger" id="empty">@ViewBag.Error</p>
+            }
+            @if (TempData["Success"] != null)
+            {
+                <p align="center" class="alert alert-success" id="empty">@TempData["Success"]</p>
+            }
+            @if (ViewBag.Success != null)
+            {
+                <p align="center" class="alert alert-success" id="success">@ViewBag.Success</p>
+            }
+            <div align="right">
+                <a href="@Url.Action("IndexPayroll", "Authorization")">
+                    <div class="btn btn-primary">
+                        <h6 align="center" class="fas fa-hand-point-right"></h6>
+                        <h6 align="center" class="fas fa-plus">
+                            Enter New ByPass Employee
+                        </h6>
+                    </div>
+                </a>
+            </div>
+            <div class="table" style="font-size:90%">
+                <table class="table table-sm col-12">
+                    <thead class="bg-primary text-white col-12">
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.vchName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.vchMobile)
+                            </th>
+                            <th>
+                                Department
+                            </th>
+                            <th>
+                                Designation
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.dtDOJ)
+                            </th>
+                            <th>
+                                Action
+                            </th>
+                        </tr>
+                    </thead>
+                    @if (ViewBag.Empty != null)
+                    {
+                        <p align="center" class="alert alert-danger" id="emptymsg">@ViewBag.Empty</p>
+                    }
+                    else if(Model!=null)
+                    {
+                        <tbody class="border border-primary">
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.vchName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.vchMobile)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.tblDeptMas.vchdeptname)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.tblDesignationMas.vchdesignation)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.dtDOJ)
+                                    </td>
+
+                                    <td>
+                                        @{                                          
+                                        <button class="confirmButton btn btn-primary btn-sm" id="btnSendAuthor" data-record-id="@item.intid"><i class="fa fa-hand-point-right">&nbsp;SendForVerification</i></button>
+                                            }</td>
+                                </tr>
+                            }
+                        </tbody>
+                    }
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script type="text/javascript">
+        //document.querySelectorAll('.confirmButton').forEach(function (button) {
+        //    button.addEventListener('click', function () {
+        //        var id = this.getAttribute("data-record-id");             
+        //        if (!confirm("Please select ok if employee is corporate employee otherwise cancel"))
+        //        {
+        //            var isCorporate = "No";
+        //            window.location.href = "/Authorization/GenByPassCode?&empid="+id+"&isCorporate="+isCorporate;
+        //        }
+        //        else {
+        //            var isCorporate= "Yes";
+        //            window.location.href = "/Authorization/GenByPassCode?&empid=" + id + "&isCorporate=" + isCorporate;
+        //        }
+        //    });
+        //});
+        document.querySelectorAll('.confirmButton').forEach(function (button) {
+            button.addEventListener('click', function () {
+                var id2 = this.getAttribute("data-record-id");
+                if (confirm("Are you sure for send document verification?")) {
+                 
+                    //window.location.href = "/Authorization/SendForVerification?&empid=" + id2;
+                    window.location.href = "/Authorization/SetAuthorization?&id=" + id2;
+                }
+                else {
+                  
+                   //
+                }
+            });
+        });
+    </script>
+}
+

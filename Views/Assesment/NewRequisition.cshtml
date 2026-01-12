@@ -1,0 +1,199 @@
+﻿@model HRM.Models.tblRequisition
+
+@{
+    ViewBag.Title = "NewRequisition";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+@using (Html.BeginForm("NewRequisition", "Assesment", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        <div class="col-12" style="font-size:90%;color:black">
+            <div class="card" style="background-color:aliceblue">
+                <div class="card-body col-12">
+                    <div class="card-title" align="center">
+                        <h3 class="card-title">New Requisition View</h3>
+                    </div>
+                    <div align="right">
+                        <a href="@Url.Action("ViewAllReq", "Assesment")">
+                            <div class="btn btn-primary">
+                                <h6 align="center" class="fas fa-hand-point-right">
+                                    All Requisition
+                                </h6>
+                            </div>
+                        </a>
+                    </div>
+                    @if (TempData["Error"] != null)
+                    {
+                        <p align="center" class="alert alert-danger" id="empty">@TempData["Error"]</p>
+                    }
+                    @if (ViewBag.Error != null)
+                    {
+                        <p align="center" class="alert alert-danger" id="empty">@ViewBag.Error</p>
+                    }
+                    @if (TempData["Success"] != null)
+                    {
+                        <p align="center" class="alert alert-success" id="empty">@TempData["Success"]</p>
+                    }
+                    @if (ViewBag.Success != null)
+                    {
+                        <p align="center" class="alert alert-success" id="success">@ViewBag.Success</p>
+                    }
+                    <hr />
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="row">
+                    <div class="col-3">
+                        <div class="form-group">
+                            @Html.Label("Select Type", htmlAttributes: new { @class = "col-8 required" })
+                            <div class="col-md-12">
+                                @Html.DropDownListFor(model => model.vchReqType, ViewBag.Types as SelectList, "Select type", htmlAttributes: new { @id = "Type", @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.vchReqType, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    @*<div class="col-3">
+            <div class="form-group">
+                @Html.Label("Select Replacement Code", htmlAttributes: new { @class = "col-8" })
+                <div class="col-md-12">
+                    @Html.DropDownListFor(model => model.fkReplacement_empid, new SelectList(ViewBag.EmpList, "Text", "Value"), htmlAttributes: new { @id = "getEmp", @class = "form-select", @style = "width:100%;" })
+                    @Html.ValidationMessageFor(model => model.fkReplacement_empid, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>*@
+                    <div class="col-3">
+                        <div class="form-group">
+                            @Html.Label("Enter EmpCode", htmlAttributes: new { @class = "col-8" })
+                            <div class="col-md-12">
+                                @Html.EditorFor(model => model.vchRplcMentEmpCode,  new { htmlAttributes = new { @id = "RPCode", @class = "form-control", @style = "width:100%;" } })
+                                @Html.ValidationMessageFor(model => model.fkReplacement_empid, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            @Html.Label("Replacement Name", htmlAttributes: new { @class = "col-8 required" })
+                            <div class="col-md-12">
+                                @Html.EditorFor(model => model.vchRplcMentName,  new { htmlAttributes = new { @id = "RPName", @class = "form-control", @style = "width:100%;" } })
+                                @Html.ValidationMessageFor(model => model.fkReplacement_empid, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            @Html.Label("Select position", htmlAttributes: new { @class = "col-8 required" })
+                            <div class="col-md-12">
+                                @Html.DropDownListFor(model => model.fk_PositionID, new SelectList(ViewBag.AllPosition, "Text", "Value"), htmlAttributes: new { @required = "required", @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.fk_PositionID, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                @Html.Label("Required Education?", htmlAttributes: new { @class = "col-8 required" })
+                                <div class="col-md-12">
+                                    @Html.EditorFor(model => model.vchEducation, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.vchEducation, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                @Html.Label("Additional Qualification?", htmlAttributes: new { @class = "col-8 required" })
+                                <div class="col-md-12">
+                                    @Html.EditorFor(model => model.vchAditionalEducation, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.vchAditionalEducation, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                @Html.Label("Skill Must Have?", htmlAttributes: new { @class = "col-8 required" })
+                                <div class="col-md-12">
+                                    @Html.EditorFor(model => model.vchSkill, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.vchSkill, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                @Html.Label("Desire Experience", htmlAttributes: new { @class = "required col-8" })
+                                <div class="col-md-12">
+                                    @Html.EditorFor(model => model.intExpRequired, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.intExpRequired, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="form-group">
+                                <div class="form-group">
+                                    @Html.Label("Requisition date", htmlAttributes: new { @class = "col-8 required" })
+                                    <div class="col-md-12">
+                                        @Html.EditorFor(model => model.dtRequest, new { htmlAttributes = new { @type = "date", @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.dtRequest, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                @Html.Label("Require on date", htmlAttributes: new { @class = "col-8 required" })
+                                <div class="col-md-12">
+                                    @Html.EditorFor(model => model.dtRequiredDate, new { htmlAttributes = new { @type = "date", @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.dtRequiredDate, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                @Html.Label("Remarks", htmlAttributes: new { @class = "col-8 required" })
+                                <div class="col-md-12">
+                                    @Html.EditorFor(model => model.vchRemarks, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.vchRemarks, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                            <div class="form-group" align="center">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <input type="submit" value="Create" class="btn btn-primary btn-block" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+        </div>
+    </div>
+}
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/Scripts/jqueryui/jquery-ui.js"></script>
+    <script src="~/Content/Select2/js/select2.js"></script>
+    <script src="~/Content/Select2/js/select2.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#getEmp').select2();
+                                        });
+        $("#Type").change(function () {
+            var getType = $("#Type").val();
+            if (getType == "1") {
+                $('#RPCode').prop('disabled', true);
+                $('#RPName').prop('disabled', true);
+            }
+            if (getType == "2") {
+                $('#RPCode').prop('disabled', false);
+                $('#RPName').prop('disabled', false);
+            }
+        }}
+    </script>
+}
+

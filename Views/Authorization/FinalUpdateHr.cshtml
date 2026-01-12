@@ -1,0 +1,112 @@
+﻿@model HRM.Models.EmpFinalUpdateViewModel
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "FinalUpdateHr";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    }
+
+    using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            @if (TempData["Error"] != null)
+            {
+                //Error display when employee details not found in database
+                <p class="alert alert-danger" id="errorMessage" align="center">@TempData["Error"]</p>
+            }
+            @if (TempData["Success"] != null)
+            {
+                //Error display when employee details not found in database
+                <p class="alert alert-success" id="successmsg" align="center">@TempData["Success"]</p>
+            }
+            <br />
+            <h3 style="color:black">Employee final update panel</h3>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.Hidden("id", (string)ViewBag.id)
+
+            <div class="form-group">
+                @Html.Label("Employee Temp Code", htmlAttributes: new { @class = "control-label col-md-8" })
+                <div class="col-md-10">
+                    @*@Html.EditorFor(model => model.tcode,(string)ViewBag.tcode, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })*@
+                    @Html.TextBox("tcode", (string)ViewBag.tcode, htmlAttributes: new { @class = "form-control", @readonly = "readonly", })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Edatejoin, htmlAttributes: new { @class = "control-label col-md-8" })
+                <div class="col-md-10">
+                    @*@Html.EditorFor(model => model.Edatejoin, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })*@
+                    @Html.Label("CreatedDate", (string)ViewBag.Edatejoin, htmlAttributes: new { @class = "form-control", @id = "olddate" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.Label("Select Final DOJ(DD/MM/YYYY)", htmlAttributes: new { @class = "control-label col-md-8" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.dtDOJ, new { htmlAttributes = new { @class = "form-control", @type = "text", @id = "getdate" } })
+                    @Html.ValidationMessageFor(model => model.dtDOJ, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                <h5 class="card-title" style="font-weight:bolder">Select Employee Type</h5>
+                <fieldset class="radio">
+                    <label class="radio">
+                        @Html.RadioButtonFor(Model => Model.bitIsCorporateemp, "true", htmlAttributes: new { id = "chkyes", @class = "radio1" })
+                        Is Corporate Employee
+                    </label><br />
+                    <label class="radio">
+                        @Html.RadioButtonFor(Model => Model.bitIsCorporateemp, "false", htmlAttributes: new { id = "chkno", @class = "radio1" })
+                        Is Unit Employee
+                    </label>
+                    @Html.ValidationMessageFor(model => model.bitIsCorporateemp, "", new { @class = "text-danger" })
+                </fieldset>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save Update" class="btn btn-primary" />
+            </div>
+        </div>
+        @*</div>*@
+    }
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+@section Scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>  
+    <script src="~/Content/assets/extra-libs/taskboard/js/jquery-ui.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var puranidt12 = $("#olddate").val();
+            $("#getdate").datepicker({
+                //minDate: puranidt12,
+                //maxDate:"+1M",
+                dateFormat: 'dd/MM/yy',
+                onSelect: function (value, ui) {
+                    var puranidt = $("#olddate").text().toString();
+                    var parsedate = $.datepicker.parseDate("dd/mm/yy", puranidt);
+                    var OldDate = new Date(parsedate);
+                    var newdt = new Date($(this).val());
+                    if (newdt < OldDate) {
+                        alert("Final D.O.J should not be less than Expected D.O.J");
+                        $("#getfdate").val = newdt;
+                    }
+                    else {
+                        $("#getfdate").val = newdt;
+                    }
+                },
+                changeMonth: true,
+                changeYear: true,
+                yearRange: '1960:2030'
+            })
+        });
+    </script>
+}

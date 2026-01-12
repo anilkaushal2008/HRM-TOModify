@@ -1,0 +1,107 @@
+﻿@model IEnumerable<HRM.Models.tblTitleMas>
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "ViewAllTitleMas";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    }
+
+
+    <br />
+    <div class="card">
+        <div class="card-body">
+            @if (TempData["Success"] != null)
+            {
+                <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+            }
+            <h3 class="card-title">All Title Master View</h3>
+            <div align="right">
+                @{ string TitleMas = Session["NameTitle"].ToString();
+                    if (TitleMas == "True")
+                    {
+                        <a href="@Url.Action("NameTitleMas", "Master")">
+                            <div class="btn btn-primary">
+                                <h6 align="center" class="fas fa-hand-point-right"></h6>
+                                <h6 align="center" class="fas fa-plus">
+                                    New title
+                                </h6>
+                            </div>
+                        </a>
+                    }
+                }
+            </div>
+
+            <div class="table">
+                <table class="table table-sm col-12">
+                    <thead class="bg-primary text-white col-12">
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.vchname)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.vchcreatedby)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.dtcreated)
+                            </th>
+                            @{ string TitleMas1 = Session["EditTitle"].ToString();
+                                if (TitleMas1 == "True")
+                                {
+                                    <th>
+                                        Action
+                                    </th>
+                                }
+                            }
+                        </tr>
+                    </thead>
+
+                    @if (TempData["Empty"] != null)
+                    {
+                        <p class="alert alert-success" id="successMessage">@TempData["Empty"]</p>
+                    }
+                    else
+                    {
+                        <tbody class="border border-primary">
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.vchname)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.vchcreatedby)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.dtcreated)
+                                    </td>
+                                    @{string TitleMas2 = Session["EditTitle"].ToString();
+                                        if (TitleMas2 == "True")
+                                        {
+                                            <td>
+                                                @Html.ActionLink("Edit", "EditTitle", new { id = item.intid })
+                                                @*@Html.ActionLink("Details", "Details", new { id = item.intid })*@
+
+                                            </td>
+                                        }
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    }
+                </table>
+            </div>
+        </div>
+    </div>
+
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/Scripts/jquery-ui.js"></script>
+}

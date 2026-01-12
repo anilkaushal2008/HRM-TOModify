@@ -1,0 +1,80 @@
+﻿@model IEnumerable<HRM.Models.tblDocMas>
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "ViewAllDoc";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    }
+
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">All Document Master View</h4>
+               
+                    @{ string newdoc = Session["Docnew"].ToString();
+                        if (newdoc == "True")
+                        {
+                            <div align="right">
+                                <a href="@Url.Action("DocumentMas","Master")">
+                                    <div class="btn btn-primary">
+                                        <h6 align="center" class="fas fa-hand-point-right">
+                                            Create new Document
+                                        </h6>
+                                    </div>
+                                </a>
+                            </div>
+                        }
+                    }
+               
+                <div class="table-responsive">
+                    <table class="table table-sm col-12">
+                        <thead class="bg-primary text-white">
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.vchdocname)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.vchcreatedby)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.dtcreated)
+                                </th>
+                                <th>
+                                    Action
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="border border-primary">
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.vchdocname)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.vchcreatedby)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.dtcreated)
+                                    </td>
+                                    @{string docedit = Session["Docedit"].ToString();
+                                        if (docedit == "True")
+                                        {
+                                    <td>
+                                        @Html.ActionLink("Edit", "EditDoc", new { id = item.intid })
+                                    </td>
+                                            }
+                                        }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+Html.RenderAction("_SessionError1", "Home");
+}

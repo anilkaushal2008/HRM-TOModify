@@ -1,0 +1,80 @@
+﻿@model IEnumerable<HRM.Models.tblEmpAssesmentMas>
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "ViewActiveDetails1";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    }
+
+    <div class="card">
+        <div class="card-body">
+            @if (TempData["Success"] != null)
+            {
+                <p class="alert alert-success" id="empty" align="center">@TempData["Success"]</p>
+            }
+            <h3 class="card-title">Cancelled authorization employee view</h3>
+            <div class="table table-sm">
+                <table class="table table-sm bg-dark text-white col-12">
+                    <thead class="bg-primary text-white col-12">
+                        <tr>
+                            <th>
+                                Temp E-Code
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.vchName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.tblDeptMas.vchdeptname)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.tblDesignationMas.vchdesignation)
+                            </th>
+                            <th>
+                                Salary
+                            </th>
+                            <th>
+                                Cancel Reason
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="border border-primary">
+                        @if (TempData["Empty"] != null)
+                        {
+                            <p class="alert alert-danger" id="empty" align="center">@TempData["Empty"]</p>
+                        }
+                        else
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.vchEmpTcode)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.vchName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.tblDeptMas.vchdeptname)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.tblDesignationMas.vchdesignation)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(model => item.intsalary)
+                                    </td>
+                                    <td style="color:white">
+                                        @TempData["CancelReson"].ToString();
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}

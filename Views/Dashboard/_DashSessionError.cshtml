@@ -1,0 +1,34 @@
+﻿<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href=@Url.Content("~/Content/assets/images/logo1.png")>
+    <!-- Custom CSS -->
+    <link href=@Url.Content("~/Content/assets/extra-libs/c3/c3.min.css") rel="stylesheet">
+    <link href=@Url.Content("~/Content/assets/libs/chartist/dist/chartist.min.css") rel="stylesheet">
+    <link href=@Url.Content("~/Content/assets/extra-libs/jvector/jquery-jvectormap-2.0.2.css") rel="stylesheet" />
+    <!-- Custom CSS -->
+    <link href=@Url.Content("~/Content/dist/css/style.min.css") rel="stylesheet" />
+    @*bootstrap multiselect*@
+</head>
+<body>
+    <div class="card">
+        <div class="card-body">
+            <h3 class="card-title">Your session has expired!</h3>
+            <div align="center">
+                <a href="@Url.Action("Index","Home")">
+                    <div class="btn btn-success">
+                        <h6 align="center" class="fas fa-hand-point-right">
+                            Click here to re-login your account
+                        </h6>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

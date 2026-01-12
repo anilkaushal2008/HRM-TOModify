@@ -1,0 +1,90 @@
+﻿@model IEnumerable<HRM.Models.tblDocDetails>
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "ViewAllDoc";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    }
+<div class="card-body">
+    @if (TempData["Success"] != null)
+    {
+        <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <p class="alert alert-danger" id="errormsg">@TempData["Error"]</p>
+    }
+    <h4 class="card-title">All Document View</h4>
+    <h6 class="card-subtitle">
+        <div align="right">
+            <a href="@Url.Action("ViewAllEmp", "AddNewEmp")">
+                <div class="btn btn-success">
+                    <h6 align="center" class="fas fa-hand-point-right">
+                        View All New Employee
+                    </h6>
+                </div>
+            </a>
+        </div>
+    </h6>
+    <div class="table-responsive">
+        <table class="table">
+            <thead class="bg-success text-white">
+                <tr>
+                    <th>
+                        Document ID
+                    </th>
+                    <th>
+                        Document Name
+                    </th>
+                    <th>
+                        Uploaded File
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            @if (TempData["Empty"] != null)
+            {
+                <p class="alert alert-danger" id="errormsg">@TempData["Empty"]</p>
+            }
+            else
+            {
+                foreach (var item in Model)
+                {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.fk_intdocid)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.vchdocname)
+
+                </td>
+                <td>
+                    <a href="@Url.Content("~/Uploads/" + @item.vchfilename)" target="_blank">View</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    @Html.ActionLink("Delete", "DelDoc", new { id = item.fk_intdocid, empid = item.fk_empAssid }, new { onclick = "functioncheck();" })
+
+                </td>
+            </tr>
+                }
+            }
+        </table>
+    </div>
+</div>
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+    @section scripts{
+        <script src="~/Scripts/jquery.validate.js"></script>
+        <script src="~/Scripts/jquery.validate.min.js"></script>
+        <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+        <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+        <script type="text/javascript">
+            function functioncheck() {
+                var message = $("Are sure you want to delete document").val();
+                aler(message);
+                return true;
+            }
+        </script>
+    }
+

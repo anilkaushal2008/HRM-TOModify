@@ -1,0 +1,107 @@
+﻿@model HRM.Models.tblLetterOfferMas
+
+@{
+    ViewBag.Title = "EditLetterOfferMas";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="row">
+        <div class="col-12">
+            <div class="card" style="background-color:aliceblue">
+                <div class="card-body col-12">
+                    @if (ViewBag.Success != null)
+                    {
+                        <p align="center" class="alert alert-success" id="successMessage">@ViewBag.Success</p>
+                    }
+                    @if (ViewBag.Error != null)
+                    {
+                        <p align="center" class="alert alert-danger" id="errorMessage">@ViewBag.Error</p>
+                    }
+                    <h3 class="card-title" style="color:black">Update Offer Letter Master View</h3>
+                    <h6 class="card-subtitle"></h6>
+                    <div align="right">
+                        <a href="@Url.Action("IndexOfferMas", "Template")"
+                           class="btn btn-primary"><i class="fa fa-hand-point-right">&nbsp; View All Offer Letter Master</i></a>
+                    </div>
+                    <hr />
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(model => model.intid)
+                    <div class="row col-12">
+                        <div class="col-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.vchMasType, htmlAttributes: new { @class = "control-label col-md-6 required" })
+                                <div class="col-md-10">
+                                    @*@Html.DropDownListFor(model => model.vchMasType, ViewBag.Mastype as SelectList, "Select for master", htmlAttributes: new { @value = Model.vchMasType, @id = "selectedgender", @class = "form-control" })*@
+                                    @Html.DropDownListFor(model => model.vchMasType, ViewBag.OfferType as SelectList, htmlAttributes: new { @value = Model.vchMasType, @id = "selectedgender", @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.vchMasType, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.vchName, htmlAttributes: new { @class = "control-label col-md-6 required" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.vchName, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.vchName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.vchForGender, htmlAttributes: new { @class = "control-label col-md-6 required" })
+                                <div class="col-md-10">
+                                    @*@Html.EditorFor(model => model.vchForGender, new { htmlAttributes = new { @class = "form-control" } })*@
+                                    @Html.DropDownListFor(model => model.vchForGender, ViewBag.GenderList as SelectList, htmlAttributes: new { @value = Model.vchForGender, @id = "selectedgender", @class = "form-control" })
+
+                                    @Html.ValidationMessageFor(model => model.vchForGender, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row col-12">
+                        <div class="col-6">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.vchMasHeading, htmlAttributes: new { @class = "control-label col-md-6 required" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.vchMasHeading, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.vchMasHeading, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.vchLetterCode, htmlAttributes: new { @class = "control-label col-md-6 required" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.vchLetterCode, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.vchLetterCode, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.txtMasContent, htmlAttributes: new { @class = "control-label col-md-6 required" })
+                        <div class="col-md-12">
+                            @Html.TextAreaFor(model => model.txtMasContent, htmlAttributes: new { @class = "form-control", @rows = "30", @size = "2500" })
+                            @Html.ValidationMessageFor(model => model.txtMasContent, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group" align="center">
+                        <div class="col-md-offset-2 col-md-10" >
+                            <input type="submit" value="Update" class="btn btn-success" />&nbsp;&nbsp;&nbsp;
+                            <a class="btn btn-outline-danger" href="@Url.Action("IndexOfferMas","Template")">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@section Scripts
+     {
+    @Scripts.Render("~/bundles/jqueryval")
+}

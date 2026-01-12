@@ -1,0 +1,112 @@
+﻿@model IEnumerable<HRM.Models.tblEmpLoginUser>
+@{
+    ViewBag.Title = "ConsultantUserView";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+<link href="//cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" rel="stylesheet" />
+<div class="card">
+    <div class="card-body">
+        <h3 class="card-title" align="center">Consultant user view</h3>
+        @if (TempData["Success"] != null)
+        {
+            <p class="alert alert-success" id="success" align="center">@TempData["Success"]</p>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <p class="alert alert-danger" id="error" align="center">@TempData["Error"]</p>
+        }
+        @if (TempData["Empty"] != null)
+        {
+            <p class="alert alert-danger" id="empty" align="center">@TempData["Empty"]</p>
+        }       
+        <table id="active" class="table table-sm" style="font-size:90%">
+            <thead class="bg-success text-white col-12">
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        EmpCode
+                    </th>
+                    <th>
+                        Mobile
+                    </th>
+                    @{ if (Session["UpdateMobile"] != null)
+                        {
+                            string ViewUsrPer = Session["UpdateMobile"].ToString();
+                            if (ViewUsrPer == "True")
+                            {
+                                <th>
+                                    Actions
+                                </th>
+                            }
+                        }
+                    }
+                </tr>
+            </thead>
+
+            <tbody class="border border-success">
+                @if (TempData["Empty"] != null)
+                {
+                    <p class="alert alert-danger" id="empty" align="center">@TempData["Empty"]</p>
+                }
+                else
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.tblEmpAssesmentMas.vchName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.tblEmpAssesmentMas.vchEmpFcode)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.vchmobile)
+                            </td>
+                            @{ if (Session["UpdateMobile"] != null)
+                                {
+                                    string Permisssion = Session["UpdateMobile"].ToString();
+                                    if (Permisssion == "True")
+                                    {
+                                        <td>
+                                            <button type="button" class="btn btn-rounded btn-success btn-sm open-modal text-white" data-id="@item.fk_intEmpID.ToString()" style="color:white">UpdateMobile</button>&nbsp;                                          
+                                        </td>
+                                    }
+                                }
+                            }
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <div id="modalContainer"></div>
+</div>
+
+
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#active').DataTable();
+        });
+        //update button action
+        $(document).on("click", ".open-modal", function () {
+            var id = $(this).data("id");
+            $.get('/UserPermission/UpdateMobile', { id: id }, function (data) {
+                $('#modalContainer').html(data);
+                $('#_PartialUpMobile').modal('show');
+            });
+        });
+
+
+    </script>
+}
+
+
+

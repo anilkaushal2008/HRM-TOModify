@@ -1,0 +1,113 @@
+﻿@if (Session["Descript"] != null)
+{
+    {
+        ViewBag.Title = "ViewFullDetails";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    }
+
+    using (Html.BeginForm("ViewFullDetails", "Authorization", FormMethod.Post))
+    {
+
+        //if(Session["HrAdmin"].ToString() != null)
+        <div class="card">
+            <div class="card-body">
+                <div class="row">                   
+                        <div class="col-8">
+                            @{ Html.RenderAction("PartialEmpMas1", "Authorization");}
+                        </div>
+                        <div class="col-4">
+                            @{ Html.RenderAction("PartialProfile1", "Authorization");}
+                        </div>
+                    </div>            
+                
+                <hr />
+                @{ Html.RenderAction("PartialEmpDetails1", "Authorization");}
+                <hr />
+                @{ Html.RenderAction("PartialDocComp1", "Authorization");
+                }
+                <hr />
+                @{Html.RenderAction("PartialAssessmentRemarks", "Authorization");
+                }
+                <hr />
+                @{Html.RenderAction("PartialReconsiderationRemarks", "Authorization");
+                }
+                <hr />
+                <div class="card">
+                    <div class="card-body">
+                        @*<div>
+                            <h3 style="color:black" class="fas fa-hand-point-right">
+                                <input type="checkbox" id="checkback" onclick="" class="form-group" />&nbsp;Click here if you want HR to re-consider this candidate
+                            </h3>
+                        </div>*@
+                        @*<div id="resubmit">
+                            @{Html.RenderAction("PartialBackAuthorization", "Authorization");
+                            }
+                        </div>*@
+                        <div id="author">
+                            @{Html.RenderPartial("PartialAutorizationAction");
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+@section Scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script type="text/javascript">     
+        var salary = $('#CheckSlary').val();
+        if (salary >= 50000) {
+            $('#postdata').click(function () {
+                if ($('#variable').val() != '0') {
+                    if ($('#fixed').val() != '0') {
+                        var vsal = parseInt($('#variable').val());
+                        var fsal = parseInt($('#fixed').val());
+                        $('#total').val(vsal + fsal);
+                        var netsum = $('#total').val();
+                        if (netsum != salary) {
+                            alert("Salary breakup total not matched with salary!");
+                        }
+                    }
+                    else {
+                        alert("Fixed amount should not be zero!");
+                    }
+                }
+                else {
+                    alert("Variable amount should not be zero!");
+                }
+            })
+        }
+        $('#variable').change(function () {
+            if ($('#variable').val() == '0') {
+                //event.preventDefault(); // Prevent form submission
+                alert("Variable amount should not be zero")
+            }
+            var vsal = parseInt($('#variable').val());
+            var fsal = parseInt($('#fixed').val());
+            $('#total').val(vsal + fsal);
+        })
+        $('#fixed').change(function () {
+            if ($('#fixed').val() == '0') {
+                alert("Fixed amount should not be zero")// Prevent form submission
+            }
+            var vsal = parseInt($('#variable').val());
+            var fsal = parseInt($('#fixed').val());
+            $('#total').val(vsal + fsal);
+        })
+
+    </script>
+}
+
+
+
+
+
+

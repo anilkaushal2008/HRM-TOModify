@@ -1,0 +1,177 @@
+﻿@{
+    ViewBag.Title = "BulkUploadTDS";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<div class="card col-12" style="text-align: center; background-color: #f9f9f9; padding: 10px; border: 2px solid #e0e0e0; border-radius:5px; box-shadow: 0 8px 8px rgba(0, 0, 0, 0.1); margin: 20px auto; width:100%;">
+    <div class="card-body">
+        <h2 style="color:black;font-style:oblique;font-weight:bold">Bulk Upload TDS Forms</h2>
+        <hr />
+        <div align="right">
+            <a class="btn btn-primary btn-sm fas fa-hand-point-right" style="color:white" href="@Url.Action("Index","Consultant")">&nbsp;View All Consultant</a>
+        </div>
+        <br />
+        <form id="uploadForm" enctype="multipart/form-data">
+            <div class="row" style="color:black">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        @*<label class="form-control">Select Quarter:</label>*@
+                        <select id="tdsQuarter" class="form-control" name="tdsQuarter">
+                            <option value="0">**Select Qurater**</option>
+                            <option value="1">(April-June)Q1</option>
+                            <option value="2">(July-Sept)Q2</option>
+                            <option value="3">(Oct-Dec)Q3</option>
+                            <option value="4">(Jan-March)Q4</option>
+                        </select>
+                    </div>
+                    <span id="quarterError" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        @*<label class="form-control">Select Quarter:</label>*@
+                        <select id="intYear" class="form-control" name="intYear">
+                            <option value="0">Select financial year</option>
+                            <option value="2024-2025">2024-2025</option>
+                            <option value="2025-2026">2025-2026</option>
+                            <option value="2026-2027">2026-2027</option>
+                            <option value="2027-2028">2027-2028</option>
+                        </select>
+                    </div>
+                    <span id="intYearError" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <input type="file" class="form-control" id="fileInput" name="files" multiple accept=".pdf" />
+
+                    </div>
+                    <span id="fileError" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <button type="button" class="form-control btn btn-primary" onclick="validateForm()">Check PAN Match</button>
+                    </div>
+                </div>
+           </div>
+        </form>
+        <div class="form-group">
+            <!-- Confirm Upload Button -->
+            <button id="confirmUploadBtn" class="btn btn-success btn-block" onclick="confirmUpload()" style="display:none;">Confirm matched PAN number to Upload</button>
+            <br />
+        </div>
+    </div>
+ </div>
+
+<!-- File Upload Form -->
+<!-- Match Results -->
+<div align="left" id="matchResults"></div>
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+                var matchedFiles = new FormData();
+                //validation
+                function validateForm() {
+                    let isValid = true;
+                    let quarter = document.getElementById("tdsQuarter").value;
+                    let intYear = document.getElementById("intYear").value;
+                    let fileInput = document.getElementById("fileInput");
+                    let files = fileInput.files;
+
+                    // Reset error messages
+                    document.getElementById("quarterError").innerText = "";
+                    document.getElementById("fileError").innerText = "";
+                    document.getElementById("intYearError").innerText = "";
+
+                    // Validate quarter selection
+                    if (quarter === "0") {
+                        document.getElementById("quarterError").innerText = "Please select a quarter.";
+                        isValid = false;
+                    }
+                    if (intYear === "0") {
+                        document.getElementById("intYearError").innerText = "Please select financial year.";
+                        isValid = false;
+                    }
+
+                    // Validate file selection
+                    if (files.length === 0) {
+                        document.getElementById("fileError").innerText = "Please upload at least one PDF file.";
+                        isValid = false;
+                    } else {
+                        for (let i = 0; i < files.length; i++) {
+                            if (files[i].type !== "application/pdf") {
+                                document.getElementById("fileError").innerText = "Only PDF files are allowed.";
+                                isValid = false;
+                                break;
+                            }
+                        }
+                    }
+                    // If valid, call your function
+                    if (isValid) {
+                        checkPANMatch();
+                    }
+                }
+
+                function checkPANMatch() {
+                    var formData = new FormData($("#uploadForm")[0]);
+                    formData.append("selectedQuarter", $("#tdsQuarter").val());
+                    formData.append("intYear", $("#intYear").val());
+                    $.ajax({
+                        url: '@Url.Action("CheckPANMatch", "Consultant")',
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function (response) {
+                            if (response.success) {
+                                let matchedPanCount = response.matchedPANs.length;
+                                let UnmatchedPanCount = response.unmatchedPANs.length;
+                                let resultHtml = "<h3>Matched PANs:</h3><ul>";
+                                response.matchedPANs.forEach(file => resultHtml += `<li>${file}</li>`);
+                                resultHtml += "</ul><h3>Unmatched PANs:</h3><ul>";
+                                response.unmatchedPANs.forEach(file => resultHtml += `<li style='color:red;'>${file}</li>`);
+                                resultHtml += "</ul>";
+
+                                $("#matchResults").html(resultHtml);
+                                matchedFiles = new FormData();
+                                let files = document.getElementById("fileInput").files;
+                                //show confirm button when match found sirf.
+                                if (response.matchedPANs.length > 0) {
+                                    $("#confirmUploadBtn").show();
+                                }
+                                for (let i = 0; i < files.length; i++) {
+                                    if (response.matchedPANs.includes(files[i].name)) {
+                                        matchedFiles.append("matchedFiles", files[i]);
+                                    }
+                                }
+                            } else {
+                                alert(response.message);
+                            }
+                        },
+                        error: function () {
+                            alert("Error checking PAN match.");
+                        }
+                    });
+                }
+
+                function confirmUpload() {
+                    matchedFiles.append("selectedQuarter", $("#tdsQuarter").val());
+                    matchedFiles.append("intYear", $("#intYear").val());
+                    $.ajax({
+                        url: '@Url.Action("UploadConfirmedTDS", "Consultant")',
+                        type: 'POST',
+                        data: matchedFiles,
+                        processData: false,
+                        contentType: false,
+                        success: function (response) {
+                            alert(response.message);
+                            if (response.success) location.reload();
+                        },
+                        error: function () {
+                            alert("File upload failed.");
+                        }
+                    });
+                }
+</script>
+
+

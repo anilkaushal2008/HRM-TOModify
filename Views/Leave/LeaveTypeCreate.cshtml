@@ -1,0 +1,108 @@
+﻿@model HRM.Models.tblLeaveType
+@{
+    ViewBag.Title = "LeaveTypeCreate";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="card" style="text-align:center; background-color: #f9f9f9; padding: 10px; border: 2px solid #e0e0e0; border-radius: 10px; box-shadow: 0 8px 8px rgba(0, 0, 0, 0.1); margin: 20px auto;">
+        <div class="card-body">
+            <h3 class="card-title">Create Leave Type Master View</h3>
+            <hr />
+            <div align="right">
+                <a href="@Url.Action("TypeIndex", "Leave")">
+                    <div class="btn btn-primary btn-sm">
+                        <h6 align="center" class="fas fa-hand-point-right"></h6>
+                        <h6 align="center" class="fa fa-plus">
+                            View All Type
+                        </h6>
+                    </div>
+                </a>
+            </div>
+            @if (TempData["Success"] != null)
+            {
+                <p class="alert alert-success" id="tsuccess" align="center">@TempData["Success"]</p>
+            }
+            @if (TempData["Empty"] != null)
+            {
+                <p class="alert alert-danger" id="tempty" align="center">@TempData["Empty"]</p>
+            }
+            @if (TempData["Error"] != null)
+            {
+                <p class="alert alert-danger" id="terror" align="center">@TempData["Error"]</p>
+            }
+            @if (ViewBag.Success != null)
+            {
+                <p class="alert alert-success" id="vSuccess" align="center">@ViewBag.Success</p>
+            }
+            @if (ViewBag.Error != null)
+            {
+                <p class="alert alert-danger" id="error" align="center">@ViewBag.Error</p>
+            }
+            @if (ViewBag.Empty != null)
+            {
+                <p class="alert alert-danger" id="vSuccess" align="center">@ViewBag.Empty</p>
+            }
+            <div class="card" style="text-align: center; background-color: #f9f9f9; padding: 10px; border: 2px solid #e0e0e0; border-radius: 10px; box-shadow: 0 8px 8px rgba(0, 0, 0, 0.1); margin: 20px auto;">
+                <div class="card-body">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="row col-12">
+                        <div class="col-md-6">
+                            @Html.Label("Leave Type", htmlAttributes: new { @class = "control-label col-md-8" })
+                            @Html.EditorFor(model => model.leaveType, new { htmlAttributes = new { @class = "form-control", @required = "reaquired" } })
+                            @Html.ValidationMessageFor(model => model.leaveType, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-md-3">
+                            @Html.Label("Type for Consultant?", htmlAttributes: new { @class = "control-label col-md-8" })
+                            @Html.EditorFor(model => model.bitForConsultant, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                        <div class="col-md-3">
+                            @Html.Label("1/2 year Validation?", htmlAttributes: new { @class = "control-label col-md-8" })
+                            @Html.EditorFor(model => model.bitAllowYearHalfCheck, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.bitAllowYearHalfCheck, "", new { @class = "text-danger" })
+                        </div>
+                       
+                    </div>
+                    <br />
+                    <div class="row col-12">
+                        <div class="col-md-3">
+                            @Html.Label("Is Employee EMG Type?", htmlAttributes: new { @class = "control-label col-md-6" })
+                            @Html.EditorFor(model => model.bitIsUseInEmgLeave, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                        <div class="col-md-3">
+                            @Html.Label("Max Day's in a Year", htmlAttributes: new { @class = "control-label col-md-6" })
+                            @Html.EditorFor(model => model.decMaxDayPerYear, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.decMaxDayPerYear, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-md-3">
+                            @Html.Label("Min Day's at once", htmlAttributes: new { @class = "control-label col-md-6" })
+                            @Html.EditorFor(model => model.decMinOnce, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.decMinOnce, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-md-3">
+                            @Html.Label("Max Day's at once", htmlAttributes: new { @class = "control-label col-md-6" })
+                            @Html.EditorFor(model => model.decMaxOnce, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.decMaxOnce, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <br />
+                    <div class="form-group" align="center">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Save Leave Master" class="btn btn-primary btn-block" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+
+}

@@ -1,0 +1,119 @@
+﻿@{ if (Session["descript"] != null)
+    {
+        {
+            ViewBag.Title = "ActiveData";
+            Layout = "~/Views/Shared/_LayoutMain.cshtml";
+        }
+        @*<link href="~/Content/datatables/css/dataTables.bootstrap4.min.css" rel="stylesheet" />*@
+        <link href="//cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" rel="stylesheet" />
+        <div class="container col-lg-12">
+            <br />
+            <div style="width:100%; margin:0;">
+                <table id="ActiveTable" class="table table-sm table-striped table-bordered dt-responsive nowrap " width="90%" cellspacing="0">
+                    <thead class="bg-dark text-white">
+                        <tr>
+                            <td>
+                                Name
+                            </td>
+                            <td>
+                                DOJ
+                            </td>
+                            <td>
+                                Salary
+                            </td>
+                            <td>
+                                FatherName
+                            </td>
+                            <td>
+                                MotherName
+                            </td>
+                            <td>
+                                Gender
+                            </td>
+                            <td>
+                                Department
+                            </td>
+                            <td>
+                                Designation
+                            </td>
+                        </tr>
+                    </thead>
+                    <tfoot class="bg-dark text-white">
+                        <tr>
+                            <td>
+                                Name
+                            </td>
+                            <td>
+                                DOJ
+                            </td>
+                            <td>
+                                Salary
+                            </td>
+                            <td>
+                                FatherName
+                            </td>
+                            <td>
+                                MotherName
+                            </td>
+                            <td>
+                                Gender
+                            </td>
+                            <td>
+                                Department
+                            </td>
+                            <td>
+                                Designation
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+        
+        }
+        else
+        {
+            Html.RenderAction("_SessionError1", "Home");
+        }
+    }
+
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    @*<script src="~/Content/datatables/js/dataTables.bootstrap4.min.js"></script>
+        <script src="~/Content/datatables/js/jquery.dataTables.min.js"></script>*@
+    <script src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#ActiveTable').DataTable({
+                "ajax": {
+                    "url": "/Accounts/SearchActive",
+                    "type": "GET",
+                    "datatype": "json",
+                    "emptyTable": "No record found in database!"
+                },
+                "columns": [
+
+                    { "data": "Name" },
+                    {
+                        "data": "DOJ",
+                        "render": function (jsonDate) {
+                            var date = new Date(parseInt(jsonDate.substr(6)));
+                            var month = date.getMonth() + 1;
+                            return date.getDate() + "/" + month + "/" + date.getFullYear();
+                        }
+                    },
+                    { "data": "Salary" },
+                    { "data": "FatherName" },
+                    { "data": "MotherName" },
+                    { "data": "Gender" },
+                    { "data": "Department" },
+                    { "data": "Designation" }
+                ]
+            });
+        });
+    </script>
+}
+

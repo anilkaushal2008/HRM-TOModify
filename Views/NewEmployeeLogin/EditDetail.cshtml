@@ -1,0 +1,352 @@
+﻿@using System.Web
+@using System.Web.Optimization
+@model HRM.Models.tblEmpDetails
+@if (Session["empid"] != null)
+{
+    {
+        ViewBag.Title = "AddEmpDetails";
+        Layout = "~/Views/Shared/_layout_EmpUserLogin.cshtml";
+        Html.EnableClientValidation(true);
+    }
+
+    using (Html.BeginForm("EditDetail", "NewEmployeeLogin", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <br />
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title">Update your details</h3>
+                        <h6 class="card-subtitle">
+                        </h6>
+                        <div class="button-box">
+                            @*<button type="button" class="btn btn-secondary btn-outline" data-toggle="tooltip"
+                                        data-placement="left" title="Add Official Details">
+                                    <a class="text-white" href="@Url.Action("OfficialDetails", "AddNewEmp")">Official Details</a>
+                                </button>*@
+                            @*<button type="button" class="btn btn-secondary btn-outline" data-toggle="tooltip"
+                                        data-placement="top" title="" data-original-title="Add Qualification">
+                                    <a class="text-white" href="@Url.Action("QualificationDetails", "AddNewEmp")">
+                                        Qualification Details
+                                    </a>
+                                </button>*@
+                            @*<button type="button" class="btn btn-primary btn-outline" data-toggle="tooltip"
+                                        data-placement="top" title="" data-original-title="Add Personal Details">
+                                    Personal Details
+                                </button>
+                                <button type="button" class="btn btn-secondary btn-outline" data-toggle="tooltip"
+                                            data-placement="top" title="" data-original-title="Add Contact Details">
+                                        <a class="text-white" href="@Url.Action("employeeupload","NewEmployeeLogin")">
+                                            Document Details
+                                        </a>
+                                    </button>*@
+                            @*<a href="@Url.Action("ViewAllEmp", "AddNewEmp")">
+                                    <div class="btn btn-success">
+                                        <h6 align="center" class="fas fa-hand-point-right">
+                                            Back to view all employee
+                                        </h6>
+                                    </div>
+                                </a>*@
+                        </div>
+                        <br />
+                        <hr />
+                        <div class="form-body">
+                            <div class="row">
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                <div class="col-md-12">
+                                    @Html.Hidden("empIDD", (string)ViewBag.SelectedEmpID)
+                                    <div class="form-group">
+                                        @Html.Label("Your selected position")<span style="color:red"></span>
+                                        @Html.Label("vchempcode", (string)ViewBag.Position, htmlAttributes: new { @class = "form-control col-12" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.fk_titid)<span style="color:red">*</span>
+                                    @Html.DropDownListFor(model => model.fk_titid, ViewBag.Title1 as SelectList, "Select title", htmlAttributes: new { @id = "selectedtitle", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.vchfname)<span style="color:red">*</span>
+                                    @Html.EditorFor(model => model.vchfname, new { htmlAttributes = new { @id = "fname", @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.vchfname, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.vchmname)
+                                    @Html.EditorFor(model => model.vchmname, new { htmlAttributes = new { @id = "mname", @class = "form-control" } })
+                                    @*@Html.ValidationMessageFor(model => model.vchmname, "", new { @class = "text-danger" })*@
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.vchlname)<span style="color:red">*</span>
+                                    @Html.EditorFor(model => model.vchlname, new { htmlAttributes = new { @id = "lname", @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.vchlname, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.vchsex)<span style="color:red">*</span>
+                                    @Html.DropDownListFor(model => model.vchsex, ViewBag.GenderList as SelectList, "Select gender", htmlAttributes: new { @id = "selectedgender", @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.vchsex, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.vchmaritalststus)<span style="color:red">*</span>
+                                    @Html.DropDownListFor(model => model.vchmaritalststus, ViewBag.MaritalStatus as SelectList, "Select status", htmlAttributes: new { @id = "smar", @class = "form-control", @onchange = "getchange()" })
+                                    @Html.ValidationMessageFor(model => model.vchmaritalststus, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.dtDob)<span style="color:red">* </span>Select from calender
+                                    @Html.EditorFor(model => model.dtDob, new { htmlAttributes = new { @id = "dtdob", @type = "text", @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.dtDob, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.intage)<span style="color:red">*</span>
+                                    @Html.EditorFor(model => model.intage, new { htmlAttributes = new { @id = "txtage", @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.intage, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.vchFatherName)<span style="color:red">*</span>
+                                    @Html.EditorFor(model => model.vchFatherName, new { htmlAttributes = new { @id = "fname", @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.vchFatherName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.vchmothername)<span style="color:red">*</span>
+                                    @Html.EditorFor(model => model.vchmothername, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.vchmothername, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.vchspouse, htmlAttributes: new { @class = "control-label col-md-8", @id = "lblspouse" })
+                                    @Html.EditorFor(model => model.vchspouse, new { htmlAttributes = new { @class = "form-control", @id = "txtspouse" } })
+                                    @*@Html.ValidationMessageFor(model => model.vchspouse, "", new { @class = "text-danger" })*@
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                        <h5 style="color:black">
+                            Nominee details
+                        </h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.Label("Nominee")<span style="color:red">*</span>
+                                    @Html.EditorFor(model => model.vchNominee, new { htmlAttributes = new { @id = "fname", @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.vchNominee, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.Label("Relation")<span style="color:red">*</span>
+                                    @Html.EditorFor(model => model.vchRelation, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.vchRelation, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                        <h5 style="color:black">
+                            Contact address
+                        </h5>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.vchtaddress)<span style="color:red">*</span>
+                                    @Html.EditorFor(model => model.vchtaddress, new { htmlAttributes = new { @id = "taddress", @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.vchtaddress, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.vchtcity)<span style="color:red">*</span>
+                                    @Html.EditorFor(model => model.vchtcity, new { htmlAttributes = new { @id = "tdistt", @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.vchtcity, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.vchtstate)<span style="color:red">*</span>
+                                    @Html.EditorFor(model => model.vchtstate, new { htmlAttributes = new { @id = "tstate", @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.vchtstate, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.inttpin, htmlAttributes: new { @class = "control-label col-md-6" })
+                                    @Html.EditorFor(model => model.inttpin, new { htmlAttributes = new { @id = "temppin", @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.inttpin, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.vchtmobile, htmlAttributes: new { @class = "control-label col-md-6" })
+                                    @Html.EditorFor(model => model.vchtmobile, new { htmlAttributes = new { @id = "tempmob", @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.vchtmobile, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                        @*place check box for same address*@
+                        <h5 style="color:black">
+                            Permanent address
+                        </h5>
+                        <div class="custom-checkbox" style="color:firebrick">
+                            Click here if permanent  address is same as contact address <br />
+                            <h5 class="fas fa-hand-point-right">
+                                <input type="checkbox" id="chkpaddress" />
+                            </h5>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.vchpaddress)<span style="color:red">*</span>
+                                    @Html.EditorFor(model => model.vchpaddress, new { htmlAttributes = new { @id = "paddress", @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.vchpaddress, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.vchpcity, htmlAttributes: new { @class = "control-label col-md-8" })
+                                    @Html.EditorFor(model => model.vchpcity, new { htmlAttributes = new { @id = "pstate", @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.vchpcity, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.vchpstate, htmlAttributes: new { @class = "control-label col-md-6" })
+                                    @Html.EditorFor(model => model.vchpstate, new { htmlAttributes = new { @id = "pdistt", @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.vchpstate, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.intppin, htmlAttributes: new { @class = "control-label col-md-6" })
+                                    @Html.EditorFor(model => model.intppin, new { htmlAttributes = new { @id = "ppin", @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.intppin, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.vchpmobile, htmlAttributes: new { @class = "control-label col-md-6" })
+                                    @Html.EditorFor(model => model.vchpmobile, new { htmlAttributes = new { @id = "pmob", @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.vchpmobile, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div align="center" class="form-group">
+                            <h5 class="card-title">Is final submission</h5>
+                            <fieldset class="radio">
+                                <label class="radio">
+                                    Yes
+                                    @Html.RadioButtonFor(Model => Model.BitCompleted, "true", htmlAttributes: new { id = "chkyes", @class = "radio1" })
+                                </label>
+                                <label class="radio">
+                                    No
+                                    @Html.RadioButtonFor(Model => Model.BitCompleted, "false", htmlAttributes: new { id = "chkno", @class = "radio1" })
+                                </label>
+                                @Html.ValidationMessageFor(model => model.BitCompleted, "", new { @class = "text-danger" })
+                            </fieldset>
+                        </div>
+                        <div align="center" class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <input type="submit" value="Save All" class="btn btn-block btn-success" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+
+@*query for if permanent address is same as contact address(on check box click)*@
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/Scripts/jquery-ui.js"></script>
+    <script type="text/javascript">
+        //calculate age using dob
+        $(document).ready(function () {
+
+            var age = "";
+            $("#dtdob").datepicker({
+                dateFormat: 'dd/MM/yy',
+                onSelect: function (value, ui) {
+                    var aaj = new Date();
+                    age = aaj.getFullYear() - ui.selectedYear;
+                    $("#txtage").val(age);
+                },
+                changeMonth: true,
+                changeYear: true,
+                yearRange: '1960:2021'
+
+            })
+        });
+
+        //function for dropdown martial status and actions
+        function getchange() {
+            var value = $("#smar").val();
+            if (value == "1") {
+                $("#txtspouse").attr("disabled", true);
+            }
+            else {
+                $("#txtspouse").attr("disabled", false);
+            }
+        }
+        $(document).ready(function () {
+            $('input:checkbox[id*=chkpaddress]').change(function () {
+                if ($(this).is(':checked')) {
+                    $('input:text[id*=paddress]').val($('input:text[id*=taddress]').val());
+                    $('input:text[id*=pstate]').val($('input:text[id*=tstate]').val());
+                    $('input:text[id*=pdistt]').val($('input:text[id*=tdistt]').val());
+                    $('#ppin').val($('#temppin').val());
+                    $('#pmob').val($('#tempmob').val());
+                }
+                else {
+                    $('input:text[id*=pstate]').val('');
+                    $('input:text[id*=pdistt]').val('');
+                    $('input:text[id*=ptehsil]').val('');
+                    $('input:text[id*=pstreet]').val('');
+                    $('input:text[id*=ppin]').val('');
+                    $('input:text[id*=pmobile]').val('');
+                }
+            });
+        });
+    </script>
+}
+
+
+

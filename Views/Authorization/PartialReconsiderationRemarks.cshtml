@@ -1,0 +1,102 @@
+﻿@model IEnumerable<HRM.Models.tblConversation>
+@{ 
+    Layout = "";
+}
+@if(Session["descript"] != null)
+{
+<div class="card">
+    <div class="card-body">
+        @if (Model != null)
+        {
+            <h4 class="card-title" style="color:black;font-weight:bold;color:Highlight">HR/Authorizer Conversation Details</h4>
+            <div class="table-responsive">
+                <table class="table table-sm">
+                    <thead class="">
+                        <tr style="color:black">
+                            <th>
+                                Message
+                            </th>
+                            <th>
+                                Posted By
+                            </th>
+                            <th>
+                                Date Time
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="">
+                        @if(ViewBag.Empty != null)
+                        {
+                            <p class="alert alert-orange" id="empty" align="center">@ViewBag.Empty</p>
+                        }
+                        else
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr style="color:black">
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.vchMsg)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.fk_UserName)
+                                    </td>
+                                    <td>
+                                        @Convert.ToDateTime(item.dtMsgDate).ToString("dd/MM/yyyy")
+                                    </td>
+                                </tr>
+                            }
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {<div class="table-responsive">
+             <table class="table table-sm">
+                 <thead class="">
+                     <tr style="color:black">
+                         <th style="color:black;font-size:medium;font-weight:bold">
+                            Old Messages
+                         </th>
+                     </tr>
+                 </thead>
+                 <tbody class="">
+                     <tr style="color:black">
+                         <td>
+                             @{ <a style="font-weight:bold">Authorizer:</a>
+                                 if (ViewBag.OldMsg != null)
+                                 {
+                                     @ViewBag.OldMsg<br />
+                                 }
+                                 else
+                                 {
+                                     @ViewBag.Empty1.ToString();<br />
+                                 }
+                             }
+                             @{ <a style="font-weight:bold">HR/HR Team:</a>
+                                 if (ViewBag.HrOldMsg != null)
+                                 {
+                                     @ViewBag.HrOldMsg;<br />
+                                 }
+                                 else
+                                 {
+                                     @ViewBag.Empty2.ToString();
+                                 }
+                             }
+                         </td>
+                         </tr>
+                     </tbody>
+                 </table>
+        </div>
+        }
+
+</div>
+</div>
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+
+

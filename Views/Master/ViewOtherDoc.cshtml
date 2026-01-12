@@ -1,0 +1,102 @@
+﻿@model IEnumerable<HRM.Models.tblOtherDocumentMas>
+@if (Session["descript"] != null)
+{
+    {
+        {
+            ViewBag.Title = "ViewOtherDoc";
+            Layout = "~/Views/Shared/_LayoutMain.cshtml";
+        }
+    }
+
+    <div class="card">
+        <div class="card-body">
+            @if (TempData["Success"] != null)
+            {
+                <p align="center" class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+            }
+            @if (TempData["Error"] != null)
+            {
+                <p align="center" class="alert alert-danger" id="error">@TempData["Error"]</p>
+            }
+           
+            <h3 class="card-title">All Other Document Master View</h3>
+            @{ string Dept = Session["DepartmentMas"].ToString();
+                if (Dept == "True")
+                {
+                    <div align="right">
+                        <a href="@Url.Action("OtherDocument", "Master")">
+                            <div class="btn btn-primary">
+                                <h6 align="center" class="fas fa-hand-point-right"></h6>
+                                <h6 align="center" class="fa fa-plus">
+                                    New Document
+                                </h6>
+                            </div>
+                        </a>
+                    </div>
+                }
+            }
+
+            <div class="table">
+                <table class="table table-sm col-12">
+                    <thead class="bg-primary text-white col-12">
+                        <tr>
+                            <th>
+                               Document Name
+                            </th>
+                            <th>
+                               CreatedBy
+                            </th>
+                            <th>
+                                Creation Date
+                            </th>
+                            @{ string Dept1 = Session["EditDepartmentMas"].ToString();
+                                if (Dept1 == "True")
+                                {
+                                    <th>Action</th>
+                                }
+                            }
+                        </tr>
+                    </thead>
+                    @if (TempData["Empty"] != null)
+                    {
+                        <p align="center" class="alert alert-danger" id="successMessage">@TempData["Empty"]</p>
+                    }
+                    else
+                    {
+                        <tbody class="border border-primary">
+
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.vchDocName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.vchCretaedBy)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.dtCretaed)
+                                    </td>
+                                    @{ string Dept2 = Session["EditDepartmentMas"].ToString();
+                                        if (Dept2 == "True")
+                                        {
+                                            <td>
+                                                @Html.ActionLink("Edit", "EditOtherDocument", new { id = item.intid })
+                                            </td>
+                                        }
+                                    }
+                                </tr>
+
+                            }
+                        </tbody>
+                    }
+                </table>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+

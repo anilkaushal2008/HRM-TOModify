@@ -1,0 +1,53 @@
+﻿@model HRM.Models.UpAadhaarNo
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "AadhaarNo";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    }
+
+    using (Html.BeginForm("AadhaarNo", "Authorization", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <br />
+        <h3 class="col-10" style="color:black">Authorizer salary update pannel</h3>
+        if (ViewBag.Error != null)
+        {
+            <p class="alert alert-danger" id="error" align="center">@ViewBag.Error</p>
+        }
+        if (TempData["Success"] != null)
+        {
+            <p class="alert alert-success" id="empty" align="center">@TempData["Success"]</p>
+        }
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(Model => Model.empid, htmlAttributes: new { @id = "id" })
+        <div class="col-6">
+            <div class="form-group">
+                <label class="control-lable col-md-12">Name</label>
+                @Html.TextBoxFor(model => model.name, htmlAttributes: new { @id = "name", @class = "form-control", @readonly = "readonly" })
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group">
+                @Html.Label("Aadhar number(XXXX-XXXX-XXXX)", htmlAttributes: new { @class = "control-lable col-md-12" })
+                @Html.TextBoxFor(model => model.aadharno, htmlAttributes: new { @id = "Anumber", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.aadharno, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="col-6">
+            <div class="form-group">
+                @*<input type="button" value="Update Password" class="btn btn-success" id="uppass" onclick="UpdatePass()" />*@
+                <input type="submit" value="Save aadhaar number" class="btn btn-primary" id="btnupdate" />&nbsp;&nbsp;&nbsp;&nbsp;
+                <a class="btn btn-danger" href="@Url.Action("ViewFullDetails", "Authorization", new { id = Model.empid })">Cancel</a>
+
+            </div>
+        </div>
+    }
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+

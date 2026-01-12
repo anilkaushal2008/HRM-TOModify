@@ -1,0 +1,506 @@
+﻿@model IEnumerable<HRM.Models.DnbFeeDashboardVM>
+@{
+    ViewBag.Title = "Candidate Fee Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container my-4 col-10">
+    <h3 class="mb-4 text-primary fa-bold">
+        <i class="bi bi-cash-stack"></i> My Fee Dashboard
+    </h3>
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger">@ViewBag.Error</div>
+    }
+    else if (ViewBag.Message != null)
+    {
+        <div class="alert alert-info">@ViewBag.Message</div>
+    }
+    @if (Model != null && Model.Any())
+    {
+        <div class="row g-4">
+            @foreach (var item in Model)
+            {
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card shadow-lg border-0 rounded-4 h-100 hover-card">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h5 class="card-title text-dark mb-0">
+                                    <i class="bi bi-calendar-week text-success"></i>
+                                    Year <strong>@item.YearNumber</strong>
+                                </h5>
+                                <span class="badge badge-pill px-3 py-2 text-white fw-semibold
+                                    @(item.SubmissionStatus == "Verified" ? "bg-success" :
+                                      item.SubmissionStatus == "Pending Verification" ? "bg-warning text-dark" :"bg-danger")">
+                                    @(string.IsNullOrEmpty(item.SubmissionStatus) ? "Not Submitted" : item.SubmissionStatus)
+                                </span>
+                            </div>
+
+                            <p class="mb-1"><i class="bi bi-bank text-primary me-1"></i><strong>Payable To:</strong> @item.PayableTo</p>
+                            <p class="mb-1"><i class="bi bi-currency-rupee text-primary me-1"></i><strong>Amount:</strong> ₹@item.Amount.ToString("N0")</p>
+                            <p class="mb-3"><i class="bi bi-calendar-event text-primary me-1"></i><strong>Due Date:</strong> @(item.DueDate != null ? item.DueDate.Value.ToString("dd-MMM-yyyy") : "")</p>
+
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                @if (string.IsNullOrEmpty(item.SubmissionStatus) || item.SubmissionStatus == "Pending")
+                                {
+                                    <button type="button"
+                                            class="btn btn-primary btn-rounded"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#uploadFeeModal"
+                                            data-id="@item.FeeStructureId">
+                                        <i class="fa fas fa-hand-point-right"></i> Upload fee proof
+                                    </button>
+                                }
+
+                                @if (!string.IsNullOrEmpty(item.SubmissionStatus) && (item.SubmissionStatus == "Pending Verification"))
+                                {
+                                    <button type="button"
+                                            class="btn btn-warning btn-rounded"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#uploadDetailModal"
+                                            data-id="@item.FeeStructureId">
+                                        <i class="fa fas fa-hand-point-right"></i> Slip detail
+                                    </button>
+                                }
+
+                                else if (item.SubmissionStatus == "Verified")
+                                {
+                                    @*<button type="button"
+                    class="btn btn-success btn-rounded"
+                    data-bs-toggle="modal"
+                    data-bs-target="@Url.Action("FeeSlipPrint","NewEmployeeLogin",new{id=item.FeeStructureId)"
+
+                    data-id="@item.FeeStructureId">
+                <i class="fa fas fa-hand-point-right"></i>Slip print
+            </button>*@
+                                    <a href="@Url.Action("PrintDNBFeeSlip", "NewEmployeeLogin", new { id = item.FeeStructureId })"
+                                       class="btn btn-success btn-rounded" target="_blank">
+                                        <i class="bi bi-printer"></i> Print Slip
+                                    </a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning text-center p-4">
+            <i class="bi bi-exclamation-triangle"></i> No fee records available for this DNB candidate.
+        </div>
+    }
+</div>
+
+<style>
+    .hover-card {
+        transition: all 0.3s ease-in-out;
+        border-radius: 1.25rem !important;
+        background: #ffffff;
+    }
+
+        .hover-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+</style>
+
+<!-- 🌟 Upload Fee Proof Modal -->
+<div class="modal fade" id="uploadFeeModal" tabindex="-1" aria-labelledby="uploadFeeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+
+            <!-- Header -->
+            <div class="modal-header bg-gradient text-white py-3" style="background: linear-gradient(135deg, #0d6efd, #6610f2);">
+                <h5 class="modal-title fw-bold" id="uploadFeeModalLabel">
+                    <i class="bi bi-upload me-2"></i> Upload Fee Proof
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <!-- Body -->
+            <div class="modal-body bg-light-subtle px-4 py-3">
+                <form id="uploadFeeForm" class="needs-validation" novalidate enctype="multipart/form-data">
+                    <input type="hidden" id="FeeStructureId" name="FeeStructureId" />
+
+                    <div class="row g-4">
+                        <!-- Payment Reference -->
+                        <div class="col-md-6 mb-4">
+                            <label for="PaymentReferenceNo" class="form-label fw-semibold text-dark">
+                                Payment Reference No <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group shadow-sm rounded-3">
+                                <span class="input-group-text bg-white border-end-0">
+                                    <i class="bi bi-hash text-primary"></i>
+                                </span>
+                                <input type="text" class="form-control border-start-0" name="PaymentReferenceNo" id="PaymentReferenceNo"
+                                       placeholder="Enter reference number" required />
+                                <div class="invalid-feedback">Payment reference number is required.</div>
+                            </div>
+                        </div>
+
+                        <!-- Payment Date -->
+                        <div class="col-md-6 mb-4">
+                            <label for="PaymentDate" class="form-label fw-semibold text-dark">
+                                Payment Date <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group shadow-sm rounded-3">
+                                <span class="input-group-text bg-white border-end-0">
+                                    <i class="bi bi-calendar-date text-primary"></i>
+                                </span>
+                                <input type="date" class="form-control border-start-0" name="PaymentDate" id="PaymentDate" required />
+                                <div class="invalid-feedback">Please select a valid payment date.</div>
+                            </div>
+                        </div>
+
+                        <!-- Payment Mode -->
+                        <div class="col-md-6 mb-4">
+                            <label for="PaymentMode" class="form-label fw-semibold text-dark">
+                                Payment Mode <span class="text-danger">*</span>
+                            </label>
+
+                            <div class="input-group has-validation shadow-sm rounded-3">
+                                <span class="input-group-text bg-white border-end-0">
+                                    <i class="bi bi-credit-card-2-front text-primary"></i>
+                                </span>
+                                <select name="PaymentMode" id="PaymentMode" class="form-select border-start-0 form-control" required>
+                                    <option value="" selected disabled>Select Mode</option>
+                                    <option>Online Transfer</option>
+                                    <option>Bank Deposit</option>
+                                    <option>Cheque/DD</option>
+                                    <option>Other</option>
+                                </select>
+                                <!-- ✅ Keep feedback INSIDE the input group (Bootstrap 5 supports this) -->
+                                <div class="invalid-feedback">Please select a payment mode.</div>
+                            </div>
+                        </div>
+
+                        <!-- File Upload -->
+                        <div class="col-md-6 mb-4">
+                            <label for="PaymentScreenshot" class="form-label fw-semibold text-dark">
+                                Upload Proof<span class="text-danger">*(JPG, PNG, or PDF files allowed.)</span>
+                            </label>
+                            <div class="input-group shadow-sm rounded-3">
+                                <span class="input-group-text bg-white border-end-0">
+                                    <i class="bi bi-image text-primary"></i>
+                                </span>
+                                <input type="file" class="form-control border-start-0" name="PaymentScreenshot" id="PaymentScreenshot"
+                                       accept="image/*,application/pdf" required />
+                                <div class="invalid-feedback">Please upload a valid image or PDF file.</div>
+                            </div>
+                            <div class="text-center mt-3">
+                                <img id="previewImg" src="#" alt="Preview"
+                                     class="img-fluid rounded-3 shadow-sm d-none border"
+                                     style="max-height:150px; object-fit:contain;" />
+                            </div>
+                        </div>
+
+                        <!-- Remarks -->
+                        <div class="col-12">
+                            <label for="Remarks" class="form-label fw-semibold text-dark">Remarks</label>
+                            <textarea name="Remarks" id="Remarks"
+                                      class="form-control shadow-sm rounded-3"
+                                      rows="2"
+                                      placeholder="Optional notes..."></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Footer -->
+            <div class="modal-footer bg-white border-top-0 py-3">
+                <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle"></i> Cancel
+                </button>
+                <button type="button" id="btnSubmitFee" class="btn bg-primary text-white rounded-pill px-4 shadow-sm">
+                    <i class="bi bi-check-circle"></i> Submit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*💅 CSS*@
+<style>
+    #uploadFeeModal .modal-header {
+        background: linear-gradient(135deg, #0d6efd, #6610f2);
+    }
+
+    #uploadFeeModal .form-control,
+    #uploadFeeModal .form-select {
+        border: 1px solid #dee2e6;
+        transition: all 0.2s ease;
+    }
+
+        #uploadFeeModal .form-control:focus,
+        #uploadFeeModal .form-select:focus {
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+        }
+
+    #uploadFeeModal .modal-content {
+        animation: slideUp 0.35s ease-in-out;
+    }
+
+    @@keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    #uploadFeeModal .input-group-text {
+        border-radius: 0.5rem 0 0 0.5rem !important;
+    }
+
+    #uploadFeeModal .btn-success:hover {
+        background: linear-gradient(135deg, #198754, #20c997);
+        box-shadow: 0 4px 10px rgba(25, 135, 84, 0.3);
+    }
+
+    #uploadFeeModal .btn-outline-secondary:hover {
+        background-color: #f8f9fa;
+        border-color: #adb5bd;
+        color: #212529;
+    }
+
+    #uploadFeeModal label {
+        color: #212529;
+        font-size: 0.95rem;
+    }
+</style>
+
+
+@*Add this once in _Layout.cshtml*@
+<div id="toastContainer" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
+
+<!-- 🟨 Slip Detail Modal -->
+<div class="modal fade" id="uploadDetailModal" tabindex="-1" aria-labelledby="uploadDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+            <!-- Header -->
+            <div class="modal-header bg-warning text-dark py-3">
+                <h5 class="modal-title fw-bold" id="uploadDetailModalLabel" style="font-weight:bold">
+                    <i class="bi bi-receipt"></i> Fee Slip Details
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <!-- Body -->
+            <div class="modal-body bg-light-subtle px-4 py-4">
+                <div id="slipDetailContainer" class="text-center">
+                    <div class="spinner-border text-warning my-3" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            </div>
+            
+
+            <!-- Footer -->
+            <div class="modal-footer bg-white border-top-0 py-3">
+                <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle"></i> Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section Scripts {
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <!-- ✅ Bootstrap 5 JS + Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    @*<script src="~/Scripts/bootstrap.js"></script>*@
+    <script type="text/javascript">
+
+        //DNB Fee Proof Upload Script
+        $(document).ready(function () {
+
+            // 🟢 When "Upload Fee Proof" button clicked → Fill FeeStructureId + Reset Form
+            $(document).on("click", "[data-bs-target='#uploadFeeModal']", function () {
+                const feeId = $(this).data("id");
+                $("#FeeStructureId").val(feeId);
+
+                // Reset form and image preview
+                const form = $("#uploadFeeForm")[0];
+                if (form) {
+                    form.reset();
+                    form.classList.remove("was-validated");
+                }
+                $("#previewImg").addClass("d-none");
+            });
+
+            // 🖼️ Preview image or validate PDF
+            $("#PaymentScreenshot").on("change", function () {
+                const file = this.files[0];
+                if (file) {
+                    const validTypes = ["image/jpeg", "image/png", "application/pdf"];
+                    if (!validTypes.includes(file.type)) {
+                        showToast("Only JPG, PNG, or PDF files are allowed.", "warning");
+                        this.value = "";
+                        $("#previewImg").addClass("d-none");
+                        return;
+                    }
+
+                    if (file.type.startsWith("image")) {
+                        const reader = new FileReader();
+                        reader.onload = e => $("#previewImg").attr("src", e.target.result).removeClass("d-none");
+                        reader.readAsDataURL(file);
+                    } else {
+                        $("#previewImg").addClass("d-none");
+                    }
+                }
+            });
+
+            // 🚀 Submit Fee Proof via AJAX
+            $("#btnSubmitFee").on("click", function () {
+                const form = document.getElementById("uploadFeeForm");
+
+                if (!form) {
+                    showToast("Upload form not found.", "danger");
+                    return;
+                }
+
+                // Remove previous validation
+                form.classList.remove("was-validated");
+
+                // Validate all fields
+                if (!form.checkValidity()) {
+                    form.classList.add("was-validated");
+                    showToast("Please fill all required fields correctly.", "warning");
+                    return;
+                }
+
+                // Prepare form data
+                const formData = new FormData(form);
+                const feeId = $("#FeeStructureId").val();
+                formData.append("FeeStructureId", feeId);
+
+                // AJAX request
+                $.ajax({
+                    url: "/NewEmployeeLogin/UploadFeeProof",
+                    type: "POST",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    beforeSend: function () {
+                        $("#btnSubmitFee")
+                            .prop("disabled", true)
+                            .html('<i class="bi bi-hourglass-split"></i> Uploading...');
+                    },
+                    success: function (res) {
+                        if (res.success) {
+                            showToast(res.message || "Fee proof uploaded successfully!", "success");
+                            $("#uploadFeeModal").modal("hide");
+                            form.reset();
+                            $("#previewImg").addClass("d-none");
+                            form.classList.remove("was-validated");
+                            location.reload();
+                        } else {
+                            showToast(res.message || "Upload failed!", "danger");
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("AJAX Error:", xhr.responseText);
+                        console.log("Status:", status);
+                        console.log("Error Message:", error);
+                        showToast("Server error: " + (xhr.responseText || error), "danger");
+                    },
+                    complete: function () {
+                        $("#btnSubmitFee")
+                            .prop("disabled", false)
+                            .html('<i class="bi bi-check-circle"></i> Submit');
+                    }
+                });
+            });
+
+            // 🔔 Toast Helper
+            function showToast(message, type) {
+                const bg = type === "success" ? "bg-success"
+                    : type === "warning" ? "bg-warning text-dark"
+                        : "bg-danger";
+
+                const toast = `
+                        <div class="toast align-items-center text-white ${bg} border-0 mb-2" role="alert" aria-live="assertive" aria-atomic="true">
+                            <div class="d-flex">
+                                <div class="toast-body fw-semibold">${message}</div>
+                                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                            </div>
+                        </div>`;
+
+                $("#toastContainer").append(toast);
+                const bsToast = new bootstrap.Toast($("#toastContainer .toast").last()[0]);
+                bsToast.show();
+            }
+
+        });
+      
+        //Slip Detail Modal Loader
+        $(document).on("click", "[data-bs-target='#uploadDetailModal']", function () {
+            const feeId = $(this).data("id");
+            $("#slipDetailContainer").html(`
+        <div class="text-center my-4">
+            <div class="spinner-border text-warning" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>`);
+
+            $.ajax({
+                url: "/NewEmployeeLogin/GetDNBSlipDetail",
+                type: "GET",
+                data: { id: feeId },
+                success: function (res) {
+                    if (res.success) {
+                        const d = res.data;     
+                        const basePath = "/Content/Uploads/FeeProofs/";
+                        const fullPath = basePath + d.FileName;
+                        let html = `
+                    <div class="card shadow-sm border-0 p-3 text-start">
+                     
+                        <hr>
+                        <p><strong>Reference No:</strong> ${d.PaymentReferenceNo || '-'} </p>
+                        <p><strong>Payment Date:</strong> ${d.PaymentDate || '-'} </p>
+                        <p><strong>Payment Mode:</strong> ${d.PaymentMode || '-'} </p>
+                        <p><strong>Payment Status:</strong> ${d.Status || '-'} </p>
+                        <p><strong>Remarks:</strong> ${d.SubmissionRemarks || '-'} </p>
+                        <hr/>
+                        <h6 class="text-muted mb-2 bold"><i class="bi bi-image"></i> Uploaded Proof:</h6>
+                        ${d.PaymentScreenshotPath
+                                ? `
+        <div class="text-center">            
+            <!-- 🔗 Open Full View Button -->
+            <a href="${fullPath}" 
+             target="_blank" 
+             class="btn btn-outline-primary btn-sm mt-2">
+              <i class="bi bi-box-arrow-up-right"></i> Open Full Proof
+            </a>
+        </div>`:`<p class="text-muted">No screenshot uploaded.</p>`
+                            }
+            </div>`;
+                        $("#slipDetailContainer").html(html);
+                    } else {
+                        $("#slipDetailContainer").html(`<div class="alert alert-danger">${res.message}</div>`);
+                    }
+                },
+                error: function () {
+                    $("#slipDetailContainer").html(`<div class="alert alert-danger">Error loading slip details.</div>`);
+                }
+            });
+        });
+
+    </script>
+
+}

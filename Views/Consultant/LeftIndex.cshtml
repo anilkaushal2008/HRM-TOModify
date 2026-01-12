@@ -1,0 +1,126 @@
+﻿@model IEnumerable<HRM.Models.tblEmpAssesmentMas>
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "LeftIndex";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    }
+    <link href="//cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <div class="card">
+        <div class="card-body">
+            <h3 class="card-title">All Left Consultant View</h3>
+            <div align="right">
+                <a href="@Url.Action("NewConsultant", "Consultant")">
+                    <div class="btn btn-danger btn-sm">
+                        <h6 align="center" class="fas fa-hand-point-right"></h6>
+                        <h6 align="center" class="fa fa-plus">
+                            New Consultant
+                        </h6>
+                    </div>
+                </a>
+            </div>
+            @if (TempData["Success"] != null)
+            {
+                <p class="alert alert-success" id="tsuccess" align="center">@TempData["Success"]</p>
+            }
+            @if (TempData["Empty"] != null)
+            {
+                <p class="alert alert-danger" id="tempty" align="center">@TempData["Empty"]</p>
+            }
+            @if (TempData["Error"] != null)
+            {
+                <p class="alert alert-danger" id="terror" align="center">@TempData["Error"]</p>
+            }
+            @if (ViewBag.Success != null)
+            {
+                <p class="alert alert-success" id="vSuccess" align="center">@ViewBag.Success</p>
+            }
+            @if (ViewBag.Error != null)
+            {
+                <p class="alert alert-danger" id="error" align="center">@ViewBag.Error</p>
+            }
+            @if (ViewBag.Empty != null)
+            {
+                <p class="alert alert-danger" id="vSuccess" align="center">@ViewBag.Empty</p>
+            }
+            <table id="LefDoctor" class="table table-sm" style="font-size:90%">
+                <thead class="bg-danger text-white col-12">
+                    <tr>
+                        <th>
+                            Employee Code
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.vchName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.tblDeptMas.vchdeptname)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.tblDesignationMas.vchdesignation)
+                        </th>
+                        <th>
+                            DOJ
+                        </th>
+                        <th>
+                            DOL
+                        </th>
+                        <th>
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="border border-danger">
+                    @if (Model != null)
+                    {
+                        foreach (var item in Model)
+                        {
+
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.vchEmpFcode)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.vchName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.tblDeptMas.vchdeptname)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.tblDesignationMas.vchdesignation)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.dtDOJ)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.dtDOL)
+                                </td>
+                                <td>
+                                    <a class="btn btn-success btn-sm" href="@Url.Action("FullConsultView","Consultant",new { id = item.intid })">ViewDetail</a>
+                                    &nbsp;&nbsp;
+                                    <a class="btn btn-primary btn-sm" href="@Url.Action("","Consultant",new { id = item.intid })">GenExp</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#LefDoctor').DataTable();
+        });
+    </script>
+}
+

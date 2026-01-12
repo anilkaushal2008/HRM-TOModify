@@ -1,0 +1,12 @@
+﻿@model HRM.Models.tblDeptMas
+
+@if (ViewBag.selectnewitem != null)
+{
+    @*@Html.Label("Selected Department")*@
+    @*@ViewBag.SelectedDept;*@
+    @Html.LabelFor(model => model.vchdeptname)
+    @Html.DropDownListFor(model => model.vchdeptname, ViewBag.selectnewitem as SelectList, "Select New Dept", htmlAttributes: new { @class = "form-control" })
+    @Html.ValidationMessageFor(model => model.vchdeptname, "", new { @class = "text-danger" })
+}
+
+

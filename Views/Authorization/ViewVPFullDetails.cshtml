@@ -1,0 +1,53 @@
+﻿@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "ViewVPFullDetails";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    }
+    using (Html.BeginForm())
+    {
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-8">
+                        @{ Html.RenderAction("PartialEmpMas1", "Authorization");}
+                    </div>
+                    <div class="col-4">
+                        @{ Html.RenderAction("PartialProfile1", "Authorization");}
+                    </div>
+                </div>
+
+                <hr />
+                @{ Html.RenderAction("PartialEmpDetails1", "Authorization");}
+                <hr />
+                @{ Html.RenderAction("PartialDocComp1", "Authorization");
+                }
+                @{
+                    Html.RenderAction("PartialAssessmentRemarks", "Authorization");
+                }
+                @{
+                    Html.RenderAction("PartialReconsiderationRemarks", "Authorization");
+                }
+             
+                @{
+                    Html.RenderAction("FlaggingEMp", "Authorization");
+                }
+                <hr />
+                <div class="card">
+                    <div class="card-body">                   
+                        <div id="vpauthor">
+                            @{Html.RenderPartial("_PartialVPAction");
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+
+

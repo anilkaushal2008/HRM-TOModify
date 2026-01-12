@@ -1,0 +1,70 @@
+﻿@model HRM.Models.UpdatePartialEmployee
+@{
+    ViewBag.Title = "ViewPartialAuthorisedDetail";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<div class="card col-12">
+    <div class="card-body">
+        <div class="form-horizontal">
+            <br />
+            <h3 class="card-title" style="color:black">Partial Authorized Candidate Detail View</h3>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.empid)
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcode, htmlAttributes: new { @class = "control-label col-md-10" })
+                <div class="col-md-12">
+                    @Html.EditorFor(model => model.fcode, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.tcode, htmlAttributes: new { @class = "control-label col-md-10" })
+                <div class="col-md-12">
+                    @Html.EditorFor(model => model.tcode, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.empname, htmlAttributes: new { @class = "control-label col-md-10" })
+                <div class="col-md-12">
+                    @Html.EditorFor(model => model.empname, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.FatherName, htmlAttributes: new { @class = "control-label col-md-10" })
+                <div class="col-md-12">
+                    @Html.EditorFor(model => model.FatherName, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.DOJ, htmlAttributes: new { @class = "control-label col-md-10" })
+                <div class="col-md-12">
+                    @Html.EditorFor(model => model.DOJ, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                    @Html.ValidationMessageFor(model => model.DOJ, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @{
+                    Html.RenderAction("PartialReconsiderationRemarks", "Authorization");
+                }
+            </div>
+            <div class="card col-12">
+                <div class="card-body">
+                    <div class="form-group">
+                        <div class="row">                        
+                                @*<i class="fa fa-hand-point-right">  @Html.ActionLink("Cancel", "CancelBack", new { id = Model.empid }, new { @class = "btn btn-danger" })</i>*@
+                                <a href="@Url.Action("Cancel", "Dashboard",routeValues:new { @id = Model.empid})">
+                                    <div class="btn-outline-danger btn btn-block">
+                                        <h6 align="center" class="fas fa-hand-point-right">
+                                            Back
+                                       </h6>
+                                    </div>
+                                </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

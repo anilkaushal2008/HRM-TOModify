@@ -1,0 +1,88 @@
+﻿@model HRM.Models.UpPartialAuthDocViewModel
+
+@{
+    ViewBag.Title = "UploadNewDoc";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    Html.EnableClientValidation(true);
+}
+@using (Html.BeginForm("UploadNewDoc", "Dashboard", FormMethod.Post, new { enctype = "multipart/form-data" }))
+
+{
+
+    @Html.AntiForgeryToken()
+    <br />
+
+    <div class="row">
+        @Html.HiddenFor(model => model.empid)
+        @Html.HiddenFor(model => model.fk_docid)
+        <div class="col-12">
+            @if (TempData["Success"] != null)
+            {
+                <p align="center" class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+            }
+            @if (TempData["Error"] != null)
+            {
+                <p align="center" class="alert alert-danger" id="">@TempData["Error"]</p>
+            }
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Upload Final Documents</h3>
+                    <div align="right">
+                        <a href="@Url.Action("ViewHrFullDetails", "Authorization", routeValues:new { @id = Model.empid })">
+                            <div class="btn btn-success">
+                                <h6 align="center" class="fas fa-hand-point-right">
+                                    View Full Details
+                                </h6>
+                            </div>
+                        </a>
+                    </div>
+                    <h6 class="card-subtitle">
+                    </h6>
+                    <hr />
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.Hidden("hdempid", (string)ViewBag.EmpID)
+                    <div class="form-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.Label("Selected Mobile number")
+                                    @Html.Label("emptcode", (string)ViewBag.Mobile, htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.Label("Selected Emp Name")
+                                    @Html.Label("emptcode", (string)ViewBag.Empname, htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @*@Html.DropDownListFor(model => model.newfilename, new SelectList(Model.newdocnamelist, "Value", "Text"), "Select Document", htmlAttributes: new { @class = "form-control", @id = "selectedDocName" })*@
+                                    @Html.Label("Selected Document Name")
+                                    @Html.LabelFor(model => model.newfilename, (string)ViewBag.Docname, htmlAttributes: new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.newfilename, "", new { @class = "text-danger" })
+                                    @*@Html.DropDownListFor(model => model.docnamelist, (IEnumerable<SelectListItem>)ViewBag.SelectedQuali,"Select doc", htmlAttributes: new { @class = "form-control" })*@
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="ct-horizontal">
+                                    @Html.Label("Upload new doc")
+                                    @Html.TextBoxFor(model => model.newpdfFile, "", new { @type = "file", @class = "form-control", @id = "compDocFile" })
+                                    @Html.ValidationMessageFor(model => model.newpdfFile, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr />
+                        <div align="center">
+                            <input type="submit" value="Upload document" class="btn btn-success" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

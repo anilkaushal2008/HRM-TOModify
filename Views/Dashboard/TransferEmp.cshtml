@@ -1,0 +1,125 @@
+﻿@model HRM.Models.EmpTransferModelView
+@{ 
+    if(Session["descript"] != null)
+    {
+
+        {
+            {
+                ViewBag.Title = "TransferEmp";
+                Layout = "~/Views/Shared/_LayoutMain.cshtml";
+                Html.EnableClientValidation(true);
+            }
+            Html.EnableClientValidation(true);
+            using (Html.BeginForm("TransferEmp", "Dashboard", FormMethod.Post))
+            {
+@Html.AntiForgeryToken()
+<div class="form-horizontal">
+    <br />   
+    <h3 style="color:black;font-weight:800" class="col-10">Employee transfer view</h3>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.empid)
+    @Html.HiddenFor(model => model.transferSalary)
+<div class="col-12" align="left">
+    @if (TempData["Error"] != null)
+    {
+        <p align="center" class="alert alert-danger col-12" id="errormsg">@TempData["Error"]</p>
+    }
+    @if (ViewBag.Error != null)
+    {
+        <p align="center" class="alert alert-danger col-12" id="errormsg">@ViewBag.Error</p>
+    }
+    @if (ViewBag.Success != null)
+    {
+        <p align="center" class="alert alert-success col-12" id="errormsg">@ViewBag.Success &nbsp;<i class="fa fa-thumbs-up"></i></p>
+    }
+    @if (TempData["Success"] != null)
+    {
+        <p align="center" class="alert alert-success col-12" id="succ1">@TempData["Success"]</p>
+    }
+    <div class="row">
+        <div class="col-4">
+            <div class="form-group">
+                @Html.LabelFor(model => model.empname, htmlAttributes: new { @class = "control-label col-md-10" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.empname, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-group">
+                @Html.LabelFor(model => model.empcode, htmlAttributes: new { @class = "control-label col-md-10" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.empcode, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-group">
+                @Html.Label("Aadhar No (XXXX-XXXX-XXXX)", htmlAttributes: new { @class = "control-label col-md-10" })
+                <div class="col-md-10">
+                    @if (Model.AadharNo != null)
+                    {
+                        @Html.EditorFor(model => model.AadharNo, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                        @Html.ValidationMessageFor(model => model.AadharNo, "", new { @class = "text-danger" })
+                    }
+                    else
+                    {
+                        @Html.EditorFor(model => model.AadharNo, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.AadharNo, "", new { @class = "text-danger" })
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.ToTransferBranch, htmlAttributes: new { @class = "control-label col-md-10" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.ToTransferBranch, new SelectList(ViewBag.AllBranch, "Text", "Value"), htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.ToTransferBranch, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.DOL, htmlAttributes: new { @class = "control-label col-md-10" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.DOL, new { htmlAttributes = new { @class = "form-control", @type = "date" } })
+                    @Html.ValidationMessageFor(model => model.DOL, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <h5 class="control-label col-md-10" style="color:black">Enter Remarks<span style="color:red"> (max length 2000 characters)</span></h5>
+        <div class="col-md-11">
+            @Html.TextAreaFor(model => model.tremarks, htmlAttributes: new { @class = "form-control", @rows = "7", @size = "1500" })
+            @Html.ValidationMessageFor(model => model.tremarks, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-11">
+            <input type="submit" value="Transfer" class="btn btn-block btn-success" />
+        </div>
+    </div>
+</div>
+</div>
+    }
+    }
+    }
+    else
+    {
+    Html.RenderAction("_SessionError1", "Home");
+    }
+    }
+    @section Scripts{
+        <script src="~/Scripts/jquery.validate.js"></script>
+        <script src="~/Scripts/jquery.validate.min.js"></script>
+        <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+        <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+        <script src="~/bin/Release/Publish/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    }

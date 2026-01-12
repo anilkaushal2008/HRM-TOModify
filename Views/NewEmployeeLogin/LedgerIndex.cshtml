@@ -1,0 +1,164 @@
+﻿@model IEnumerable<HRM.Models.tblConsultantLedgerDetail>
+@using System.Data
+@using System.Collections
+@using System.Web
+@{
+    // 1. LINK TO THE MASTER LAYOUT
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Professional Ledger";
+
+    // ROLE CHECK
+    bool isConsultant = Session["IsConsultant"]?.ToString() == "True";
+}
+
+@if (Session["Ename"] != null)
+{
+    <style>
+        /* Ledger Component Styling */
+        .modern-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            padding: 24px;
+            margin-bottom: 30px;
+        }
+
+        /* Typography Hierarchy: Bold Titles, Bit Small Data */
+        table.dataTable thead th {
+            background: var(--bg-body);
+            color: var(--text-main) !important;
+            font-weight: 800 !important;
+            font-size: 0.75rem !important;
+            text-transform: uppercase;
+            border-bottom: 2px solid var(--border) !important;
+            padding: 15px !important;
+        }
+
+        table.dataTable tbody td {
+            vertical-align: middle !important;
+            padding: 15px !important;
+            border-bottom: 1px solid var(--border) !important;
+            font-size: 0.85rem !important;
+            color: var(--text-muted);
+        }
+
+        [data-theme="dark"] table.dataTable tbody td {
+            color: var(--text-main) !important;
+        }
+
+        .ledger-title {
+            font-weight: 800;
+            color: var(--accent);
+            font-size: 0.95rem;
+        }
+
+        .btn-view-ledger {
+            border-radius: 50px;
+            padding: 8px 20px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: 0.3s;
+        }
+
+        .restriction-box {
+            padding: 60px 20px;
+            text-align: center;
+        }
+    </style>
+
+    <!-- Page Header -->
+    <div class="mb-4">
+        <h3 class="font-weight-bold mb-0">Professional Fee Ledger</h3>
+        <p class="text-muted small mb-0">Review your historical financial statements and professional fee records.</p>
+    </div>
+
+    <div class="modern-card">
+        @if (isConsultant)
+        {
+            if (TempData["Empty"] != null)
+            {
+                <div class="alert alert-info border-0 shadow-sm mb-4" style="border-radius: 12px;">
+                    <i class="fas fa-info-circle mr-2"></i> @TempData["Empty"]
+                </div>
+            }
+
+            <div class="table-responsive">
+                <table id="ledgerTable" class="table no-wrap v-middle mb-0" style="width:100%;">
+                    <thead>
+                        <tr>
+                            <th class="px-3">Statement Particulars (Year)</th>
+                            <th>Uploaded On</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null)
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="px-3">
+                                        <div class="ledger-title">@item.vchDocMasName</div>
+                                        <small class="text-muted font-weight-bold">Statement of Account</small>
+                                    </td>
+                                    <td>
+                                        @if (item.dtUpload != null)
+                                        {
+                                            <span class="font-weight-bold">@item.dtUpload.Value.ToString("dd MMM yyyy")</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted italic small">N/A</span>
+                                        }
+                                    </td>
+                                    <td class="text-center">
+                                        <a class="btn btn-outline-success btn-view-ledger shadow-sm" href="@Url.Content("~/Content/Uploads/ConsultantLedger/" + item.vchFileName)" target="_blank">
+                                            <i class="fas fa-file-invoice mr-2"></i> View Statement
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="restriction-box">
+                <i class="fas fa-lock fa-4x text-muted mb-4" style="opacity: 0.2"></i>
+                <h4 class="font-weight-bold">Access Restricted</h4>
+                <p class="text-muted">The Professional Fee Ledger is exclusively available for authorized Doctors and Consultants.</p>
+                <a href="@Url.Action("EmpDashboard", "NewEmployeeLogin")" class="btn btn-primary rounded-pill px-5 mt-3 shadow-sm">
+                    Return to Dashboard
+                </a>
+            </div>
+        }
+    </div>
+
+    <!-- DataTables Script -->
+    <script src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            if ($('#ledgerTable').length) {
+                $('#ledgerTable').DataTable({
+                    "pageLength": 10,
+                    "ordering": true,
+                    "info": true,
+                    "language": {
+                        "search": "_INPUT_",
+                        "searchPlaceholder": "Filter ledger records..."
+                    }
+                });
+            }
+        });
+    </script>
+}
+else
+{
+    @Html.Action("_SessionError", "NewEmployeeLogin")
+}

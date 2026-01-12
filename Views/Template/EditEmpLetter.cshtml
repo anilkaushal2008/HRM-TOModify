@@ -1,0 +1,121 @@
+﻿@model HRM.Models.tblTemplateDetail
+
+@{
+    ViewBag.Title = "EditEmpLetter";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+
+
+@using (Html.BeginForm("EditEmpLetter", "Template", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <br />
+   
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.intid)
+    <h3 style="color:black">Edit Experience Letter</h3>
+    <div class="row col-12">
+        <div class="col-md-4">
+            <div class="form-group">
+                @Html.Label("Ref. Code", htmlAttributes: new { @class = "" })
+                @Html.EditorFor(model => model.vchRef_Code, new { htmlAttributes = new { @readonly = "readonly", @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.vchRef_Code, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                @Html.Label("Update Name", htmlAttributes: new { @class = "" })
+                @Html.EditorFor(model => model.vchEmpName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.vchEmpName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                @Html.Label("Update FatherName", htmlAttributes: new { @class = "" })
+                @Html.EditorFor(model => model.vchFaterName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.vchFaterName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="row col-12">
+        <div class="col-md-3">
+            <div class="form-group">
+                @Html.Label("Old from date", htmlAttributes: new { @class = "" })<br />
+                @Html.Label("", ViewBag.Sdate as string, new { htmlAttributes = new {  @readonly = "readonly", @class = "form-control" } })
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                @Html.Label("Update From date", htmlAttributes: new { @class = "" })
+                @Html.EditorFor(model => model.dtSdate, new { htmlAttributes = new { @type = "date", @class = "form-control" } })
+                @*@Html.ValidationMessageFor(model => model.dtSdate, "", new { @class = "text-danger" })*@
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="form-group">
+                @Html.Label("Old to date", htmlAttributes: new { @class = "" })<br />
+                @Html.Label("", ViewBag.Edate as string, new { htmlAttributes = new { @class = "form-control" } })               
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                @Html.Label("Update to date", htmlAttributes: new { @class = "" })
+                @Html.EditorFor(model => model.dtEdate, new { @type = "date", htmlAttributes = new { @type = "date", @class = "form-control" } })
+                @*@Html.ValidationMessageFor(model => model.dtEdate, "", new { @class = "text-danger" })*@
+            </div>
+        </div>
+    </div>
+
+    <div class="row col-12">
+        <div class="col-md-4">
+            <div class="form-group">
+                @Html.Label("Old relieved date", htmlAttributes: new { @class = "" })<br />
+                @Html.Label("", ViewBag.Rdate as string, new { htmlAttributes = new { @class = "form-control" } })
+
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                @Html.Label("Update relieved date", htmlAttributes: new { @class = "" })
+                @Html.EditorFor(model => model.dtRelieved, new { @type="date", htmlAttributes = new { @type = "date", @class = "form-control" } })
+                @*@Html.ValidationMessageFor(model => model.dtRelieved, "", new { @class = "text-danger" })*@
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                @Html.Label("Department", htmlAttributes: new { @class = "" })
+                @Html.DropDownListFor(model => model.vchDepartment, ViewBag.DeptList as SelectList, "Select department", htmlAttributes: new { @id = "selectedDpt", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.vchDepartment, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="form-group">
+            @Html.Label("Update Content", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.TextAreaFor(model => model.txtContent, htmlAttributes: new { @class = "form-control", @rows = "9", @size = "1500" })
+            @Html.ValidationMessageFor(model => model.txtContent, "", new { @class = "text-danger" })
+        </div>
+    </div> 
+    <div class="col-12" align="center">
+        <div class="form-group">
+            <input type="submit" value="Update" class="btn btn-success" />
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="@Url.Action("NewLetter", "Template")" class="btn btn-outline-danger">Cancel</a>
+        </div>
+    </div>
+</div>
+    }
+    @section scripts{
+        <script src="~/Scripts/jquery.validate.js"></script>
+        <script src="~/Scripts/jquery.validate.min.js"></script>
+        <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+        <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+        <script src="~/Scripts/jquery-ui.js"></script>
+
+    }
+
+

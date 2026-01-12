@@ -1,0 +1,114 @@
+﻿@model IEnumerable<HRM.Models.spGetDeptMapping_Result>
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "UpdateMapping";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    }
+    using (Html.BeginForm("UpdateMapping", "Master", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+<div class="card">
+    <div class="card-body">
+        <h3 class="card-title">User permission edit view</h3>
+        <hr />        
+        <label style="display:none" id="branchID">@ViewBag.BranchID</label>
+        <div class="form-group">
+            @{ if (ViewBag.SelectedBranch != null)
+                {
+                    <h4 align="center" style="color:black">
+                        Selected Branch : <label id="branch">@ViewBag.SelectedBranch</label>
+                    </h4>
+                }
+            }
+        </div>
+        <table id="tblUpdate" class="table table-sm col-10" style="font-size:90%;color:black" align="center">
+            <thead class="bg-primary text-white col-12">
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            @Html.Label("Department", htmlAttributes: new { @class = "control-label col-md-4", @disabled = "disabled" })
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            @Html.Label("ManPower Counter", htmlAttributes: new { @class = "control-label col-md-4", @disabled = "disabled" })
+                        </div>
+                    </td>
+                </tr>
+            </thead>
+            <tbody class="border border-primary" id="">
+                @if (Model.Count() != 0)
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <div class="col-md-10">
+                                    @Html.Label(@item.vchdeptname)
+                                </div>
+                            </td>
+                            <td>
+                                <div class="col-md-10">
+                                    <input type="hidden" id="fkdept" class="departmentid" value="@item.deptID" />
+                                    <input type="text" id="dptcounter" class="textbox" value="@item.ManPowerCounter" />
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+        <div align="center">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="button" value="Update" id="btnupdate" class="btn btn-primary btn-block" required="required" />
+            </div>
+        </div>
+    </div>
+</div>
+                    }
+                }
+                else
+                {
+                    Html.RenderAction("_SessionError1", "Home");
+                }
+
+
+                @section scripts{
+                    <script src="~/Scripts/jquery.validate.js"></script>
+                    <script src="~/Scripts/jquery.validate.min.js"></script>
+                    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+                    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+                    <script type="text/javascript">       
+                        $("#btnupdate").click(function (e) {
+                            e.preventDefault();
+                            var branchCode = $("#branchID").text();
+                            var branchName = $("#branch").text();
+                            var UpdateDptMapModel = [];
+                            $('#tblUpdate tbody tr').each(function () {
+                                var departmentId = $(this).find('.departmentid').val(); //$("#fkdept").val();
+                                var boxValue = $(this).find('.textbox').val(); //$("#dptcounter").val();
+                                UpdateDptMapModel.push({
+                                    FkDeptId: departmentId,
+                                    textBoxValues: boxValue,
+                                    intcode: branchCode,
+                                    branchName: branchName,
+                                    fkBranchID: branchCode
+                                });
+                            });
+                            $.ajax({
+                                url: '@Url.Action("EditMapping", "Master")',
+                                type: 'POST',
+                                data: JSON.stringify(UpdateDptMapModel),
+                                contentType: 'application/json; charset=utf-8',
+                                success: function (response) {
+                                    alert("Data updated successfully!");
+                                    window.location= "/Master/NewDeptMapping";
+                                },
+                                error: function (xhr, status, error) {
+                                    console.log("Error: " + error);
+                                }
+                            });
+                        })
+                    </script>
+              }

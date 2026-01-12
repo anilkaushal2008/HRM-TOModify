@@ -1,0 +1,125 @@
+﻿@model HRM.Models.DeactiveEmpModelView
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "DeactiveEmp";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+        Html.EnableClientValidation(true);
+    }
+    Html.EnableClientValidation(true);
+    using (Html.BeginForm("DeactiveEmp", "Dashboard", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+<div class="form-horizontal">
+    @if (TempData["Error"] != null)
+    {
+        <p align="center" class="alert alert-danger" id="errormsg">@TempData["Error"]</p>
+    }
+    <br />
+    <h3 style="color:black;font-weight:800" class="col-10">Change Employee Status View</h3>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.empid)
+    <div class="col-12" align="left">
+        <div class="form-group">
+            @Html.LabelFor(model => model.fcode, htmlAttributes: new { @class = "control-label col-md-10" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.fcode, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.empname, htmlAttributes: new { @class = "control-label col-md-10" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.empname, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+            </div>
+        </div>
+        <div align="left" class="form-group col-10">
+            <label style="font-weight:bold">Select Employee Status<span style="color:red">*</span></label>
+            <fieldset class="radio">
+                <label class="radio">
+                    <span style="color:black;font-weight:bold">Left?</span>
+                    @Html.RadioButtonFor(Model => Model.Empstatus, "Left", htmlAttributes: new { id = "chkyes", @class = "radio1" })
+                </label>
+                &nbsp;
+                <label class="radio">
+                    <span style="color: black; font-weight:bold">
+                        Terminate?
+                    </span>
+                    @Html.RadioButtonFor(Model => Model.Empstatus, "Terminate", htmlAttributes: new { id = "chkno", @class = "radio1" })
+                </label>
+                @Html.ValidationMessageFor(model => model.Empstatus, "", new { @class = "text-danger" })
+            </fieldset>
+        </div>
+    <div class="row">
+        <div class="col-5">
+            <div class="form-group">
+                @Html.LabelFor(model => model.dol, htmlAttributes: new { @class = "required control-label col-md-10" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.dol, new { htmlAttributes = new { @class = "form-control", @type = "date" } })
+                    @Html.ValidationMessageFor(model => model.dol, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="col-5">
+            <div class="form-group">
+                @Html.Label("AadhaarNo (XXXX-XXXX-XXXX)", htmlAttributes: new { @class = "control-label col-md-10" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.vchAadharNo, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.vchAadharNo, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-10">
+            <h5 style="color:black">Enter Remarks<span style="color:red"> (max length 2000 characters)</span></h5>
+            @Html.TextAreaFor(model => model.vchRemarks, htmlAttributes: new { @class = "form-control", @rows = "7", @size = "1500" })
+            @Html.ValidationMessageFor(model => model.vchRemarks, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div align="left" class="form-group col-10">
+        <h3 class="card-title" style="color:black;font-weight:900">Select Flag To Employee<span style="color:red">*</span></h3>
+        <fieldset class="radio">
+            <label class="radio">
+                <span style="color:red;font-weight:800">Is Red Flag Employee?</span>
+                @Html.RadioButtonFor(Model => Model.BitIsFlaggingEmp, "Red", htmlAttributes: new { id = "chkyes", @class = "radio1" })
+            </label>
+            <br />
+            <label class="radio">
+                <span style="color:orangered;font-weight:800">
+                    Is Orange Flag Employee?
+                </span>
+                @Html.RadioButtonFor(Model => Model.BitIsFlaggingEmp, "Orange", htmlAttributes: new { id = "chkno", @class = "radio1" })
+            </label>
+            <br />
+            <label class="radio">
+                <span style="color:green;font-weight:800">
+                    Is Green Flag Employee?
+                </span>
+                @Html.RadioButtonFor(Model => Model.BitIsFlaggingEmp, "Green", htmlAttributes: new { id = "chkno", @class = "radio1" })
+            </label>
+            @Html.ValidationMessageFor(model => model.BitIsFlaggingEmp, "", new { @class = "text-danger" })
+        </fieldset>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Submit" class="btn btn-block btn-danger" />
+        </div>
+    </div>
+</div>
+</div>
+        }
+    }
+    else
+    {
+        Html.RenderAction("_SessionError1", "Home");
+    }
+@section Scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/bin/Release/Publish/Scripts/jquery.validate.unobtrusive.min.js"></script>
+}

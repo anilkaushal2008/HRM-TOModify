@@ -1,0 +1,278 @@
+﻿@model HRM.Models.tblCurrentExpDetail
+@{ if (Session["descript"] != null)
+    {
+        {
+            ViewBag.Title = "CreateCurrExp";
+            Layout = "~/Views/Shared/_LayoutMain.cshtml";
+        }
+
+        using (Html.BeginForm("CreateCurrExp","Template",FormMethod.Post))
+        {
+            Html.AntiForgeryToken();
+            @Html.HiddenFor(model=>model.fk_MasId)
+            @Html.HiddenFor(model=>model.bitIsDetailAvilable)
+<div class="row">
+    <div class="col-12" style="font-size:90%">
+        <div class="card" style="background-color:aliceblue">
+            <div class="card-body col-12">
+                <div class="card-title" align="center">
+                    <h3 class="card-title">Current Experience Certificate Create View</h3>
+                </div>
+                @if (TempData["Error"] != null)
+                {
+                    <p align="center" class="alert alert-danger" id="empty">@TempData["Error"]</p>
+                }
+                @if (ViewBag.Error != null)
+                {
+                    <p align="center" class="alert alert-danger" id="empty">@ViewBag.Error</p>
+                }
+                @if (TempData["Success"] != null)
+                {
+                    <p align="center" class="alert alert-success" id="empty">@TempData["Success"]</p>
+                }
+                @if (ViewBag.Success != null)
+                {
+                    <p align="center" class="alert alert-success" id="success">@ViewBag.Success</p>
+                }
+                <h6 class="card-subtitle"></h6>
+                <hr />
+                @if (Model.vchstate != null)
+                {
+                    <div class="row col-12">
+                        <div class="col-4">
+                            <div class="form-group">
+                                @Html.Label("Name", htmlAttributes: new { @class = "control-label col-md-6 required" })
+                                <div class="col-md-12">
+                                    @Html.EditorFor(model => model.vchName, new { htmlAttributes = new { @Readonly = "Readonly", @id = "name", @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.vchName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                @Html.Label("Department", htmlAttributes: new { @class = "control-label col-md-6 required" })
+                                <div class="col-md-12">
+                                    @Html.DropDownListFor(model => model.fk_deptId, ViewBag.SelectDpt as SelectList, null, htmlAttributes: new { @disabled = "disabled", @id = "selectDept", @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.fk_deptId, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                @Html.Label("Designation", htmlAttributes: new { @class = "control-label col-md-6 required" })
+                                <div class="col-md-12">
+                                    @Html.DropDownListFor(model => model.fk_desiId, ViewBag.SelectDesi as SelectList, null, htmlAttributes: new { @disabled = "disabled", @id = "selectDesi", @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.fk_desiId, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row col-12">
+                        <div class="col-4">
+                            <div class="form-group">
+                                @Html.Label("DOJ", htmlAttributes: new { @class = "control-label col-md-6" })
+                                <div class="col-md-12">
+                                    @Html.EditorFor(model => model.dtdoj, new { htmlAttributes = new { @readonly = "readonly", @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.dtdoj, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                @Html.Label("Gender", htmlAttributes: new { @class = "control-label col-md-6 required" })
+                                <div class="col-md-12">
+                                    @Html.DropDownListFor(model => model.vchGender, ViewBag.GenderList as SelectList, "Select gender", htmlAttributes: new { @selected = "model.vchGender", @id = "ForGender", @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.vchGender, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                @Html.Label("Father Name", htmlAttributes: new { @class = "control-label col-md-6 required" })
+                                <div class="col-md-12">
+                                    @Html.EditorFor(model => model.vchFatherName, new { htmlAttributes = new { @readonly = "readonly", @id = "fathername", @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.vchFatherName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row col-12" id="HRMSData">
+                        <div class="col-4">
+                            <div class="form-group">
+                                @Html.Label("State", htmlAttributes: new { @class = "control-label col-md-6 required" })
+                                <div class="col-md-12">
+                                    @Html.EditorFor(model => model.vchstate, new { htmlAttributes = new { @id = "estate1", @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.vchstate, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                @Html.Label("City", htmlAttributes: new { @class = "control-label col-md-6 required" })
+                                <div class="col-md-12">
+                                    @Html.EditorFor(model => model.vchCity, new { htmlAttributes = new { @id = "e1city", @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.vchCity, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                @Html.Label("Address", htmlAttributes: new { @class = "control-label col-md-6 required" })
+                                <div class="col-md-12">
+                                    @Html.EditorFor(model => model.vchAddress, new { htmlAttributes = new { @id = "eaddress", @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.vchAddress, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="row col-12">
+                        <div class="col-4">
+                            <div class="form-group">
+                                @Html.Label("Name", htmlAttributes: new { @class = "control-label col-md-6 required" })
+                                <div class="col-md-12">
+                                    @Html.EditorFor(model => model.vchName, new { htmlAttributes = new { @Readonly = "Readonly", @id = "name", @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.vchName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                @Html.Label("Department", htmlAttributes: new { @class = "control-label col-md-6 required" })
+                                <div class="col-md-12">
+                                    @Html.DropDownListFor(model => model.fk_deptId, ViewBag.SelectDpt as SelectList, null, htmlAttributes: new { @disabled = "disabled", @id = "selectDept", @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.fk_deptId, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                @Html.Label("Designation", htmlAttributes: new { @class = "control-label col-md-6 required" })
+                                <div class="col-md-12">
+                                    @Html.DropDownListFor(model => model.fk_desiId, ViewBag.SelectDesi as SelectList, null, htmlAttributes: new { @disabled = "disabled", @id = "selectDesi", @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.fk_desiId, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row col-12">
+                        <div class="col-4">
+                            <div class="form-group">
+                                @Html.Label("DOJ", htmlAttributes: new { @class = "control-label col-md-6" })
+                                <div class="col-md-12">
+                                    @Html.EditorFor(model => model.dtdoj, new { htmlAttributes = new { @readonly = "readonly", @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.dtdoj, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                @Html.Label("Gender", htmlAttributes: new { @class = "control-label col-md-6 required" })
+                                <div class="col-md-12">
+                                    @Html.DropDownListFor(model => model.vchGender, ViewBag.GenderList as SelectList, "Select gender", htmlAttributes: new { @selected = "model.vchGender", @id = "ForGender", @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.vchGender, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                @Html.Label("Father Name", htmlAttributes: new { @class = "control-label col-md-6 required" })
+                                <div class="col-md-12">
+                                    @Html.EditorFor(model => model.vchFatherName, new { htmlAttributes = new { @id = "fathername", @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.vchFatherName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row col-12" id="HRMSData">
+                        <div class="col-4">
+                            <div class="form-group">
+                                @Html.Label("State", htmlAttributes: new { @class = "control-label col-md-6 required" })
+                                <div class="col-md-12">
+                                    @Html.DropDownListFor(model => model.fkStateId, new SelectList(ViewBag.AllState, "Text", "Value"),  htmlAttributes: new {@required="required", @id = "estate2", @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.fkStateId, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                @Html.Label("City", htmlAttributes: new { @class = "control-label col-md-6 required" })
+                                <div class="col-md-12">
+                                    <select class="form-control" id="city2" name="selectedCity" required="required"></select>                                   
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                @Html.Label("Address", htmlAttributes: new { @class = "control-label col-md-6 required" })
+                                <div class="col-md-12">
+                                    @Html.EditorFor(model => model.vchAddress, new { htmlAttributes = new { @id = "eaddress2", @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.vchAddress, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                <div class="row col-12">
+                    <div class="col-12" align="center">
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <input type="submit" value="Create" class="btn btn-success" />&nbsp;&nbsp;&nbsp;
+                                <a class="btn btn-outline-danger" href="@Url.Action("ViewCurrentEmp", "Template")">Cancel</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+            }
+        }
+        else
+        {
+            Html.RenderAction("_SessionError1", "Home");
+        }
+    }
+
+    @section scripts{
+        <script src="~/Scripts/jquery.validate.js"></script>
+        <script src="~/Scripts/jquery.validate.min.js"></script>
+        <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+        <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+        <script src="~/Scripts/jqueryui/jquery-ui.js"></script>
+        <script type="text/javascript">
+        //function for city
+            $("#estate2").change(function () {
+                        var stateid = parseInt($(this).val());
+                        if (!isNaN(stateid)) {
+                            var selectedCity = $('#city2');
+                            selectedCity.empty();
+                            selectedCity.append($("<option></option>").val('').html('Please wait ...'));
+                            $.ajax({
+                                url: '@Url.Action("GetCity", "Template")',
+                                type: 'GET',
+                                dataType: 'json',
+                                data: { state_id: stateid },
+                                success: function (result) {
+                                    selectedCity.empty(); // Clear the please wait
+                                    selectedCity.append($("<option></option>").val('').html('Select city'));
+                                    $.each(result, function (i, city) {
+                                        selectedCity.append($("<option></option>").val(city.id).html(city.vchCity));
+                                    });
+                                },
+                                error: function () {
+                                    alert('Error!');
+                                }
+                            });
+                        }
+                    });
+        </script>
+    }

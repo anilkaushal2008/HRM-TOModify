@@ -1,0 +1,132 @@
+﻿@model IEnumerable<HRM.Models.DnbStudentListViewModel>
+
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "DNB Fee Structure Assignment";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    }
+
+    <link href="//cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" rel="stylesheet" />
+
+    <div class="card shadow-sm border-0 mt-3">
+        <div class="card-body">
+            <h3 align="center" class="card-title text-black">
+                Academic Officer View- Assign Fee Structure
+            </h3>
+
+            @* ✅ Display Alerts *@
+            @if (TempData["Msg"] != null)
+            {
+                <p class="alert alert-info text-center shadow-sm">@TempData["Msg"]</p>
+            }
+            @if (TempData["Success"] != null)
+            {
+                <p class="alert alert-success text-center shadow-sm">@TempData["Success"]</p>
+            }
+            @if (TempData["Error"] != null)
+            {
+                <p class="alert alert-danger text-center shadow-sm">@TempData["Error"]</p>
+            }
+
+            <table id="tblDnb" class="table table-bordered table-hover table-striped mt-3" style="font-size:90%">
+                <thead class="bg-success text-white">
+                    <tr>
+                        <th>@Html.DisplayNameFor(model => model.Name)</th>
+                        <th>@Html.DisplayNameFor(model => model.EmpCode)</th>
+                        <th>Department</th>
+                        <th>Designation</th>
+                        <th>Joining Date</th>                       
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody class="border border-success">
+                    @if (Model == null || !Model.Any())
+                    {
+                        <tr>
+                            <td colspan="7" class="text-center text-danger fw-bold py-3">
+                                <i class="bi bi-exclamation-triangle"></i> No records found.
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        foreach (var s in Model)
+                        {
+                            <tr>
+                                <td>@s.Name</td>
+                                <td>@s.EmpCode</td>
+                                <td>@s.Department</td>
+                                <td>@s.Designation</td>
+                                <td>@s.DOJ</td>
+                                
+                                <td>
+                                    @if (s.FeeStatus == "Not Assigned")
+                                    {
+                                        <a href="@Url.Action("Assign", "DNB", new { id = s.EmployeeId })"
+                                           class="btn btn-outline-success btn-sm">
+                                            <i class="bi bi-pencil-square"></i> Assign Fee
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a href="@Url.Action("ViewFeeStructure", "DNB", new { id = s.DnbStudentId })"
+                                           class="btn btn-outline-primary btn-sm">
+                                            <i class="bi bi-pencil-square"></i> ViewStructure
+                                        </a>
+                                    }
+                                    </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+
+@section scripts {
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#tblDnb').DataTable({
+                "pageLength": 10,
+                "lengthChange": true,
+                "language": {
+                    "search": "Search Student:",
+                    "lengthMenu": "Show _MENU_ entries per page",
+                    "zeroRecords": "No matching records found"
+                }
+            });
+        });
+    </script>
+
+    <style>
+        .dataTables_wrapper .dataTables_filter input {
+            border-radius: 4px;
+            border: 1px solid #ced4da;
+            padding: 4px 8px;
+        }
+
+        .card {
+            border-radius: 10px;
+        }
+
+        .table th {
+            font-weight: 600;
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: #e9f7ef !important;
+            transition: background-color 0.3s;
+        }
+    </style>
+}

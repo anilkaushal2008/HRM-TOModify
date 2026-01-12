@@ -1,0 +1,159 @@
+﻿@model HRM.Models.DocumentViewModel
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "AddNewDoc";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+        Html.EnableClientValidation(true);
+    }
+
+    using (Html.BeginForm("AddNewDoc", "AddNewEmp", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        if (TempData["Success"] != null)
+        {
+            <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+        }
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title">Uploads Details Documents</h3>
+                        <h6 class="card-subtitle">
+                        </h6>
+                        <div class="button-box">
+                            <button type="button" class="btn btn-secondary btn-outline" data-toggle="tooltip"
+                                    data-placement="left" title="Add Official Details">
+                                <a class="text-white" href="@Url.Action("OfficialDetails", "AddNewEmp")">
+                                    Official Details
+                                </a>
+                            </button>
+                            <button type="button" class="btn btn-secondary btn-outline" data-toggle="tooltip"
+                                    data-placement="top" title="" data-original-title="Add Qualification">
+                                <a class="text-white" href="@Url.Action("QualificationDetails", "AddNewEmp")">
+                                    Qualification Details
+                                </a>
+                            </button>
+                            <button type="button" class="btn btn-secondary btn-outline" data-toggle="tooltip"
+                                    data-placement="top" title="" data-original-title="Add Personal Details">
+                                <a class="text-white" href="@Url.Action("PersonalDetails", "AddNewEmp")">
+                                    Personal Details
+                                </a>
+                            </button>
+                            <button type="button" class="btn btn-primary btn-outline" data-toggle="tooltip"
+                                    data-placement="top" title="" data-original-title="Add Document Details">
+                                Document Details
+                            </button>
+                            <a href="@Url.Action("ViewAllEmp", "AddNewEmp")">
+                                <div class="btn btn-success">
+                                    <h6 align="center" class="fas fa-hand-point-right">
+                                        Back to view all employee
+                                    </h6>
+                                </div>
+                            </a>
+                        </div>
+                        <br />
+                        <hr />
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="form-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        @Html.Label("Selected Emp Temp Code")
+                                        @Html.Label("emptcode", (string)ViewBag.EmptCode, htmlAttributes: new { @class = "form-control" })
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        @Html.Label("Selected Emp Name")
+                                        @Html.Label("emptcode", (string)ViewBag.Empname, htmlAttributes: new { @class = "form-control" })
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        @Html.DropDownListFor(model => model.filename, new SelectList(Model.docnamelist, "Value", "Text"), "Select Document", htmlAttributes: new { @class = "form-control" })
+                                        @Html.Hidden("hdempid", (string)ViewBag.EmpID)
+                                        @*@Html.DropDownListFor(model => model.docnamelist, (IEnumerable<SelectListItem>)ViewBag.SelectedQuali,"Select doc", htmlAttributes: new { @class = "form-control" })*@
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="ct-horizontal">
+                                        @Html.TextBoxFor(model => model.pdfFile, "", new { @type = "file", @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.pdfFile, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div align="center" class="form-group">
+                                <h5 class="card-title">Is final submission<span style="color:red">*</span></h5>
+                                <fieldset class="radio">
+                                    <label class="radio">
+                                        Yes
+                                        @Html.RadioButtonFor(Model => Model.BitCompleted, "true", htmlAttributes: new { id = "chkyes", @class = "radio1" })
+                                    </label>
+                                    <label class="radio">
+                                        No
+                                        @Html.RadioButtonFor(Model => Model.BitCompleted, "false", htmlAttributes: new { id = "chkno", @class = "radio1" })
+                                    </label>
+                                    @Html.ValidationMessageFor(model => model.BitCompleted, "", new { @class = "text-danger" })
+                                </fieldset>
+                            </div>
+                            <div align="left">
+                                <input type="submit" value="Upload" class="btn btn-success" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        }
+    }
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+@section scripts
+    {
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+}
+
+@*<div class="form-group">
+        @Html.Hidden("EmpID", (string)ViewBag.EmpID)
+        @Html.Label("Qualification Name", htmlAttributes: new { @class = "control-label col-md-10" })
+        @Html.HiddenFor(model=>model.selecteddocname,ViewBag.SelectedQuali as SelectListItem)
+           @{ <br /><br />
+               foreach (var item in Model.docnamelist)
+            {
+                <div class="col-md-6">
+                    <div class="ct-horizontal">
+                        <span>@item.Text</span>
+                        <span> @Html.LabelFor(model => model.docnamelist, item.Text, new { @type = "textbox", @class = "control-label col-md-12", @multiple = "Multiple" })</span>
+                        @Html.Hidden("dcname",item.Text)
+                        @Html.HiddenFor(model=>model.selecteddocname,item.Text)
+                        @Html.HiddenFor(model=>model.qualidid,item.Value)
+                     <br /><br />
+                    </div>
+                </div>
+            }
+        }
+    </div>
+            <div class="form-group">
+                                    @Html.LabelFor(model => model.pdfFile, htmlAttributes: new { @class = "control-label col-md-10" })
+                                    @{ <br /><br />
+                                        foreach (var item in Model.docnamelist)
+                                        {
+                                            <div class="col-md-6">
+                                                <div class="ct-horizontal">
+                                                    @Html.TextBoxFor(model => model.pdfFile, "", new { @type = "file", @multiple = "Multiple" })
+                                                    @Html.ValidationMessageFor(model => model.pdfFile, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div><br />
+                                        }
+                                    }
+                                </div>
+                            </div>*@

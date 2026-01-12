@@ -1,0 +1,234 @@
+﻿@model IEnumerable<HRM.Models.spGetConsultant_Result>
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "UploadConsultantDoc";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    }
+
+    <div class="card">
+        <div class="card-body">
+            <h3 class="card-title">All Consultant View</h3>
+            @if (TempData["PendingDoc"] != null)
+            {
+                <p class="alert alert-danger" id="pendigdoc" align="center">
+                    Document pending for upload<br />
+                    @foreach (var item in TempData["PendingDoc"] as List<HRM.Models.tblDoctorDocMas>)
+                    {
+                        @item.vchDocMasName<br />
+                    }
+                </p>
+            }
+            @if (TempData["Success"] != null)
+            {
+                <p class="alert alert-success" id="tsuccess" align="center">@TempData["Success"]</p>
+            }
+            @if (TempData["Empty"] != null)
+            {
+                <p class="alert alert-danger" id="tempty" align="center">@TempData["Empty"]</p>
+            }
+            @if (TempData["Error"] != null)
+            {
+                <p class="alert alert-danger" id="terror" align="center">@TempData["Error"]</p>
+            }
+            @if (ViewBag.Success != null)
+            {
+                <p class="alert alert-success" id="vSuccess" align="center">@ViewBag.Success</p>
+            }
+            @if (ViewBag.Error != null)
+            {
+                <p class="alert alert-danger" id="error" align="center">@ViewBag.Error</p>
+            }
+            @if (ViewBag.Empty != null)
+            {
+                <p class="alert alert-danger" id="vSuccess" align="center">@ViewBag.Empty</p>
+            }
+
+            <div align="right">
+                <a href="@Url.Action("Index", "Consultant")">
+                    <div class="btn btn-primary btn-sm">
+                        <h6 align="center" class="fas fa-hand-point-right"></h6>
+                        <h6 align="center" class="fa fa-plus">
+                            All Consultant
+                        </h6>
+                    </div>
+                </a>
+            </div>
+            <table class="table table-sm table-striped table-responsive-xl " style="font-size:90%">
+                <thead class="bg-primary text-white col-12">
+                    <tr>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            Mobile
+                        </th>
+                        <th>
+                            DOJ
+                        </th>
+                        <th>
+                            Professional Fee
+                        </th>
+                        <th>
+                            Registration
+                        </th>
+                        <th>
+                            M.O.U
+                        </th>
+                        <th>
+                            Other Document
+                        </th>
+                        <th>
+                            Final Lock/Unlock
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="border border-primary">
+                    @if (Model != null)
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.vchName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.vchMobile)
+                                </td>
+                                <td>
+                                    @item.dtDOJ.Value.ToString("dd/MM/yyyy")
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.intsalary)
+                                </td>
+                                <td>
+                                    @{
+
+                                        if (item.bitRegiUploaded == false)
+                                        {
+                                            <a class="btn btn-outline-cyan btn-sm" style="color:black" href="@Url.Action("AddRegistration", "Consultant", new { id = @item.intid })">Add</a>
+                                            @*<a class="btn btn-outline-cyan btn-sm" style="color:black" href="#" data-toggle="modal" data-target="AddRegistration">Add</a>*@
+                                        }
+                                        if (item.bitRegiUploaded == true && item.bitRegistrationlocked == false)
+                                        {
+                                            <a class="btn btn-outline-cyan btn-sm" style="color:black" href="@Url.Action("EditRegistration", "Consultant", new { id = item.intid })">Edit</a>
+                                            <a class="btn btn-outline-success btn-sm" style="color:black" href="@Url.Action("ViewRegistration", "Consultant", new { id = item.intid })">View</a>
+                                        }
+                                        if (item.bitRegistrationlocked == true)
+                                        {
+                                            <a class="btn btn-outline-cyan btn-sm" style="color:black" href="@Url.Action("ViewRegistration", "Consultant", new { id = item.intid })">View</a>
+                                            string isAdmin;
+                                            if (Session["MainAdmin"] != null)
+                                            {
+                                                isAdmin = Session["MainAdmin"].ToString();
+                                                if (isAdmin == "True")
+                                                {
+                                                    if (item.bitRegiUploaded == true && item.bitRegistrationlocked == true)
+                                                    {
+                                                        <a class="btn btn-outline-danger btn-sm" style="color:black" href="@Url.Action("UnlockRegistration", "Consultant", new { id = item.intid })">Unlock to Update</a>
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.bitMOUUploaded == false)
+                                    {
+                                        <a class="btn btn-outline-info btn-sm" style="color:black" href="@Url.Action("UpConsultantMOU", "Consultant",new { id = item.intid })">Add</a>
+                                    }
+                                    @if (item.bitMOUUploaded == true && item.bitMOUlocked == false)
+                                    {
+                                        <a class="btn btn-outline-info btn-sm" style="color:black" href="@Url.Action("EditMOU", "Consultant",new { id = item.intid })">Edit</a>
+                                        <a class="btn btn-outline-info btn-sm" style="color:black" href="@Url.Action("ViewMOU", "Consultant",new { id = item.intid })">View</a>
+                                    }
+                                    @if (item.bitMOUlocked == true)
+                                    {
+                                        <a class="btn btn-outline-info btn-sm" style="color:black" href="@Url.Action("ViewMOU", "Consultant",new { id = item.intid })">View</a>
+                                        string isAdmin;
+                                        if (Session["MainAdmin"] != null)
+                                        {
+                                            isAdmin = Session["MainAdmin"].ToString();
+                                            if (isAdmin == "True")
+                                            {
+                                                if (item.bitMOUUploaded == true && item.bitRegistrationlocked == true)
+                                                {
+                                                    <a class="btn btn-outline-danger btn-sm" style="color:black" href="@Url.Action("UnlockMOU", "Consultant", new { id = item.intid })">Unlock MOU</a>
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                </td>
+                                <td>
+                                    @if (item.bitOtherUploadLock == false)
+                                    {
+                                        <a class="btn btn-outline-success btn-sm" style="color:black" href="@Url.Action("UploadConultDoc", "Consultant",new { id = item.intid })">Add</a>
+                                    }
+                                    @if (item.bitOtherUploadLock == true)
+                                    {
+                                        <a class="btn btn-outline-success btn-sm" style="color:black" href="@Url.Action("ViewOther", "Consultant",new { id = item.intid })">View</a>
+                                        string isAdmin;
+                                        if (Session["MainAdmin"] != null)
+                                        {
+                                            isAdmin = Session["MainAdmin"].ToString();
+                                            if (isAdmin == "True")
+                                            {
+                                                <a class="btn btn-outline-danger btn-sm" style="color:black" href="@Url.Action("Unlock", "Consultant", new { id = item.intid })">Unlock To Upload</a>
+                                            }
+                                        }
+                                    }
+                                </td>
+                                <td>
+                                    <div align="center">
+                                        @if (item.bitRegistrationlocked == true && item.bitMOUlocked == true)
+                                        {
+                                            if (Session["HrAdmin"] != null)
+                                            {
+                                                string isHR = Session["HrAdmin"].ToString();
+                                                if (isHR == "True")
+                                                {
+                                                    <button class="confirmButton btn btn-danger btn-sm" id="btnComplete" data-record-id="@item.intid">CompleteUploads?</button>
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <label>Upload All Document</label>
+                                        }
+
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script type="text/javascript">
+        document.querySelectorAll('.confirmButton').forEach(function (button) {
+            button.addEventListener('click', function () {
+                var recordid = this.getAttribute("data-record-id");
+                if (!confirm("Are your sure you want to lock consultant uploads?")) {
+                    //do nothing
+                }
+                else {
+                    window.location.href = '/Consultant/CompleteAllDoc/' + recordid;
+                }
+
+            });
+        });
+    </script>
+}

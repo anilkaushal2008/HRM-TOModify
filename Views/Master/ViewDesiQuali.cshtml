@@ -1,0 +1,81 @@
+﻿@model IEnumerable<HRM.Models.tblDesiQualification>
+
+@{
+    ViewBag.Title = "ViewDesiQuali";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+    <br />
+<div class="col-lg-12">
+    <div class="card">
+        @if (TempData["Success"] != null)
+        {
+            <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+        }
+        <div class="card-body">
+            <h3 class="card-title">All Qualifaction Master View</h3>
+             <div align="right">
+                    <a href="@Url.Action("AddNew","Master")">
+                        <div class="btn btn-primary">
+                            <h6 class="fas fa-hand-point-right"></h6>
+                            <h6 align="center" class="fa fa-plus">
+                                Create new
+                            </h6>
+                        </div>
+                    </a>
+                </div>
+           
+            <div class="table">
+                <table class="table table-sm col-12">
+                    <thead class="bg-primary text-white col-12">
+                        <tr>
+                            <td>
+                                Designation
+                            </td>
+                            <th>
+                                Qualification
+                            </th>
+                            <th>
+                                Date Created
+                            </th>
+                            <th>
+                                Created By
+                            </th>
+                            <th>
+                                Action
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="border border-primary">
+                        @foreach (var item in Model)
+                        {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.tblDesignationMas.vchdesignation)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.vchQualification)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.dtcreated)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.vchCreatedBy)
+                            </td>
+                            <td>
+                                <a href="@Url.Action("EditDesiQuali","Master",new { id = item.intid })">
+                                    <h6 align="center" class="fa fa-edit" data-placement="left" data-toggle="tooltip" data-original-title="Edit"></h6>
+                                </a>&nbsp;&nbsp;
+                                <a href="@Url.Action("DeleteQualiDesi","Master",new { id = item.intid })">
+                                    <h6 align="center" class="fa fa-trash" data-placement="right" data-toggle="tooltip" data-original-title="Delete"></h6>
+                                </a>
+                                @*<p6 class="fa fa-edit">@Html.ActionLink("Edit", "Edit", new { id = item.intid })</p6>*@
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

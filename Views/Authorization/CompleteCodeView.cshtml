@@ -1,0 +1,84 @@
+﻿@model HRM.Models.EmpFinalUpdateViewModel
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "CompleteCodeView";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    }
+
+    using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <br />
+            <h3 style="color:black">Employee final update panel</h3>
+            <hr />
+            //@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.Hidden("id", Model.id)
+            <div class="form-group">
+                @Html.LabelFor(model => model.Edatejoin, htmlAttributes: new { @class = "control-label col-md-8" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Edatejoin, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                    @*@Html.Label("Nam", (string)ViewBag.Edatejoin, htmlAttributes: new { @class = "form-control", @id = "olddate" })*@
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Label("Entered Final DOJ(DD/MM/YYYY)", htmlAttributes: new { @class = "control-label col-md-8" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.doj, new { htmlAttributes = new { @class = "form-control", @type = "text", @readonly = "readonly" } })
+                    @Html.ValidationMessageFor(model => model.doj, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Label("Auto Generated Code", htmlAttributes: new { @class = "control-label col-md-8" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.fcode, new { htmlAttributes = new { @class = "form-control", @type = "text", @readonly = "readonly" } })
+                    @Html.ValidationMessageFor(model => model.doj, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Save" class="btn btn-primary" />&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="button" value="Cancel" class="btn btn-danger" />
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+@section Scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/Scripts/jquery-ui.js"></script>
+    <script type="text/javascript">
+$(document).ready(function () {
+            var puranidt12 = $("#olddate").val();
+            $("#getfdate").datepicker({
+                dateFormat: 'dd/MM/yy',
+                onSelect: function (value, ui) {
+                    var puranidt = $("#olddate").text().toString();
+                    var newpuranidt = new Date(puranidt);
+                    //var puranidt = new Date($("#olddate").val().toString());
+                    //var fedate = edatee.getDate();
+                    var newdt = new Date($(this).val());
+                    if (newdt < newpuranidt) {
+                        alert("Final D.O.J should not be less than Expected D.O.J");
+                    }
+                    else {
+                        $("#getfdate").val = newdt;
+                    }
+                },
+                changeMonth: true
+                //changeYear: true
+                //yearRange: '1960:2030'
+            })
+});
+    </script>
+}

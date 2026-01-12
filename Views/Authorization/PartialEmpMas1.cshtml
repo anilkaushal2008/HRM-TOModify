@@ -1,0 +1,167 @@
+﻿@model HRM.Models.tblEmpAssesmentMas
+    @{ 
+        Layout = "";
+    }
+@if (Session["descript"] != null)
+{
+    if (Model != null)
+    {
+
+<dl class="dl-horizontal">
+    <h3 style="color: black; font-weight: bold; color: Highlight">Official</h3>
+    <br />
+
+    <div class="row" style="color:black">
+        <div class="col-md-3">
+    <dt>
+        @Html.DisplayNameFor(model => model.vchName)
+    </dt>
+    <dd>
+        @Html.DisplayFor(model => model.vchName)
+    </dd>
+    </div>
+    <div class="col-md-3">
+    <dt>
+        @Html.DisplayNameFor(model => model.tblDeptMas.vchdeptname)
+    </dt>
+    <dd>
+        @Html.DisplayFor(model => model.tblDeptMas.vchdeptname)
+    </dd>
+    </div>
+    <div class="col-md-3">
+    <dt>
+        @Html.DisplayNameFor(model => model.tblDesignationMas.vchdesignation)
+    </dt>
+    <dd>
+        @Html.DisplayFor(model => model.tblDesignationMas.vchdesignation)
+    </dd>
+    </div>
+    </div>
+    <br />
+    <br />
+    <div class="row" style="color:black">
+        <div class="col-md-3">
+    <dt>
+        @Html.DisplayNameFor(model => model.decExperience)
+    </dt>
+    <dd>
+        @Html.DisplayFor(model => model.decExperience)
+    </dd>
+    </div>
+    <div class="col-md-3">
+    <dt>
+        DOJ
+    </dt>
+    <dd>
+        @Html.DisplayFor(model => model.dtDOJ)
+    </dd>
+    </div>
+    @{ if (Model.dtFDOJ != null)
+        {
+            <div class="col-md-3">
+            <dt>
+                Final DOJ
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.dtFDOJ)
+            </dd>
+            </div>
+        }
+    }
+    @{ if (Model.dtDOL != null)
+        {
+            <div class="col-md-3">
+            <dt>
+                DOL
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.dtDOL)
+            </dd>
+            </div>
+        }
+    }
+    <div class="col-md-3">
+    <dt>
+        Salary
+    </dt>
+    <dd>
+        @Html.DisplayFor(model => model.intsalary)
+        @{
+            if (Session["AllowAuthorization"] != null)
+            {
+                string Authorizer2 = Session["AllowAuthorization"].ToString();
+                string isAuthorback = Model.bitAuthorBack.ToString();
+                string isgoauthor = Model.bitgoauthor.ToString();
+                string isactive = Model.bittempstatusactive.ToString();
+                string isDeactive = Model.bitstatusdeactive.ToString();
+                if (Authorizer2 == "True" && isgoauthor == "True" && isAuthorback == "False" && isactive == "False" && isDeactive == "False")
+                {
+                    <a href="@Url.Action("AuthoriserUpdateSalary", "Authorization", new { id = Model.intid })">Update&nbsp;<i class="fas fa-hand-point-left"></i></a>
+                }
+                else
+                {
+
+                }
+            }
+            else
+            {
+
+            }
+        }
+    </dd>
+    </div>
+    </div>
+    <br />
+    <br />
+    <div class="row" style="color:black">
+
+        @{ if (Model.vchAadharNo == null)
+            {
+                <div class="col-md-3">
+            <dt><label>Aadhaar number</label></dt>
+            <a href="@Url.Action("AadhaarNo", "Authorization", new { id = Model.intid })">Enter aadhaar number&nbsp;<i class="fas fa-hand-point-left"></i></a>
+            </div> }
+        else if (Model.vchAadharNo != null)
+        {
+            <div class="col-md-3">
+            <dt><label> Aadhar number</label></dt>
+            <dd>@Html.DisplayFor(model => model.vchAadharNo)</dd>
+            </div>
+        }
+
+        }
+       
+        @if (Model.intVariable != 0 && Model.intVariable!=null)
+        {
+            <div class="col-md-3">
+            <dt>
+                VariablePart
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.intVariable)
+            </dd>
+            </div>
+            <div class="col-md-3">
+            <dt>
+                FixedPart
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.intFixed)
+            </dd>
+            </div>
+        }
+    </dl>
+    }
+    @*else
+    {
+        if (TempData["Empty"] != null)
+        {
+            <p class="alert alert-danger" id="successMessage" align="center">@TempData["Empty"]</p>
+        }
+    }*@
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+

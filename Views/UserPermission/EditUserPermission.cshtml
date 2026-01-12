@@ -1,0 +1,414 @@
+﻿@model HRM.Models.tblUserAuthorize
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "EditUserPermission";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+        Html.EnableClientValidation(true);
+    }
+
+    using (Html.BeginForm("UpdateList", "UserPermission", FormMethod.Post))
+    {
+    @Html.AntiForgeryToken()
+
+    <br />
+    <div class="card">
+        <div class="card-body">
+            <h3 class="card-title">User permission edit view</h3>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="row col-12">
+            <div class="col-md-4">
+                <div class="form-group">
+                    @Html.Label("Selected User", htmlAttributes: new { @class = "control-label col-md-8" })
+                    @Html.TextBox("selecteduser", (string)ViewBag.UserName, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                    @Html.Hidden("hduser", (string)ViewBag.UserName, htmlAttributes: new { @id = "hduser" })
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    @Html.Label("Update Password", htmlAttributes: new { @class = "control-label col-md-10" })
+                    @*<input type="text" class="form-control" placeholder="Enter new password" id="passcode" />*@
+                    @Html.TextBox("passcode", (string)ViewBag.Pwd, htmlAttributes: new { @class = "form-control", @type = "Password" })
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    @Html.Label("Selected department", htmlAttributes: new { @class = "control-lable col-md-8" })
+                    @Html.TextBox("dept", (string)ViewBag.Dept, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                </div>
+            </div>
+        </div>
+        <div class="row col-12">
+            <div class="col-md-4">
+                <div class="form-group">
+                    @Html.Label("Selected designation", htmlAttributes: new { @class = "control-label col-md-10" })
+                    @Html.TextBox("desi", (string)ViewBag.Desi, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    @Html.Label("Selected Email", htmlAttributes: new { @class = "control-label col-md-10" })
+                    @Html.TextBox("email",(string)ViewBag.Email, htmlAttributes: new { @class = "form-control"})
+                    </div>
+                </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            @Html.Label("Update Mobile", htmlAttributes: new { @class = "control-lable col-md-8" })
+                            @Html.TextBox("mobile", (string)ViewBag.Mobile, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+        <div class="row col-12">
+            <div class="col-md-4">
+                <div class="form-group">
+                    @Html.Label("Update allow assesment", htmlAttributes: new { @class = "control-lable col-md-12", @align = "center" })
+                    @{
+                        string status = (string)ViewBag.StatusAss.ToString();
+                        if (status == "True")
+                        {
+
+                            <input type="checkbox" id="AllowAss" checked="checked" class="form-control" />
+
+                        }
+
+                        else
+                        {
+                            <input type="checkbox" id="AllowAss" checked="" class="form-control" />
+                        }
+                    }
+                    @*@Html.CheckBox("", htmlAttributes: new {@checked= "(string)ViewBag.StatusAss",@id= "AllowAss", @class = "form-control" })*@
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    @Html.Label("Active", htmlAttributes: new { @class = "control-lable col-md-12", @align = "center" })
+                    @{string isactive = (string)ViewBag.Active.ToString();
+                        if (isactive == "True")
+                        {
+
+                            <input type="checkbox" id="upActive" checked="checked" class="form-control" />
+
+                        }
+                        else
+                        {
+                            <input type="checkbox" id="upActive" class="form-control" />
+                        }
+                    }
+                    @*@Html.CheckBox("", htmlAttributes: new {@checked= "(string)ViewBag.StatusAss",@id= "AllowAss", @class = "form-control" })*@
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    @Html.Label("HOD", htmlAttributes: new { @class = "control-lable col-md-12", @align = "center" })
+                    @{string ISHOD = (string)ViewBag.ISHOD.ToString();
+                        if (ISHOD == "True")
+                        {
+
+                            <input type="checkbox" id="upHOD" checked="checked" class="form-control" />
+
+                        }
+                        else
+                        {
+                            <input type="checkbox" id="upHOD" class="form-control" />
+                        }
+                    }
+                    @*@Html.CheckBox("", htmlAttributes: new {@checked= "(string)ViewBag.StatusAss",@id= "AllowAss", @class = "form-control" })*@
+                </div>
+            </div>
+        </div>
+
+
+                <hr />
+                <div class="form-body col-12">
+                    <div align="right">
+                        <a href="@Url.Action("ViewAllUserPermissionEmp", "UserPermission")">
+                            <div class="btn btn-success">
+                                <h6 align="center" class="fas fa-hand-point-right">
+                                    Click here to view all user.
+                                </h6>
+                            </div>
+                        </a>
+                    </div>
+                    <div align="center">
+                        <div class="checkbox">
+                            @*<label style="color:black">Select All</label>&nbsp;&nbsp;<input type="checkbox" id="checkall" checked="checked" />&nbsp;&nbsp;&nbsp;&nbsp;*@
+                            <label style="color:black">Uncheck/Check All</label>&nbsp;&nbsp;<input type="checkbox" id="uncheckall" />
+                        </div>
+                    </div>
+                    <table class="table table-sm" id="newper">
+                        <thead class="bg-success text-white">
+                            <tr>
+                                <td>
+                                    <div class="form-group">
+                                        @Html.Label("Permission Name", htmlAttributes: new { @class = "control-label col-md-6" })
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        @Html.Label("Allowed", htmlAttributes: new { @class = "control-label col-md-6" })
+                                    </div>
+                                </td>
+
+                            </tr>
+                        </thead>
+                        <tbody id="notselect">
+                            @foreach (var item in ViewBag.AllPer as IEnumerable<SelectListItem>)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="col-md-10">
+                                            @Html.Label(@item.Text)
+                                            @Html.Hidden(item.Value)
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="col-md-10">
+                                            <div class="checkbox">
+                                                <input type="checkbox" id="check_@item.Value" checked="@item.Selected" />
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    @if (Model != null)
+                    {
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+
+                                    @Html.Label("Update salary range", htmlAttributes: new { @calss = "control-lable col-md-10", })
+                                    <div class="checkbox">
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <h5 class="fas fa-hand-point-right">
+                                            @*@Html.CheckBoxFor(model => model.bitAuthor, new { id = "authyes" })*@
+                                            <input type="checkbox" id="authyes" checked="checked" />
+                                        </h5>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    @Html.Label("Salary from", htmlAttributes: new { @class = "control-label col-md-8" })
+                                    @Html.TextBoxFor(model => model.intSalaryfrom, htmlAttributes: new { @calss = "form-control", id = "sfrom" })
+                                    @Html.ValidationMessageFor(model => model.intSalaryfrom, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    @Html.Label("Salary to", htmlAttributes: new { @class = "control-label col-md-8" })
+                                    @Html.TextBoxFor(model => model.intSalaryTo, htmlAttributes: new { @calss = "form-control", id = "sto" })
+                                    @Html.ValidationMessageFor(model => model.intSalaryTo, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @Html.Label("Salary range required click here", new { @calss = "control-lable col-md-10" })
+                                    <div class="checkbox">
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <h5 class="fas fa-hand-point-right">
+                                            @*@Html.CheckBoxFor(model => model.bitAuthor, new { id = "authyes" })*@
+                                            <input type="checkbox" id="authyes" />
+                                        </h5>
+                                    </div>
+                                </div>
+                            </div>
+                            @*<div class="col-md-3">
+                    <div class="form-group">
+                        <br />
+                        <lable>Enter Salary Range</lable>
+                    </div>
+                </div>*@
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    @Html.Label("Salary from", htmlAttributes: new { @class = "control-label col-md-10" })
+                                    @Html.TextBoxFor(model => model.intSalaryfrom, htmlAttributes: new { @calss = "form-control", id = "sfrom", @disabled = "disabled" })
+                                    @Html.ValidationMessageFor(model => model.intSalaryfrom, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    @Html.Label("Salary to", htmlAttributes: new { @class = "control-label col-md-10" })
+                                    @Html.TextBoxFor(model => model.intSalaryTo, htmlAttributes: new { @calss = "form-control", id = "sto", @disabled = "disabled" })
+                                    @Html.ValidationMessageFor(model => model.intSalaryTo, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    <div class="form-control" align="center">
+                        <div class="col-md-offset-2 col-md-12">
+                            <input type="button" value="Update All" class="btn btn-success btn-block" onclick="UpdateList()" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script type="text/javascript">
+        //check all and uncheck all
+        $('#uncheckall').click(function () {
+            if ($(this).is(':checked')) {
+                $('#newper').find('input[type=checkbox]:checked').removeAttr('checked');
+            }
+            else {
+                $('#newper').find('input[type=checkbox]').attr('checked', true);
+            }
+        });
+
+        //Add a JQuery click event handler onto our checkbox.
+        $("#authyes").click(function () {
+            //If the checkbox is checked.
+            if ($(this).is(':checked')) {
+                //Enable the textbox button.
+                $("#sfrom").attr("disabled", false);
+                $("#sto").attr("disabled", false);
+
+            } else {
+                //If it is not checked, disable the textbox.
+                $('#sfrom').attr("disabled", true);
+                $('#sto').attr("disabled", true);
+            }
+        });
+
+      //on sumbit post all value
+        var UpdateList = function () {
+            var mob1 = $("#mobile").val().toString();
+            var asscheck = $("#AllowAss").is(":checked").toString();
+            var upactive = $("#upActive").is(":checked").toString();
+            var upHOD = $("#upHOD").is(":checked").toString();
+            var uppwd1 = $("#passcode").val().toString();
+            var upemail = $("#email").val().toString();
+            if (upemail != "") {
+                if (mob1 != "") {
+                    if (uppwd1 != "") {
+                        var arryitem = [];
+                        var aarynitem = [];
+                        var commasepratefield = "";
+                        var commasepratedNfield = "";
+                        var checkval = "";
+                        var getuser = "";
+                        var salfrom = "";
+                        var salto = "";
+                        var Mob = "";
+                        var AllowAssesment = "";
+                        var newpwd = "";
+                        var newactive = "";
+                        var newHOD = "";
+                        var newemailid = "";
+                        var checkboxval = $("#authyes").is(":checked").toString();
+                        var salf = $("#sfrom").val().toString();
+                        var sto = $("#sto").val().toString();
+                        var selected = $("#hduser").val();
+                        $("#notselect input[type=checkbox]").each(function (AssignNewUserPermission, val) {
+                            var checkid = $(val).attr("Id");
+                            var arr = checkid.split('_');
+                            var currentcheckboxid = arr[1];
+                            var currentuncheckboxid = arr[1];
+                            var ischecked = $("#" + checkid).is(":checked", true);
+                            if (ischecked) {
+                                arryitem.push(currentcheckboxid);
+                            }
+                            var isunchecked = $("#" + checkid).is(":unchecked", true);
+                            if (isunchecked) {
+                                aarynitem.push(currentuncheckboxid);
+                            }
+                        })
+
+                        if (arryitem.length != 0) {
+                            commasepratefield = arryitem.toString();
+                            commasepratedNfield = aarynitem.toString();
+                            getuser = selected.toString();
+                            salfrom = salf.toString();
+                            salto = sto.toString();
+                            checkval = checkboxval.toString();
+                            Mob = mob1.toString();
+                            newpwd = uppwd1.toString();
+                            newactive = upactive.toString();
+                            newHOD = upHOD.toString();
+                            AllowAssesment = asscheck.toString();
+                            newemailid = upemail.toString();
+                            $.ajax({
+                                url: "/UserPermission/UpdateList",
+                                type: "POST",
+                                data: {
+                                    newper: commasepratefield,
+                                    notselect: commasepratedNfield,
+                                    selectedusr: getuser,
+                                    sfrom: salfrom,
+                                    sto: salto,
+                                    authyes: checkval,
+                                    mobile: Mob,
+                                    Ass: AllowAssesment,
+                                    newactive: newactive,
+                                    newHOD: newHOD,
+                                    newpwd: newpwd,
+                                    newmail: newemailid
+                                },
+                                success: function (result) {
+                                    //code here
+                                    if (result.success == "1") {
+                                        alert(result.output1);                
+                                    }
+                                    else if (result.success == "2") {
+                                        alert(result.output2);
+                                    }
+                                    else if (result.success == "3") {
+                                        alert(result.output3);
+                                        window.location = "/UserPermission/ViewAllUserPermissionEmp";
+                                    }
+                                    else if (result.success == "4") {
+                                        alert(result.output4);
+                                    }
+                                    else if (result.success == "7") {
+                                        alert(result.output7);
+                                    }
+                                    else if (result.success == "6") {
+                                        alert(result.output6);
+                                    }
+                                    else if (result.success == "5") {
+                                        alert(result.output5);
+                                        location.href = "/Home/_SessionError1"
+                                    }
+                                }
+                            })
+                        }
+                        else {
+                            alert("Select atleat 1 permission!");
+                            return false
+                        }
+                    }
+                    else {
+                        alert("Enter password!");
+                        return false
+                    }
+                }
+                else {
+                    alert("Enter mobile number!");
+                    return false
+                }
+            }
+                else {
+                alert("Enter email id!");
+                return false
+            }
+        }
+    </script>
+    }

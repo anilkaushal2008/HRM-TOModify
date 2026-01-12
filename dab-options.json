@@ -1,0 +1,458 @@
+﻿{
+   "ConnectionStringName": "dab-connection-string",
+   "Dacpac": null,
+   "DatabaseType": 3,
+   "MergeDacpacs": false,
+   "Optional": false,
+   "ProjectPath": "D:\\HRM-master\\HRM-master",
+   "Tables": [
+      {
+         "Name": "[dbo].[tblAssesmentQuestDetails]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblAssQuestMas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblBranchShiftMas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblCertificateCodeMas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblCity]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblConsultantDocDetail]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblConsultantLedgerDetail]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblConsultantSlipDetail]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblConsultantSlips]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblConsultantTDS]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblConversation]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblCurrentExpDetail]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblDeletedData]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblDeleteRows]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblDeptMas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblDesignationMas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblDesiQualification]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblDesiSetting]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[TblDnbFeeStructure]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[TblDnbFeeSubmission]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[TblDnbStudent]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblDocDetails]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblDocMas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblDoctorDocMas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblDoctorUploadDetail]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblDocTypeMas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblEmpAssesmentDetails]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblEmpAssesmentMas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblEmpCodeMas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblEmpDetails]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblEMpExitDetail]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblEmpExitMas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblEmpLoginUser]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblEmpMas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblExitInterviewQuestMas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblExperienceDetail]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblExperienceMas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblGroupMaster]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblIntershipDetail]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblIntershipMas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblJoiningRemarks]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblKRADocDetail]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblLeaveApplication]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblLeaveApplicationDetail]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblLeaveBalance]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblLeaveType]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblLedgerSession]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblLetterAppointDetail]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblLetterAppointMas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblLetterNumberMas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblLetterOfferDetail]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblLetterOfferMas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblManPowerDetail]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblManPowerMas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblMonthMaster]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblMouDetail]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblOtherDocDetail]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblOtherDocumentMas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblPayrollData]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblPermissionMaster]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblPosDesiMap]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblPosDocMap]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblPositionCategoryMas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblQualiDetails]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblQualiMas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblQuraterMas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblRegistrationDetail]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblRequisition]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblRequisitionNumberMas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblSalaryIncrement]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblSkillMarksAndPositionMappMas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblState]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblTitleMas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblTransferDetail]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblUserAuthorize]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblUserLove]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblUserMaster]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblUserPermission]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblVPForward]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[tblYearMaster]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[sp_GetDnbFeeDashboard]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[sp_GetDnbFeeReport]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[spCurrentExpCertificate]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[spEditPosDesiMap]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[spEditPosDocMap]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[spEmpAppointLetter]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[spEmpExpLetter]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[spEmpinternshipLetter]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[spEmpOfferLetter]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[spGetActiveConsultant]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[spGetAssesmentRemarks]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[spGetBranchMapping]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[spGetCohort]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[spGetConsultant]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[spGetConsultantSlip]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[spGetConsultantSlipDetail]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[spGetConsumedConsultantLeave]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[spGetConsumedLeave]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[spGetDeptMapping]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[spGetdoj]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[spGetdoj123]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[spGetdol]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[spGetEmpData]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[spGetInternshipLetter]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[spGetLeaveCounter]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[spGetOfferLetter]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[spGetPartialAuthorizedEmp]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[spGetRequisition]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[spGetSearchEmployee]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[spGetUserPermission]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[spLeaveReport]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[spLeaveReport123]",
+         "ObjectType": 1
+      }
+   ]
+}

@@ -1,0 +1,98 @@
+﻿@model IEnumerable<HRM.Models.tblPayrollData>
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "PayrollEmployee";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    }
+
+    using (Html.BeginForm())
+    {
+        <br />
+        @*<div class="row" style="border:solid; border-width:thin; padding:20px; height:400px;">*@
+        <div class="col-lg-12">
+            <hr />
+            @if (Model != null)
+            {
+                <div class="card">
+                    @if (TempData["Error"] != null)
+                    {
+                        //Error display when employee details not found in database
+                        <p class="alert alert-danger" id="errorMessage" align="center">@TempData["Error"]</p>
+                    }
+                    @if (TempData["Success"] != null)
+                    {
+                        //Error display when employee details not found in database
+                        <p class="alert alert-success" id="successmsg" align="center">@TempData["Success"]</p>
+                    }
+                    <div class="table-responsive" style="font-size:90%">
+                        <table class="table table-sm col-12">
+                            <thead class="bg-success text-white col-12">
+                                <tr>
+                                    <th>
+                                        AadhaarNo
+                                    </th>
+                                    <th>
+                                        Name
+                                    </th>
+                                    <th>
+                                        Mobile
+                                    </th>
+                                    <th>
+                                        Employee Code
+                                    </th>
+                                    <th>
+                                        D.O.J
+                                    </th>
+                                    <th>
+                                        Gender
+                                    </th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="border border-primary">
+                                @if (TempData["Empty"] != null)
+                                {
+                                    <p class="alert alert-danger" id="successMessage" align="center">@TempData["Empty"]</p>
+                                }
+                                else
+                                {
+                                    foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.AadhaarNo)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Name)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.vchMobile)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.vchEMpCode)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.dtDOJ)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.vchGender)
+                                            </td>
+                                            <td>
+                                                <i class="fa fa-hand-point-right"> @Html.ActionLink("Click to push in HRMS", "PayrollDetailEmp", new { id = item.vchEMpCode.ToString() })</i>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}

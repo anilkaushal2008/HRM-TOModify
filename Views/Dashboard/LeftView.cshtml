@@ -1,0 +1,252 @@
+﻿@model IEnumerable<HRM.Models.tblEmpAssesmentMas>
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "LeftView";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    }
+    <link href="//cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <div class="card">
+        <div class="card-body">
+            <h3 class="card-title">Left Employee View</h3>
+            @if (TempData["Success"] != null)
+            {
+                <p class="alert alert-success" id="empty" align="center">@TempData["Success"]</p>
+            }
+            <table id="leftView" class="table table-sm" style="font-size:90%">
+                <thead class="bg-danger text-white col-12">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.vchName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.vchEmpFcode)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.tblDeptMas.vchdeptname)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.tblDesignationMas.vchdesignation)
+                        </th>
+                        <th>
+                            Left/Transfer
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.dtFDOJ)
+                        </th>
+                        <th>
+                            Salary
+                        </th>
+                        <th>
+                            D.O.L
+                        </th>
+                        <th>
+                            Actions
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="border border-danger">
+                    @if (TempData["Empty"] != null)
+                    {
+                        <p class="alert alert-danger" id="empty" align="center">@TempData["Empty"]</p>
+                    }
+                    else
+                    {
+                        foreach (var item in Model)
+                        {
+                            if (item.BitIsRedFlagging == true)
+                            {
+                                <tr style="color:red">
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.vchName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.vchEmpFcode)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.tblDeptMas.vchdeptname)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.tblDesignationMas.vchdesignation)
+                                    </td>
+                                    <td>
+                                        @if (item.bitIsTransferred == true)
+                                        {
+                                            @Html.Label("Transfered")
+                                        }
+                                        else if (item.bitIsTerminated == true || item.BitIsRedFlagging == true)
+                                        {
+                                            @Html.Label("Terminated")
+                                        }
+                                        else
+                                        {
+                                            @Html.Label("Left")
+                                        }
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.dtDOJ)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.intsalary)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.dtDOL)
+                                    </td>
+                                    <td>
+                                        @Html.ActionLink("ViewDetails", "ViewActiveDetails", new { id = item.intid }, htmlAttributes: new { @class = "btn btn-success btn-sm" })
+                                    </td>
+                                </tr>
+                            }
+                            else if (item.BitIsOrangeFlagging == true)
+                            {
+                                <tr style="color:orangered">
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.vchName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.vchEmpFcode)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.tblDeptMas.vchdeptname)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.tblDesignationMas.vchdesignation)
+                                    </td>
+                                    <td>
+                                        @if (item.bitIsTransferred == true)
+                                        {
+                                            @Html.Label("Transfered")
+                                        }
+                                        else if (item.bitIsTerminated == true || item.BitIsRedFlagging == true)
+                                        {
+                                            @Html.Label("Terminated")
+                                        }
+                                        else
+                                        {
+                                            @Html.Label("Left")
+                                        }
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.dtDOJ)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.intsalary)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.dtDOL)
+                                    </td>
+                                    <td>
+                                        @Html.ActionLink("ViewDetails", "ViewActiveDetails", new { id = item.intid }, htmlAttributes: new { @class = "btn btn-success btn-sm" })
+                                    </td>
+                                </tr>
+                            }
+                            else if (item.BitIsGreenFlagging == true)
+                            {
+                                <tr style="color:forestgreen">
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.vchName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.vchEmpFcode)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.tblDeptMas.vchdeptname)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.tblDesignationMas.vchdesignation)
+                                    </td>
+                                    <td>
+                                        @if (item.bitIsTransferred == true)
+                                        {
+                                            @Html.Label("Transfered")
+                                        }
+                                        else if (item.bitIsTerminated == true || item.BitIsRedFlagging == true)
+                                        {
+                                            @Html.Label("Terminated")
+                                        }
+                                        else
+                                        {
+                                            @Html.Label("Left")
+                                        }
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.dtDOJ)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.intsalary)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.dtDOL)
+                                    </td>
+                                    <td>
+                                        @Html.ActionLink("ViewDetails", "ViewActiveDetails", new { id = item.intid }, htmlAttributes: new { @class = "btn btn-success btn-sm" })
+                                    </td>
+                                </tr>
+                            }
+                            else
+                            {
+                                <tr style="color:black">
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.vchName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.vchEmpFcode)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.tblDeptMas.vchdeptname)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.tblDesignationMas.vchdesignation)
+                                    </td>
+                                    <td>
+                                        @if (item.bitIsTransferred == true)
+                                        {
+                                            @Html.Label("Transfered")
+                                        }
+                                        else if (item.bitIsTerminated == true || item.BitIsRedFlagging == true)
+                                        {
+                                            @Html.Label("Terminated")
+                                        }
+                                        else
+                                        {
+                                            @Html.Label("Left")
+                                        }
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.dtDOJ)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.intsalary)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.dtDOL)
+                                    </td>
+                                    <td>
+                                        @Html.ActionLink("ViewDetails", "ViewActiveDetails", new { id = item.intid }, htmlAttributes: new { @class = "btn btn-success btn-sm" })
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#leftView').DataTable();
+        });
+    </script>
+}

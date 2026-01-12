@@ -1,0 +1,144 @@
+﻿@model IEnumerable<HRM.Models.tblEmpAssesmentMas>
+
+@{
+    ViewBag.Title = "ViewByPassUpload";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+
+<div class="card">
+    <div class="card-body">
+        @if (TempData["Success"] != null)
+        {
+            <p class="alert alert-success" id="Success" align="center">@TempData["Success"]</p>
+        }
+        @if (TempData["PendingDoc"] != null)
+        {
+    <p class="alert alert-danger" id="pendigdoc" align="center">
+        Document pending for upload<br />
+        @foreach (var item in TempData["PendingDoc"] as List<HRM.Models.tblDocMas>)
+        {
+            @item.vchdocname<br />
+        }
+    </p>
+        }
+        <h3 class="card-title">Bypass Candidate Pending Upload View</h3>
+        <table class="table table-sm">
+            <thead class="bg-primary text-white col-12">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.vchName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.vchMobile)
+                    </th>
+                    <th>
+                        Department
+                    </th>
+                    <th>
+                        Designation
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.dtDOJ)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.intsalary)
+                    </th>
+                    <th>
+                        Action
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="border border-primary">
+                @if (TempData["Empty"] != null)
+                {
+                    <p class="alert alert-danger" id="empty" align="center">@TempData["Empty"]</p>
+                }
+                @if (TempData["Error"] != null)
+                {
+                    <p class="alert alert-danger" id="empty" align="center">@TempData["Error"]</p>
+                }
+                @if (ViewBag.Empty != null)
+                {
+                    <p class="alert alert-danger" id="empty" align="center">@ViewBag.Empty</p>
+                }
+                @if (ViewBag.Error != null)
+                {
+                    <p class="alert alert-danger" id="empty" align="center">@ViewBag.Error</p>
+                }
+                else if (Model != null)
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.vchName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.vchMobile)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.tblDeptMas.vchdeptname)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.tblDesignationMas.vchdesignation)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.dtDOJ)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.intsalary)
+                            </td>
+                            <td>
+                                @if (Session["HrAdmin"] != null)
+                                {
+                                    string isHR = Session["HrAdmin"].ToString();
+                                    if (isHR == "True")
+                                    {
+                                        <a href="@Url.Action("UpByPassDoc", "Authorization", routeValues: new { @id = item.intid })">
+                                            <div class="btn btn-success btn-sm">
+                                                <h6 align="center" class="fas fa-hand-point-right">
+                                                    Upload document
+                                                </h6>
+                                            </div>
+                                        </a>
+                                    }
+                                }
+                                &nbsp;&nbsp;&nbsp;
+                                @if (Session["HrAdmin"] != null)
+                                {
+                                    string isHR = Session["HrAdmin"].ToString();
+                                    if (isHR == "True")
+                                    {
+                                        <button class="confirmButton btn btn-danger btn-sm" id="btnComplete" data-record-id="@item.intid">CompleteUploads?</button>
+                                    }
+                                }
+                            </td>
+
+                        </tr>
+                    }
+                }
+        </table>
+</div>
+</div>
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script type="text/javascript">
+        document.querySelectorAll('.confirmButton').forEach(function (button) {
+            button.addEventListener('click', function () {
+                var recordid = this.getAttribute("data-record-id");
+                if (!confirm("Are your sure you want to lock employee uploads for employee document verification?")) {
+                    //do nothing
+                }
+                else {
+                    window.location.href = '/Authorization/CompleteByPassUpload/' + recordid;
+                }
+
+            });
+        });
+ </script>
+}
+

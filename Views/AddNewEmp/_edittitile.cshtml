@@ -1,0 +1,8 @@
+﻿@model HRM.Models.tblTitleMas
+
+@if (ViewBag.selectnewtitile != null)
+{
+    @Html.Label("Update Title",new { @class = "control-label col-md-8" })
+    @Html.DropDownListFor(model => model.vchname, ViewBag.selectnewtitile as SelectList,Model.vchname, htmlAttributes: new { @class = "form-control" })
+    @Html.ValidationMessageFor(model => model.vchname, "", new { @class = "text-danger" })
+}

@@ -1,0 +1,144 @@
+﻿@using System.Web;
+@using System.Web.Optimization;
+@model HRM.Models.tblEmpAssesmentMas
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "EditEmpl";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+        Html.EnableClientValidation(true);
+    }
+
+
+
+    using (Html.BeginForm("EditEmpl", "AddNewEmp", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title">Edit Official Details</h3>
+                        <h6 class="card-subtitle">
+                        </h6>
+                        <div class="button-box">
+                            <button type="button" class="btn btn-primary btn-outline" data-toggle="tooltip"
+                                    data-placement="left" title="Add Official Details">
+                                Official Details
+                            </button>
+
+                            @*<a href="@Url.Action("ViewAllEmp", "AddNewEmp")">
+                                <div class="btn btn-success">
+                                    <h6 align="center" class="fas fa-hand-point-right">
+                                        Back to view all employee
+                                    </h6>
+                                </div>
+                            </a>*@
+                        </div>
+                        <br />
+                        <hr />
+                        @if (TempData["Error"] != null)
+                        {
+                            <p class="alert alert-danger" id="errormsg">@TempData["Error"]</p>
+                        }
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        @Html.HiddenFor(model => model.intid)
+
+                        <div class="form-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+
+                                        @{
+                                            if (Model == null)
+                                            {
+                                                Html.RenderPartial("_editdept");
+                                            }
+                                            else
+                                            {
+                                                Html.RenderPartial("_editdept", Model.tblDeptMas);
+                                            }
+                                        }
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        @{
+                                            if (Model == null)
+                                            {
+                                                Html.RenderPartial("_editdesignation");
+                                            }
+                                            else
+                                            {
+                                                Html.RenderPartial("_editdesignation", Model.tblDesignationMas);
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        @Html.Label("Entered DOJ", htmlAttributes: new { @class = "control-label col-md-6" })
+                                        @Html.EditorFor(model => model.dtDOJ, new { htmlattributes = new { @class = "form-control", @type = "datetime", @disabled = "disabled" } })
+                                        @Html.ValidationMessageFor(model => model.dtDOJ, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        @Html.Label("Update DOJ", htmlAttributes: new { @class = "control-label col-md-6" })
+                                        @Html.EditorFor(model => model.dtDOJ, new { htmlattributes = new { @class = "form-control", @type = "date" } })
+                                        @Html.ValidationMessageFor(model => model.dtDOJ, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        @Html.Label("Update Salary", htmlAttributes: new { @class = "control-label col-md-8" })
+                                        @Html.EditorFor(model => model.intsalary, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.intsalary, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group" align="center">
+                                <h5 class="card-title">Is final submission</h5>
+                                <fieldset class="radio">
+                                    <label class="radio">
+                                        Yes
+                                        @Html.RadioButtonFor(Model => Model.bitofficialdetails, "true", htmlAttributes: new { id = "chkyes", @class = "radio1" })
+                                    </label>
+                                    <label class="radio">
+                                        No
+                                        @Html.RadioButtonFor(Model => Model.bitofficialdetails, "false", htmlAttributes: new { id = "chkno", @class = "radio1" })
+                                    </label>
+                                    @Html.ValidationMessageFor(model => model.bitofficialdetails, "", new { @class = "text-danger" })
+                                </fieldset>
+                            </div>
+                            <br />
+                            <div align="center">
+                                <div class="form-group">
+                                    <div class="col-md-offset-2 col-md-10">
+                                        <input type="submit" value="Update" class="btn btn-block btn-success" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/Scripts/jquery-ui.js"></script>
+}
+

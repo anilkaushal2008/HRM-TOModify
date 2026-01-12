@@ -1,0 +1,190 @@
+﻿@model HRM.Models.EmployeeLoginModelView
+@{
+    Layout = null;
+    Html.EnableClientValidation(true);
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href=@Url.Content("~/Content/assets/images/logo1.png")>
+    <title>HrModule</title>
+    <!-- Custom CSS -->
+    <link href=@Url.Content("~/Content/dist/css/style.min.css") rel="stylesheet" type="text/css">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script>
+        function setZoom(percentage) {
+            document.body.style.zoom = percentage + '%';
+        }
+    </script>
+</head>
+<body>
+    @using (Html.BeginForm("Employee", "NewEmployeeLogin"))
+    {
+        <div class="main-wrapper">
+            <!-- ============================================================== -->
+            <!-- Preloader - style you can find in spinners.css -->
+            <!-- ============================================================== -->
+            @*<div class="preloader">
+                    <div class="lds-ripple">
+                        <div class="lds-pos"></div>
+                        <div class="lds-pos"></div>
+                    </div>
+                </div>*@
+            <!-- ============================================================== -->
+            <!-- Preloader - style you can find in spinners.css -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- Login box.scss -->
+            <!-- ============================================================== -->
+            <div class="auth-wrapper d-flex no-block justify-content-center align-items-center position-relative"
+                 style="background: url(/Content/assets/images/big/auth-bg.jpg) no-repeat center center; ">               
+                <div class="auth-box row" id="centerlogin">
+
+                    <div class="col-lg-7 col-md-5 modal-bg-img" style="background-image: url(/Content/assets/images/big/HRM1.png);">
+                    </div>                   
+                    <div class="col-lg-5 col-md-7 bg-white">
+                        <div class="p-3">
+                            <div class="text-center">
+                                <img src="~/Content/assets/images/logo123.jpg" alt="wrapkit">
+                            </div>
+                            <div>
+                                <label id="ipaddress"></label>
+                            </div>
+
+                            <h2 class="mt-3 text-center" style="color:darkblue">Sign In</h2>
+                            <p class="text-center">Enter information to access your Dashboard</p>
+                            @if (TempData["Success"] != null)
+                            {
+                                <p class="alert alert-success" id="empty" align="center">@TempData["Success"]</p>
+                            }
+                            @if (TempData["Error"] != null)
+                            {
+                                <p class="alert alert-danger" id="empty" align="center">@TempData["Error"]</p>
+                            }
+                            <form class="mt-4">
+                                <div class="row">
+                                    <!--<div class="col-lg-12">
+            <div class="form-group">-->
+                                    @*<label class="text-dark" for="uname">Username</label>*@
+                                    <!--<li class="fa fa-hand-point-right"> <a href="@Url.Action("GenerateOTP", "NewEmployeeLogin")"><span> Click for candidate login</span></a></li>
+                </div>
+            </div>-->
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            @*<label class="text-dark" for="Group">Select Company</label>*@
+                                            @{Html.RenderPartial("selcetbranch");
+                                                <p id="selectedValue"></p>}
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            @*<label class="text-dark" for="uname">Username</label>*@
+                                            @Html.LabelFor(m => m.vchmobile, new { @class = "text-dark" })
+                                            @Html.TextBoxFor(m => m.vchmobile, new { @class = "form-control", @placeholder = "enter mobile number", @type = "Text", @id = "mobile" })
+                                            @Html.ValidationMessageFor(m => m.vchmobile, "", new { @class = "text-danger" })
+                                           <label hidden="hidden" id="OtpSuccessMsg"></label>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            @*<label class="text-dark" for="uname">Username</label>*@
+                                            <a class="btn btn-primary bg-facebook" id="OTPGEN" style="color:white;font-style:initial"><li class="fa fa-hand-point-right">&nbsp; Generate OTP</li></a>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12" id="OTP">
+                                        <div class="form-group">
+                                            @*<label class="text-dark" for="pwd">Password</label>*@
+                                            @Html.LabelFor(m => m.OTP, new { @class = "text-dark" })
+                                            @Html.TextBoxFor(m => m.OTP, new { @class = "form-control", @placeholder = "enter OTP", @type = "password" })
+                                            @Html.ValidationMessageFor(m => m.OTP, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-12 text-center">
+                                        <button type="submit" class="btn btn-block btn-dark" id="btnSubmit" value="submit" formnovalidate="formnovalidate">Sign In</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ============================================================== -->
+            <!-- Login box.scss -->
+            <!-- ============================================================== -->
+        </div>
+    }
+    <!-- ============================================================== -->
+    <!-- All Required js -->
+    <!-- ============================================================== -->
+
+    <script src="~/Content/assets/libs/jquery/jquery.min.js"></script>
+    <!-- Bootstrap tether Core JavaScript -->
+    <script src="~/Content/assets/libs/popper.js/dist/popper.min.js"></script>
+    <script src="~/Content/assets/libs/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <!-- ============================================================== -->
+    <!-- This page plugin js -->
+    <!-- ============================================================== -->
+    <script>
+        setZoom(80);       
+        //Adjust the percentage as needed
+        $("#OTP").attr("hidden", true);
+        $("#btnSubmit").attr("hidden", true);
+        
+
+        $("#OTPGEN").click(function () {
+            var mobile = $("#mobile").val().toString();
+            var selectedValue = $("#branch").val();
+            if (branch != null && branch != "") {
+                if (mobile != null && mobile != "") {
+                    $.ajax({
+                        url: '@Url.Action("genOTP", "NewEmployeeLogin")',
+                        type: 'POST',
+                        data: {
+                            mobile: mobile,
+                            branch: selectedValue
+                        },
+                        success: function (data) {
+                            $('#genOTP').html('<p>' + data.msg + '</p>');
+                            $("#OTP").attr("hidden", false);
+                            $("#OtpSuccessMsg").attr("hidden", false);
+                            $("#OtpSuccessMsg").text("OTP send successfully!");
+                            $("#btnSubmit").attr("hidden", false);
+                        },
+                        error: function () {
+                            $('#genOTP').html('<p>An error has occurred</p>');
+                        }
+                    });
+                }
+                else {
+                    alert("Enter mobile number!");
+                }
+            }
+            else {
+                alert("Select your branch");
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,133 @@
+﻿@model HRM.Models.tblEmpAssesmentMas
+@{
+    Layout = "";
+}
+@if (Session["descript"] != null)
+{
+    if (Model != null)
+    {
+
+        <dl class="dl-horizontal">
+            <h3 style="color: black; font-weight: bold; color: Highlight">Official</h3>
+            <br />
+            <div class="row" style="color:black">
+                <div class="col-md-3">
+            <dt>
+                @Html.DisplayNameFor(model => model.vchName)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.vchName)
+            </dd>
+            </div>
+            <div class="col-md-3">
+            <dt>
+                Employee Code
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.vchEmpFcode)
+            </dd>
+            </div>
+
+            <div class="col-md-6">
+            <dt>
+                Department
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.tblDeptMas.vchdeptname)
+            </dd>
+            </div>
+
+            </div>
+
+            <br />
+            <div class="row" style="color:black">
+                <div class="col-md-3">
+            <dt>
+                Experience
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.decExperience)
+            </dd>
+            </div>
+            <div class="col-md-3">
+            <dt>
+                DOJ
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.dtDOJ)
+            </dd>
+            </div>
+            @{ if (Model.dtFDOJ != null)
+                {
+                    <div class="col-md-3">
+                    <dt>
+                        Final DOJ
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.dtFDOJ)
+                    </dd>
+                    </div>
+                }
+            }
+            <div class="col-md-3">
+            <dt>
+                Professional Fee
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.intsalary)
+
+            </dd>
+            </div>
+            </div>
+            <br />
+            <div class="row" style="color:black">
+                <div class="col-md-3">
+            <dt>Aadhar number</dt>
+            @{ if (Model.vchAadharNo != null)
+                {
+                    var adhar = Model.vchAadharNo;
+                    var finalAadhaar = "XXXX-XXXX-" + adhar.Substring(adhar.Length - 4);
+
+                    <dd>@finalAadhaar</dd>
+                }
+                else
+                {
+                    <dd>N/A</dd>
+                }
+            }
+            </div>
+            <div class="col-md-3">
+            <dt>
+                PAN Number
+            </dt>
+            <dd>
+                @{ if (Model.vchPANNUmber != null)
+                    {
+                        @Html.DisplayFor(model => model.vchPANNUmber)
+                    }
+                    else
+                    {
+                      <button type="button" class="btn btn-success fa-capsules btn-sm open-modal text-white" data-id="@Model.intid.ToString()" style="color:white">Add Pan Number</button>
+                    }
+                }
+            </dd>
+            </div>
+            </div>
+        </dl>
+    }
+    <div id="modalContainer"></div>
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+<script type="text/javascript">
+    
+</script>
+
+

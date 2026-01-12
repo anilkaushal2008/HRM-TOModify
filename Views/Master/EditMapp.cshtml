@@ -1,0 +1,199 @@
+﻿@model HRM.Models.tblPosDesiMap
+
+@{
+    ViewBag.Title = "EditMapp";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+
+
+@using (Html.BeginForm("UpdateMapping", "Master", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <div class="card">
+            <div class="card-body">
+                <h4 style="color:black" class="col-md-12">Position and designation update mapping master</h4>
+                <hr />
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.intid)
+
+                <div class="form-group">
+                    @Html.Label("Selected position name", htmlAttributes: new { @class = "control-label col-md-8" })
+                    <div class="col-md-10">
+                        @Html.TextBox("SelectedPos", (string)ViewBag.SelectedPosi, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                        @Html.Hidden("hdid", (string)ViewBag.SelectedPosiID)
+                        @Html.Hidden("Selectedposname", (string)ViewBag.SelectedPosi)
+                    </div>
+                </div>
+                @{
+                    string Pdview = Session["Pdview"].ToString();
+                    if (Pdview == "True")
+                    {
+                        <div align="right">
+                            <a href="@Url.Action("ViewAllMap", "Master")">
+                                <div class="btn btn-success">
+                                    <h6 align="center" class="fas fa-hand-point-right">
+                                        Return to view all mapping
+                                    </h6>
+                                </div>
+                            </a>
+                        </div>
+                    }
+                    <div align="center">
+                        <div class="checkbox">
+                            @*<label style="color:black">Select All</label>&nbsp;&nbsp;<input type="checkbox" id="checkall" checked="checked" />&nbsp;&nbsp;&nbsp;&nbsp;*@
+                            <label style="color:black">Uncheck/Check All</label>&nbsp;&nbsp;<input type="checkbox" id="uncheckall" />
+                        </div>
+                    </div>
+                }
+            <table class="table table-sm" id="newmapp">
+                <thead class="bg-success text-white">
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                @Html.Label("Designations Name", htmlAttributes: new { @class = "control-label col-md-10" })
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                @Html.Label("Checked/Unchecked", htmlAttributes: new { @class = "control-label col-md-12" })
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                Allowed For LastAssessment
+                            </div>
+                        </td>
+
+                    </tr>
+                </thead>
+                <tbody id="upData">
+
+                    @foreach (var item in ViewBag.SelectedRecrod as IEnumerable<SelectListItem>)
+                    {
+                        <tr>
+                            <td>
+                                <div class="col-md-10">
+                                    @Html.Label(@item.Text)
+                                    @Html.Hidden(@item.Value)
+                                </div>
+                            </td>
+                            <td>
+                                <div class="col-md-10">
+                                    <div class="checkbox">
+                                        <input type="checkbox" id="check_@item.Value" checked="@item.Selected" />
+                                    </div>
+                                </div>
+                            </td>
+                                <td>
+                                    <div class="col-md-10">
+                                        <fieldset class="radio">
+                                            @{if (ViewBag.bitIsLast == "True" && ViewBag.Desiid==item.Value)
+                                                {
+                                                    <input type="radio" name="FAssesment" value="@item.Value" checked="checked" />
+                                                }
+                                                else
+                                                {
+                                                    <input type="radio" name="FAssesment" value="@item.Value" />
+                                                  }
+                                                }
+                                                </fieldset>
+                                    </div>
+                                </td>
+                        </tr>
+                    }
+
+
+                </tbody>
+                </table>
+                <div class="form-group" align="center">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Update" class="btn btn-block btn-success" onclick="UpdateMapping()"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+                    }
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script type="text/javascript">
+        //check all and uncheck all
+        $('#uncheckall').click(function () {
+            if ($(this).is(':checked')) {
+                $('#newmapp').find('input[type=checkbox]:checked').removeAttr('checked');
+            }
+            else {
+                $('#newmapp').find('input[type=checkbox]').attr('checked', true);
+            }
+        });
+        //on sumbit post all value
+        var UpdateMapping = function () {
+            var postxt = $("#Selectedposname").val().toString();
+            var Posid = $("#hdid").val().toString();
+            var radioyes = $('input[name="FAssesment"]:checked').val();
+            var FAss = radioyes.toString();
+                var arryitem = [];
+                var aarynitem = [];
+                var commaseprateYfield = "";
+                var commasepratedNfield = "";
+                var Pid = "";
+                var Ptxt = "";                
+            $("#upData input[type=checkbox]").each(function (EditMapp, val) {
+                var checkid = $(val).attr("Id");
+                var arr = checkid.split('_');
+                var currentcheckboxid = arr[1];
+                var currentuncheckboxid = arr[1];
+                var ischecked = $("#" + checkid).is(":checked", true);
+                if (ischecked) {
+                    arryitem.push(currentcheckboxid);
+                }
+                var isunchecked = $("#" + checkid).is(":unchecked", true);
+                if (isunchecked) {
+                    aarynitem.push(currentuncheckboxid);
+                }
+            })
+
+                if (arryitem.length != 0) {
+                    commaseprateYfield = arryitem.toString();
+                    commasepratedNfield = aarynitem.toString();
+                    Pid = Posid.toString();
+                    Ptxt = postxt.toString();
+
+                    $.ajax({
+                        url: "/Master/UpdateMapping",
+                        type: "POST",
+                        data: {
+                            UpdateYesValiDesi: commaseprateYfield,
+                            UpdateNoValiDesi: commasepratedNfield,
+                            PositionId: Pid,
+                            PositionText: Ptxt,
+                            FAssEdit: FAss
+                        },
+                        success: function (result) {
+                            if (result.Success == "1") {
+                                alert(result.output1);
+                                window.location = "/Master/ViewAllMap";
+                            }
+                            else if (result.Success == "2") {
+                                alert(result.output2);
+                                location.href = "/Home/_SessionError1"
+                            }
+                        }
+                    })
+                }
+                else {
+                    alert("Select atleast 1 designation");
+                    return false
+                }
+            }
+    </script>
+}
+
+

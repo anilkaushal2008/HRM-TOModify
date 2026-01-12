@@ -1,0 +1,14 @@
+﻿@model HRM.Models.tblExperienceMas
+
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryval")
+
+
+        @Html.HiddenFor(model => model.intid)
+        <div class="form-group">
+            @Html.LabelFor(model => model.txtContent, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.txtContent, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.txtContent, "", new { @class = "text-danger" })
+            </div>
+        </div>    

@@ -1,0 +1,303 @@
+﻿@model IEnumerable<HRM.Models.tblMonthMaster>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "KRA Performance Analytics";
+}
+
+<style>
+    /* Modern Dashboard Styling */
+    .dashboard-container {
+        background: #fdfdfd;
+        padding: 1.5rem;
+        border-radius: 20px;
+    }
+
+    .analytics-card {
+        background: #fff;
+        border: none;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    /* Table Styling */
+    .table thead th {
+        background: #f8fafc;
+        color: #64748b;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        border: none;
+        padding: 1.25rem;
+    }
+
+    .table td {
+        vertical-align: middle !important;
+        border-top: 1px solid #f1f5f9;
+        padding: 1.25rem;
+    }
+
+    /* Chart Containers */
+    .chart-container-donut {
+        position: relative;
+        width: 85px;
+        height: 85px;
+        margin: 0 auto;
+    }
+
+    .trend-container {
+        height: 300px;
+        width: 100%;
+    }
+
+    /* Score Typography - Digit only format */
+    .score-badge {
+        font-size: 1.15rem;
+        font-weight: 800;
+        color: #10b981;
+    }
+
+    .month-label {
+        font-weight: 700;
+        color: #1e293b;
+        display: block;
+        font-size: 1rem;
+    }
+
+    /* Modern Button Styling */
+    .btn-modern {
+        border-radius: 12px;
+        font-weight: 700;
+        padding: 0.6rem 1.5rem;
+        font-size: 0.85rem;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none !important;
+        border: none;
+    }
+
+    .btn-view-report {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white !important;
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+    }
+
+        .btn-view-report:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(16, 185, 129, 0.3);
+        }
+</style>
+
+<div class="dashboard-container">
+    <div class="d-flex justify-content-between align-items-center mb-4 px-2">
+        <p class="text-muted mb-0">Performance tracking for <span class="text-primary font-weight-bold">@Session["Ename"]</span></p>
+        <div>
+            <a href="~/Content/Uploads/Templetes/Calculation.pdf" target="_blank" class="btn btn-outline-secondary btn-sm rounded-pill mr-2 px-3">Calculation Guide</a>
+            <a href="~/Content/Uploads/Templetes/Scoring.pdf" target="_blank" class="btn btn-primary btn-sm rounded-pill shadow-sm px-3">Scoring Rubric</a>
+        </div>
+    </div>
+
+    <div class="analytics-card">
+        <h5 class="font-weight-bold mb-4"><i class="fas fa-chart-line mr-2 text-primary"></i>Annual Performance Trend</h5>
+        <div class="trend-container">
+            <canvas id="performanceTrendChart"></canvas>
+        </div>
+    </div>
+
+    <div class="analytics-card">
+        <div class="table-responsive">
+            <table id="kraMainTable" class="table">
+                <thead>
+                    <tr>
+                        <th>Month / Year</th>
+                        <th>Upload Date</th>
+                        <th>Score</th>
+                        <th class="text-center">Achievement</th>
+                        @* Renamed column to "Cohort" *@
+                        <th class="text-center">Cohort</th>
+                        <th class="text-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td><span class="month-label">@item.Month</span></td>
+                                <td><span class="text-muted small">@(item.dtTempUploaded?.ToString("dd MMM yyyy") ?? "Pending")</span></td>
+                                @* Score displayed as digit only *@
+                                <td><span class="score-badge">@(item.decTempScore?.ToString("0") ?? "0")</span></td>
+                                <td class="text-center">
+                                    <div class="chart-container-donut">
+                                        @{ var gId = "graph_" + Guid.NewGuid().ToString("N").Substring(0, 6); }
+                                        <canvas id="@gId" class="kra-donut-el" data-val="@(item.decTempScore ?? 0)" data-type="achievement"></canvas>
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    @if (item.decCohortScore > 0)
+                                    {
+                                        <div class="chart-container-donut">
+                                            @{ var bId = "bench_" + Guid.NewGuid().ToString("N").Substring(0, 6); }
+                                            <canvas id="@bId" class="kra-donut-el" data-val="@item.decCohortScore" data-type="cohort"></canvas>
+                                        </div>
+                                    }
+                                    else
+                                    { <span class="badge badge-light px-3 py-2 text-muted">N/A</span>}
+                                </td>
+                                <td class="text-center">
+                                    @if (item.bitIsUploaded == true)
+                                    {
+                                        <a href="@Url.Content("~/Content/Uploads/KRADoc/" + item.vchTempFileName)" target="_blank" class="btn-modern btn-view-report">
+                                            <i class="fas fa-file-pdf mr-2"></i> View Report
+                                        </a>
+                                    }
+                                    else
+                                    { <span class="text-muted small italic">Pending</span>}
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="6" class="text-center" style="font-size:0.85rem; color: red; font-weight:500; border-top: 2px solid #f1f5f9; padding-top: 20px;">
+                            <strong>Note (Beta Version):</strong> KPI calculations and document uploads are currently in the beta stage.
+                            If you notice any discrepancies in the calculations or scoring, please contact <strong>Mr. Varun (98144 56973)</strong>.
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
+
+    <script type="text/javascript">
+        /**
+         * Renders Donut Charts
+         * Achievement: Green (Doctor) vs Gray
+         * Cohort: Blue (Doctor) vs Red (Pan Units)
+         */
+        function renderDonut(id, val, type) {
+            const canvas = document.getElementById(id);
+            if (!canvas) return;
+            const existing = Chart.getChart(id);
+            if (existing) existing.destroy();
+
+            // MODIFIED LOGIC: Both types now use Gray (#f1f5f9) as the background
+            // Achievement stays Green, Cohort stays Blue. No more Red.
+            const mainColor = (type === 'achievement') ? '#10b981' : '#3b82f6';
+            const bgColor = '#f1f5f9'; // Fixed neutral gray for both
+
+            new Chart(canvas.getContext('2d'), {
+                type: 'doughnut',
+                data: {
+                    datasets: [{
+                        data: [val, (val >= 100 ? 0 : 100 - val)],
+                        backgroundColor: [mainColor, bgColor],
+                        borderWidth: 0,
+                        borderRadius: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '82%',
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    if (type === 'achievement') {
+                                        return context.dataIndex === 0 ? `Achieved: ${val}` : `Remaining: ${100 - val}`;
+                                    } else {
+                                        // Tooltip updated to be descriptive without the "Red" context
+                                        return context.dataIndex === 0 ? `Cohort Score: ${val}%` : `Target: 100%`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                plugins: [{
+                    id: 'centerText',
+                    afterDraw: (chart) => {
+                        const { ctx, chartArea: { left, top, width, height } } = chart;
+                        ctx.save();
+                        ctx.font = "bold 13px sans-serif";
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+                        ctx.fillStyle = '#1e293b';
+
+                        const centerDisplay = (type === 'achievement') ? Math.floor(val) : val + '%';
+                        ctx.fillText(centerDisplay, left + (width / 2), top + (height / 2));
+                        ctx.restore();
+                    }
+                }]
+            });
+        }
+        function renderTrendLine() {
+            const ctx = document.getElementById('performanceTrendChart').getContext('2d');
+            const labels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(m => m.Month)));
+            const scores = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(m => m.decTempScore ?? 0)));
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Performance',
+                        data: scores,
+                        borderColor: '#6366f1',
+                        backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 5,
+                        pointBackgroundColor: '#fff',
+                        pointBorderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, max: 120, grid: { borderDash: [5, 5] } },
+                        x: { grid: { display: false } }
+                    },
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+
+        function initDashboard() {
+            if (window.jQuery && $.fn.DataTable && window.Chart) {
+                $(document).ready(function () {
+                    $('#kraMainTable').DataTable({
+                        "pageLength": 10,
+                        "drawCallback": function() {
+                            $('.kra-donut-el:visible').each(function() {
+                                renderDonut(this.id, $(this).data('val'), $(this).data('type'));
+                            });
+                        }
+                    });
+                    $('.kra-donut-el').each(function() {
+                        renderDonut(this.id, $(this).data('val'), $(this).data('type'));
+                    });
+                    renderTrendLine();
+                });
+            } else {
+                setTimeout(initDashboard, 100);
+            }
+        }
+
+        initDashboard();
+    </script>
+}

@@ -1,0 +1,249 @@
+﻿@model IEnumerable<HRM.Models.tblMonthMaster>
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "KRADetail";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    }
+    <div class="card">
+        <div class="card-body" style="background-color:aliceblue">
+            <br />
+            <h3 class="" style="color:black;font-weight:bold" align="center">Upload KRA/KPA Document Master</h3>
+            <div class="card-body">
+                @if (TempData["Error"] != null)
+                {
+                    <p align="center" class="alert alert-danger" id="empty">@TempData["Error"]</p>
+                }
+                @if (ViewBag.Error != null)
+                {
+                    <p align="center" class="alert alert-danger" id="empty">@ViewBag.Error</p>
+                }
+                @if (TempData["Success"] != null)
+                {
+                    <p align="center" class="alert alert-success" id="empty">@TempData["Success"]</p>
+                }
+                @if (ViewBag.Success != null)
+                {
+                    <p align="center" class="alert alert-success" id="success">@ViewBag.Success</p>
+                }
+            <div align="right">
+                <a class="btn btn-primary btn-sm fas fa-hand-point-right" style="color:black; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); border-radius: 5px;
+                  transition: transform 0.2s, box-shadow 0.2s; color:white" href="@Url.Action("Index","Consultant")">&nbsp;ViewAllConsultant</a>
+                <a class="btn btn-warning btn-sm fas fa-hand-point-right" target="_blank" style="color: black; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); border-radius: 5px; transition: transform 0.2s, box-shadow 0.2s; color: white" href="~/Content/Uploads/Templetes/Calculation.pdf">&nbsp;KPI Calculation Templete</a>
+                <a class="btn btn-success btn-sm fas fa-hand-point-right" target="_blank" style="color: black; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); border-radius: 5px; transition: transform 0.2s, box-shadow 0.2s; color: white" href="~/Content/Uploads/Templetes/Scoring.pdf">&nbsp;KPI Scoring Templete</a>
+            </div>
+                <hr />
+                <table class="table table-sm table-bordered table-responsive-lg" style="font-size:90%">
+                    <thead class="bg-success text-white col-12">
+                        <tr style="color:black">
+                            <th>
+                                Document Name
+                            </th>
+                            <th>
+                                Upload DateTime
+                            </th>
+                            <th>
+                                Score
+                            </th>
+                            <th>Progress</th>
+                            <th>
+                                Cohort
+                            </th>
+                            <th>
+                                Action
+                            </th>
+
+                        </tr>
+                    </thead>
+                    <tbody class="border border-success">
+                        @if (Model != null)
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr style="color:black">
+                                    <td class="align-middle">
+                                        @Html.DisplayFor(model => item.Month)
+                                    </td>
+                                    <td class="align-middle">
+                                        @{if (item.dtTempUploaded != null)
+                                            {
+                                                @item.dtTempUploaded.Value.ToString("dd/MM/yyyy")
+                                            }
+                                            else
+                                            {
+                                                @Html.Label("Pending")
+                                            }
+                                        }
+                                    </td>
+                                    <td class="align-middle">
+                                        @Html.DisplayFor(mdoel => item.decTempScore)
+                                    </td>
+                                    <td class="align-middle">
+                                        @{
+                                            if (item.bitIsUploaded == true && item.decTempScore >= 100)
+                                            {
+                                                <canvas id="progress1_@item.intid" width="150" height="150" align="middle"></canvas>
+                                                <script type="text/javascript">
+                                        document.addEventListener("DOMContentLoaded", function () {
+                                        renderPieChart1("progress1_@item.intid", @item.decTempScore, @(item.decTempScore - item.decTempScore));
+                                         });
+                                                </script>
+                                            }
+                                            else
+                                            {
+                                                <canvas id="progress_@item.intid" width="150" height="150"></canvas>
+                                                <script type="text/javascript">
+                                                    document.addEventListener("DOMContentLoaded", function() {
+                                                renderPieChart("progress_@item.intid", @item.decTempScore, @(100 - item.decTempScore));
+                                            });
+                                                </script>
+                                            }
+                                        }
+                                    </td>
+                                    <td class="align-middle">
+                                        @{
+                                            if (item.decCohortScore != 0 && item.decCohortScore != null)
+                                            {
+                                                <canvas id="allprogress2_@item.intid" width="150" height="150"></canvas>
+                                                <script type="text/javascript">
+                                        document.addEventListener("DOMContentLoaded", function () {
+                                            renderPieChart2("allprogress2_@item.intid", @item.decCohortScore, @(100 - item.decCohortScore));
+                                    });
+                                                </script>
+                                            }
+                                            else if (item.decCohortScore == null || item.decCohortScore == 0)
+                                            {
+                                                <a>N/A</a>
+                                            }
+                                        }
+                                    </td>
+                                    <td class="align-middle">
+                                        @{
+                                            string isAdmin = string.Empty;
+                                            if (Session["MainAdmin"] != null)
+                                            {
+                                                isAdmin = Session["MainAdmin"].ToString();
+                                            }
+                                            if (item.bitIsUploaded == true)
+                                            {
+                                                <a class="btn btn-success btn-sm fas fa-hand-point-right" href="@Url.Content("~/Content/Uploads/KRADoc/" + @item.vchTempFileName)" target="_blank">&nbsp;View&nbsp;&nbsp;&nbsp;</a>
+                                                if (isAdmin == "True")
+                                                {
+                                                    <a class="btn btn-danger fas fa-hand-point-right btn-sm" href="@Url.Action("DeleteKRADoc","Consultant",new { id = item.intTempEmpID, docname = item.vchTempFileName })">&nbsp; Delete</a>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <button type="button" class="btn btn-primary btn-sm fas fa-hand-point-right open-modal" data-id="@item.intTempEmpID" , data-month="@item.Month" style="color:white">&nbsp;Upload</button>
+                                            }
+                                        }
+
+
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+                <div id="modalContainer"></div>
+            </div>
+        </div>
+    </div>
+
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="text/javascript">
+        $(document).on("click", ".open-modal", function () {
+            var id = $(this).data("id");
+            var monthname = $(this).data("month");
+
+            $.get('/Consultant/UploadKRADoc', { id: id, month: monthname }, function (data) {
+                $('#modalContainer').html(data);
+                $('#_partialKRAUpload').modal('show');
+            });
+        });
+
+        //chart for current score
+        function renderPieChart(canvasId, completed, pending) {
+            var ctx = document.getElementById(canvasId).getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+
+                    datasets: [{
+                        data: [completed, pending],
+                        backgroundColor: ['#28a745', '#dc3545']
+                    }],
+                    labels: ['Achieved:' + completed + '%', 'Not-achieved:' + pending + '%']
+                },
+                options: {
+                    responsive: false,
+                    maintainAspectRatio: false
+                }
+            });
+        }
+        function renderPieChart1(canvasId, completed, pending) {
+            var ctx = document.getElementById(canvasId).getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+
+                    datasets: [{
+                        data: [completed, pending],
+                        backgroundColor: ['#28a745', '#cd32cd']
+                    }],
+                    labels: ['Achieved:' + completed + '%', ' Fantastic']
+                },
+                options: {
+                    responsive: false,
+                    maintainAspectRatio: false
+                }
+            });
+        }
+
+        //chart for cohort comparision
+        function renderPieChart2(canvasId, completed, pending) {
+            var ctx = document.getElementById(canvasId).getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    datasets: [{
+                        data: [completed, pending],
+                        backgroundColor: ['#28a745', '#dc3545']
+                    }],
+                    labels: ['Contribution:' + completed + '%', 'Pan Indus']
+                },
+                options: {
+                    responsive: false,
+                    maintainAspectRatio: false
+                }
+            });
+        }
+            //get score and max score
+            //var getscore = $("#Getscore").val();
+            //var Maxscore = $("#Maxscore").val();
+            //var Remaning = Maxscore - getscore;
+            // Call the function for each task
+            //renderPieChart('progress', getscore, Remaning); // 75% Completed, 25% Pending
+            //renderPieChart111('progress', getscore, Remaning); // 75% Completed, 25% Pending
+    </script>
+}
+
+
+
+
+
+
+
+
+

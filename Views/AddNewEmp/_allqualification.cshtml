@@ -1,0 +1,10 @@
+﻿@model HRM.Models.tblQualiMas
+
+@if (ViewBag.quali != null)
+{
+    <span style="color:crimson">*</span>
+    @Html.LabelFor(model => model.vchqname)
+    <br />
+    @Html.ListBoxFor(model => model.vchqname, ViewBag.quali as SelectList, "Select Qualification")
+    @Html.ValidationMessageFor(model => model.vchqname, "", new { @class = "text-danger" })
+}

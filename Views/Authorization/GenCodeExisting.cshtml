@@ -1,0 +1,203 @@
+﻿@model HRM.Models.GenExistingEmpCodeModel
+@{
+    ViewBag.Title = "GenCodeExisting";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    Html.EnableClientValidation(true);
+}
+
+
+    @using (Html.BeginForm("GenCodeExisting", "Authorization", FormMethod.Post))
+    {
+@Html.AntiForgeryToken()
+<div class="col-lg-12">
+    <div class="card">
+        <div class="card-body">
+            <h4 style="color:black" class="col-md-12">Generate existing eomployee code</h4>
+            <hr />
+            <div class="form-group" id="emplist">
+                @Html.Label("Select Employee", htmlAttributes: new { @class = "control-label col-md-8" })
+                <div class="col-md-12">
+                    @Html.DropDownListFor(model => model.EmployeeName, new SelectList(ViewBag.EmpList, "Text", "Value", Model.SelectedEmployee, "-Select employee-"), htmlAttributes: new { @id = "sltName", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.EmployeeName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group" id="empdetails" hidden="hidden">
+                <div class="col-12">
+                    <label style="color:black;font-weight:bold">Selected employee details</label>
+
+                    @*@Html.TextBoxFor(m => m.empid, htmlAttributes: new { @class = "form-control", @id = "empid", @hidden = "hidden" })*@
+                    <input type="text" hidden="hidden" id="empid" />
+                </div>
+
+                <div class="row col-12">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label>Selected employee name</label>
+                            @*@Html.TextBoxFor(m => m.EmployeeName, htmlAttributes: new { @class = "form-control", @id = "empname", @readonly = "readonly" })*@
+                            <input type="text" id="empname" readonly="readonly" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label>Father name</label>
+                            <input type="text" id="fathername" readonly="readonly" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row col-12">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label>D.O.J (DD/MM/YYYY)</label>
+                            <input type="text" id="dtdoj" readonly="readonly" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label>Department</label>
+                            <input type="text" id="depart" readonly="readonly" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row col-12">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label>Designation</label>
+                            <input type="text" id="desi" readonly="readonly" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <h5 class="card-title" style="font-weight:bolder">Select Employee Type</h5>
+                        <fieldset class="radio">
+                            <label class="radio">
+                                @Html.RadioButtonFor(Model => Model.bitIsCorporateemp, "Yes", htmlAttributes: new { name = "checkyes", @class = "radio1" })
+                                Is Corporate Employee
+                            </label><br />
+                            <label class="radio">
+                                @Html.RadioButtonFor(Model => Model.bitIsCorporateemp, "No", htmlAttributes: new { name = "checkno", @class = "radio1" })
+                                Is Unit Employee
+                            </label>
+                            @Html.ValidationMessageFor(model => model.bitIsCorporateemp, "", new { @class = "text-danger" })
+                        </fieldset>
+                    </div>
+                    </div>
+                    <div class="row col-12">
+                        <input type="button" value="Generate employee new code" class="btn btn-primary btn-block" onclick="GenCodeExisting()" />
+                    </div>
+                </div>
+
+            </div>
+    </div>
+</div>
+    }
+    @section scripts{
+        <script src="~/Scripts/jquery.validate.js"></script>
+        <script src="~/Scripts/jquery.validate.min.js"></script>
+        <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+        <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+        <script type="text/javascript">
+        $(document).ready(function () {
+            $("#empdetails").attr("hidden", true);
+            $("#sltName").change(function () {
+                var empid = $("#sltName").val();
+                var empname = $("#sltName option:selected").text().trim();
+                if (empid != null && empid != 0 && empid != "0") {
+                    var EmployeeID = empid.toString();
+                    var EmployeeName = empname.toString();
+                    $.ajax({
+                        url: '@Url.Action("GetEmpData", "Authorization")',
+                        type: "GET",
+                        data: {
+                            EmployeeID: EmployeeID,
+                            EmployeeName: EmployeeName
+                        },
+                        success: function (result) {
+                            if (result != null) {
+                                $("#emplist").attr("hidden", true);
+                                $("#empdetails").attr("hidden", false);
+                                $.each(result, function (i, data) {
+                                    //var obj = JSON.parse(data);
+                                    $("#empid").val(data.empid);
+                                    $("#empname").val(data.empname);
+                                    $("#fathername").val(data.fathername);
+                                    var date1=data.dtdoj;
+                                    var dateString = date1.substr(6);
+                                    var currentTime = new Date(parseInt(dateString));
+                                    var month = currentTime.getMonth() + 1;
+                                    var day = currentTime.getDate();
+                                    var year = currentTime.getFullYear();
+                                    var date = day + "/" + month + "/" + year;
+                                    //alert(date);
+                                    $("#dtdoj").val(date);
+                                    $("#depart").val(data.depart);
+                                    $("#desi").val(data.desi);
+                                });
+                            }
+                            else if (result.success == "1") {
+                                alert(result.output2);
+                            }
+                            else if (result.success == "2") {
+                                alert(result.output3);
+                            }
+                        }
+                    })
+                }
+                else {
+                    var msg = "Employee not selected!"
+                    alert(msg);
+                }
+            });
+        });
+            //on submit post values
+            var GenCodeExisting = function () {
+                var empid = $("#empid").val().toString();
+                var iscorporate = $(".radio1:checked").val();
+                if (iscorporate == "" && iscorporate=="undefined") {
+                    alert("Please select employee type!");
+                    window.location = "/Authorization/GenCodeExisting";
+                }
+                var employeeid = ""
+                var iscop=""
+                $.ajax({
+                    url: "/Authorization/GenCodeExisting",
+                    type: "POST",
+                    data: {
+                        employeeid: empid,
+                        iscop: iscorporate
+                    },
+                    success: function (result) {
+                        //code here
+                        if (result.success == "1") {
+                            alert(result.output1);
+                            window.location = "/Authorization/GenCodeExisting";
+                        }
+                        if(result.success == "2"){
+                            alert(result.output2);
+                            window.location = "/Authorization/GenCodeExisting"
+                        }
+                        if (result.success == "3") {
+                            alert(result.output3);
+                            window.location = "/Authorization/GenCodeExisting"
+                        }
+                        if (result.success == "4") {
+                            alert(result.output4);
+                            window.location = "/Authorization/GenCodeExisting"
+                        }
+                        if (result.success == "5") {
+                            alert(result.output5);
+                            window.location = "/Authorization/GenCodeExisting"
+                        }
+                        if (result.success == "6") {
+                            alert(result.output6);
+                            window.location = "/Authorization/GenCodeExisting"
+                        }
+                    }
+                });
+
+            }
+        </script>
+    }
+
+

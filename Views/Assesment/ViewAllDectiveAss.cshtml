@@ -1,0 +1,65 @@
+﻿@model IEnumerable<HRM.Models.tblEmpAssesmentMas>
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "ViewAllDectiveAss";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    }
+
+    <div class="col-lg-12">
+        @if (TempData["Success"] != null)
+        {
+            <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <p class="alert alert-danger" id="emptyMessage">@TempData["Error"]</p>
+        }
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title">Deactivated assesment view</h3>
+                <div class="table-responsive" style="font-size:90%">
+                    <table class="table table-sm col-12">
+                        <thead class="bg-primary text-white col-12">
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.vchName)
+                                </th>
+                                <th>
+                                   De-activation Remarks
+                                </th>
+
+                            </tr>
+                        </thead>
+                        <tbody class="border border-primary">
+                            @if (TempData["Empty"] != null)
+                            {
+                                <p class="alert alert-danger" id="Empty">@TempData["Empty"]</p>
+                            }
+                            else
+                            {
+                                foreach (var item in Model)
+                                {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.vchName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.vchAssDeactiveRemarks)
+                                    </td>
+                                </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+
+</table>

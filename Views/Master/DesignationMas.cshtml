@@ -1,0 +1,71 @@
+﻿@model HRM.Models.tblDesignationMas
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "DesignationMas";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+        Html.EnableClientValidation(true);
+    }
+
+    using (Html.BeginForm("DesignationMas", "Master"))
+    {
+
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal col-12">
+            <br />
+            @if (TempData["Success"] != null)
+            {
+                <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+            }
+            <h4>Designation Master Setup</h4>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.Label("Department Name", htmlAttributes: new { @class = "control-label col-md-8" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.intdeptid, ViewBag.DeptList as IEnumerable<SelectListItem>, "Select new dept", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.intdeptid, "", new { @class = "text-danger" })
+            </div>
+        </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.vchdesignation, htmlAttributes: new { @class = "control-label col-md-6" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.vchdesignation, new { htmlAttributes = new { @class = "form-control", @placeholder = "Enter designation" } })
+                    @Html.ValidationMessageFor(model => model.vchdesignation, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Save" class="btn btn-dark" />
+                    @{ string Desi = Session["ViewDesignationMas"].ToString();
+                        if (Desi == "True")
+                        {
+                            <div align="center">
+                                <a href="@Url.Action("ViewAllDesignationMas", "Master")">
+                                    <div class="btn btn-primary">
+                                        <h6 align="center" class="fas fa-hand-point-right">
+                                            View All Designation
+                                        </h6>
+                                    </div>
+                                </a>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+}

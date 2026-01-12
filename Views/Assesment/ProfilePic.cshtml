@@ -1,0 +1,95 @@
+﻿@model HRM.Models.ProfileViewModel
+
+@{
+    ViewBag.Title = "UpCompDoc";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    Html.EnableClientValidation(true);
+}
+@using (Html.BeginForm("ProfilePic", "Assesment", FormMethod.Post, new { enctype = "multipart/form-data" }))
+
+{
+
+    @Html.AntiForgeryToken()
+    <br />
+
+    <div class="row">
+        <div class="col-12">
+            @if (TempData["Success"] != null)
+            {
+                <p align="center" class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+            }
+            @if (TempData["Error"] != null)
+            {
+                <p align="center" class="alert alert-danger" id="errormsg">@TempData["Error"]</p>
+            }
+            @if (Model.BitIsCompleted == false)
+            {
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title">New Employee Uploads Compulsory Documents</h3>
+                        @*<div align="right">
+                            <a href="@Url.Action("ViewCompDocEmp", "Assesment", new { })">
+                                <div class="btn btn-success">
+                                    <h6 align="center" class="fas fa-hand-point-right">
+                                        View all document
+                                    </h6>
+                                </div>
+                            </a>
+                        </div>*@
+                        <h6 class="card-subtitle">
+                        </h6>
+                        <hr />
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="form-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        @Html.Label("Selected Mobile number")
+                                        @Html.Label("emptcode", (string)ViewBag.Mobile, htmlAttributes: new { @class = "form-control" })
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        @Html.Label("Selected Emp Name")
+                                        @Html.Label("emptcode", (string)ViewBag.Empname, htmlAttributes: new { @class = "form-control" })
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        @Html.Label("File Name")
+                                        @Html.TextBoxFor(model => model.picname, (string)ViewBag.EmpProfileName, htmlAttributes: new { @class = "form-control" })
+                                        @Html.Hidden("hdempid", (string)ViewBag.EmpID)
+                                        @Html.ValidationMessageFor(model => model.picname, "", new { @class = "text-danger" })
+                                        @*@Html.DropDownListFor(model => model.docnamelist, (IEnumerable<SelectListItem>)ViewBag.SelectedQuali,"Select doc", htmlAttributes: new { @class = "form-control" })*@
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="ct-horizontal">
+                                        @Html.Label("Choose jpg file only")
+                                        @Html.TextBoxFor(model => model.profilepic, "", new { @type = "file", @class = "form-control", @id = "compDocFile" })
+                                        @Html.ValidationMessageFor(model => model.profilepic, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+                            <div align="center">
+                                <input type="submit" value="Upload Photograph" class="btn btn-success" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+@section scripts
+    {
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+}
+

@@ -1,0 +1,164 @@
+﻿@model IEnumerable<HRM.Models.tblLeaveType>
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "TypeIndex";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    }
+
+    <link href="//cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <div class="card" style="text-align:center; background-color: #f9f9f9; padding: 10px; border: 2px solid #e0e0e0; border-radius: 10px; box-shadow: 0 8px 8px rgba(0, 0, 0, 0.1); margin: 20px auto;">
+        <div class="card-body">
+            <h3 class="card-title">Leave Type Master View</h3>
+            <div align="right">
+                <a href="@Url.Action("LeaveTypeCreate", "Leave")">
+                    <div class="btn btn-primary btn-sm">
+                        <h6 align="center" class="fas fa-hand-point-right"></h6>
+                        <h6 align="center" class="fa fa-plus">
+                            Create new type
+                        </h6>
+                    </div>
+                </a>
+            </div>
+            <br />
+            @if (TempData["Success"] != null)
+            {
+                <p class="alert alert-success" id="tsuccess" align="center">@TempData["Success"]</p>
+            }
+            @if (TempData["Empty"] != null)
+            {
+                <p class="alert alert-danger" id="tempty" align="center">@TempData["Empty"]</p>
+            }
+            @if (TempData["Error"] != null)
+            {
+                <p class="alert alert-danger" id="terror" align="center">@TempData["Error"]</p>
+            }
+            @if (ViewBag.Success != null)
+            {
+                <p class="alert alert-success" id="vSuccess" align="center">@ViewBag.Success</p>
+            }
+            @if (ViewBag.Error != null)
+            {
+                <p class="alert alert-danger" id="error" align="center">@ViewBag.Error</p>
+            }
+            @if (ViewBag.Empty != null)
+            {
+                <p class="alert alert-danger" id="vSuccess" align="center">@ViewBag.Empty</p>
+            }
+            <table id="typeindex" class="table table-sm" style="font-size:90%">
+                <thead class="bg-primary text-white col-12">
+                    <tr>
+                        <th>
+                            Sr. No.
+                        </th>
+                        <th>
+                            Type
+                        </th>
+                        <th>
+                            Max(In a year)
+                        </th>
+                        <th>
+                            Creation Date
+                        </th>
+                        <th>
+                            For Employee/Consultant
+                        </th>
+                        <th>
+                            1/2Year Validation
+                        </th>
+
+                        @{ if (Session["MainAdmin"] != null)
+                            {
+                                string isadmin = Session["MainAdmin"].ToString();
+                                if (isadmin == "True")
+                                {
+                                    <th>
+                                        Action
+                                    </th>
+                                }
+                            }
+                        }
+
+                    </tr>
+                </thead>
+                <tbody class="border border-primary">
+                    @if (Model != null)
+                    {
+                        int srNo = 1; // <-- Serial number counter
+
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @srNo
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.leaveType)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.decMaxDayPerYear)
+                                </td>
+                                <td>
+                                    @item.dtCreated.ToString("dd/MM/yyyy")
+                                </td>
+                                <td>
+                                    @{ if (item.bitForConsultant == true)
+                                        {
+                                            <span class="badge badge-pill badge-warning">For Consultant</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge badge-pill badge-success">For Employee</span>
+                                        }
+
+
+}
+                                </td>
+                                <td>
+                                    @{
+                                        if (item.bitAllowYearHalfCheck == true)
+                                        {
+                                             <span class="badge badge-pill badge-success">Yes</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge badge-pill badge-warning">No</span>
+                                        }
+                                        }
+                                </td>
+                                <td>
+                                    @if (Session["MainAdmin"] != null)
+                                    {
+                                        string isadmin = Session["MainAdmin"].ToString();
+                                        if (isadmin == "True")
+                                        {
+                                            <a class="btn btn-primary btn-sm" href="@Url.Action("EditType", "Leave", new { id = item.unID })">Edit</a>
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                                                srNo++; // Increment serial number
+                                            }
+                                        }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#typeindex').DataTable();
+        });
+    </script>
+} 

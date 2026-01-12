@@ -1,0 +1,102 @@
+﻿@model IEnumerable<HRM.Models.tblEmpAssesmentMas>
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "AllComAss";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+        Html.EnableClientValidation(true);
+    }
+
+<div class="col-lg-12">
+    @if (TempData["Success"] != null)
+    {
+        <p class="alert alert-success" id="successMessage" align="center">@TempData["Success"]</p>
+    }
+
+    <div class="card">
+        <div class="card-body">
+            <h3 class="card-title">Assign for document upload</h3>
+            @*<div align="right">
+                    <a href="@Url.Action("ViewAssignedAss", "Assesment")">
+                        <div class="btn btn-primary">
+                            <h6 class="fas fa-hand-point-right"></h6>
+                            <h6 align="center" class="fa fa-plus">
+                                Return back to assigned assesment
+                            </h6>
+                        </div>
+                    </a>
+                </div>*@
+            <div class="table-responsive" style="font-size:90%">
+                <table class="table table-sm col-12">
+                    <thead class="bg-primary text-white col-12">
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.vchName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.vchMobile)
+                            </th>
+
+                            <th>
+                                For Position
+                            </th>
+                            <th>
+                                Action
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody class="border border-primary" style="color:black">
+                        @if (TempData["Empty"] != null)
+                        {
+                            <p class="alert alert-danger" id="emptyMessage">@TempData["Empty"]</p>
+                        }
+                        else
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.vchName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.vchMobile)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.tblPositionCategoryMas.vchPosCatName)
+                                    </td>
+                                    <td>
+                                        @{string allowupload = Session["AllowDocUpload"].ToString();
+                                            if (allowupload == "True")
+                                            {
+                                        <a href="@Url.Action("AllowForUploadDoc", "Assesment", new { id = item.intid })">
+                                            <h6 align="center" class="fa fa-upload" data-placement="left" data-toggle="tooltip" data-original-title="Allow for document upload"></h6>
+                                        </a>}
+                                            }
+                                            &nbsp;&nbsp;&nbsp;&nbsp;
+                                        <a href="@Url.Action("DeactiveAssesment", "Assesment", new { id = item.intid })">
+                                            <h6 align="center" class="fa fa-ban" data-placement="left" data-toggle="tooltip" data-original-title="De-active Assessment"></h6>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+    }
+    else
+    {
+        Html.RenderAction("_SessionError1", "Home");
+    }
+
+    @section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+}

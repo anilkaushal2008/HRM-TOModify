@@ -1,0 +1,177 @@
+﻿@model HRM.Models.tblEmpAssesmentMas
+    @{ Layout = "";}
+@if (Session["UserId"] != null)
+{
+    if (Model != null)
+    {
+
+        <dl class="dl-horizontal">
+            <h3 style="color: black; font-weight: bold; color: Highlight">Official</h3>
+            <br />
+
+            <div class="row" style="color:black">
+                <div class="col-md-3">
+            <dt>
+                @Html.DisplayNameFor(model => model.vchName)
+                @Html.HiddenFor(mode => Model.intid, htmlAttributes: new { @id = "empid" })
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.vchName)
+            </dd>
+            </div>
+            <div class="col-md-3">
+            <dt>
+                Department
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.tblDeptMas.vchdeptname)
+            </dd>
+            </div>
+            <div class="col-md-3">
+            <dt>
+                Designation
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.tblDesignationMas.vchdesignation)
+            </dd>
+            </div>
+            </div>
+            <br />
+            <br />
+            <div class="row" style="color:black">
+                <div class="col-md-3">
+            <dt>
+                @Html.DisplayNameFor(model => model.decExperience)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.decExperience)
+            </dd>
+            </div>
+            <div class="col-md-3">
+            <dt>
+                DOJ
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.dtDOJ)
+            </dd>
+            </div>
+            @{ if (Model.dtFDOJ != null)
+                {
+                    <div class="col-md-3">
+                    <dt>
+                        Final DOJ
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.dtFDOJ)
+                    </dd>
+                    </div>
+                }
+            }
+            @{ if (Model.dtDOL != null)
+                {
+                    <div class="col-md-3">
+                    <dt>
+                        DOL
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.dtDOL)
+                    </dd>
+                    </div>
+                }
+            }
+            <div class="col-md-3">
+                @if (Session["IsConsultant"] != null)
+                {
+                    string isConult = Session["IsConsultant"].ToString();
+
+                    if (isConult == "True")
+                    {
+                    <dt>
+                        Professional Fee
+                    </dt>
+                }
+                else
+                {
+                    <dt>
+                        Salary
+                    </dt>
+                }
+
+            }
+                <dd>
+                    @Html.DisplayFor(model => model.intsalary)
+                </dd>
+                </div>
+                </div>
+                <br />
+                <br />
+                <div class="row" style="color:black">
+
+                    @{ if (Model.vchAadharNo == null)
+                        {
+                            <div class="col-md-3">
+                        <dt><label>Aadhaar number</label></dt>
+                        <a href="@Url.Action("AadhaarNo", "Authorization", new { id = Model.intid })">Enter aadhaar number&nbsp;<i class="fas fa-hand-point-left"></i></a>
+                        </div> }
+                    else if (Model.vchAadharNo != null)
+                    {
+                        <div class="col-md-3">
+                        <dt><label> Aadhar number</label></dt>
+                        <dd>@Html.DisplayFor(model => model.vchAadharNo)</dd>
+                        </div>
+                    }
+                    }
+
+                    @{ if (ViewBag.Qualification != null)
+                        {
+                            <div class="col-md-3">
+                            <dt><label> Qualification</label></dt>
+                            <dd>@ViewBag.Qualification.ToString()</dd> &nbsp;
+                            <a href="javascript:void(0);" style="color:blue" id="updateQul">Update qualification</a>
+                            @*<a href="@Url.Action("", "", new { id = Model.intid })">Update Qualification</a>*@
+                            </div>
+                        }
+                    }
+
+
+                    @if (Model.intVariable != 0 && Model.intVariable != null)
+                    {
+                        <div class="col-md-3">
+                        <dt>
+                            VariablePart
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.intVariable)
+                        </dd>
+                        </div>
+                        <div class="col-md-3">
+                        <dt>
+                            FixedPart
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.intFixed)
+                        </dd>
+                        </div>
+                    }
+                </dl>
+                <div id="updateQualificationForm">
+                    <input type="hidden" id="employeeId" value="@Model.intid" />
+                    <label for="qualification">Qualification:</label>
+                    <input type="text" id="qualification" value="@ViewBag.Qualification.ToString()" />
+                    <button class="btn btn-success" id="updateQualificationButton">Update Qualification</button>
+                </div>
+            }
+            @*else
+                {
+                    if (TempData["Empty"] != null)
+                    {
+                        <p class="alert alert-danger" id="successMessage" align="center">@TempData["Empty"]</p>
+                    }
+                }*@
+        }
+        else
+        {
+            Html.RenderAction("_SessionError1", "Home");
+        }
+
+

@@ -1,0 +1,103 @@
+﻿@*@model HRM.Models.tblDocDetails*@
+@{ Layout = "";}
+@if (Session["UserId"] != null)
+{
+    <div class="card">
+        <h3 class="col-10" style="color: black; font-weight: bold; color: Highlight">Document Detail</h3>
+        <div class="card-body">
+            <h4 class="card-title" style="color:red;font-weight: bold">Compulsory</h4>
+            <table class="table table-sm col-12">
+                <thead>
+                    <tr style="color:black">
+                        <th>
+                            Document Name
+                        </th>
+                        <th>
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (ViewBag.CompDoc != null)
+                    {
+                        foreach (var comp in ViewBag.CompDoc as IEnumerable<SelectListItem>)
+                        {
+                            <tr style="color:black">
+                                <td>
+                                    @Html.Label(comp.Text)
+                                </td>
+                                <td>
+                                    <a href="@Url.Content("~/Content/Uploads/" + comp.Value)" target="_blank">View Document</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+            <hr />
+            <h4 class="card-title" style="color:red;font-weight:bold">Qualification</h4>
+            <table class="table table-sm col-12">
+                <thead>
+                    <tr style="color:black">
+                        <th>
+                            Document Name
+                        </th>
+                        <th>
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (ViewBag.QualiDoc != null)
+                    {
+                        foreach (var quali in ViewBag.QualiDoc as IEnumerable<SelectListItem>)
+                        {
+                            <tr style="color:black">
+                                <td>
+                                    @Html.Label(@quali.Text)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                </td>
+                                <td>
+                                    <a href="@Url.Content("~/Content/Uploads/" + @quali.Value)" target="_blank">View Document</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+            <hr />
+            <h4 class="card-title" style="color:Highlight">Official Document</h4>
+            <table class="table table-sm col-12">
+                <thead>
+                    <tr style="color:black">
+                        <th>
+                            Document Name
+                        </th>
+                        <th>
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (ViewBag.OtherDoc != null)
+                    {
+                        foreach (var item in ViewBag.OtherDoc as IEnumerable<SelectListItem>)
+                        {
+                            <tr style="color:black">
+                                <td>
+                                    @Html.Label(@item.Text)
+                                </td>
+                                <td>
+                                    <a href="@Url.Content("~/Content/Uploads/OtherDocuments/" + @item.Value)" target="_blank">View Document</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}

@@ -1,0 +1,50 @@
+﻿@model HRM.Models.UploadKRAModelView
+<div class="modal fade" id="_partialKRAUpload" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Upload Document</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="postmodal">
+                @using (Html.BeginForm("UploadKRADoc", "Consultant", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+    @Html.HiddenFor(m => m.empid)
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.decFinalScore)
+                        @Html.EditorFor(m => Model.decFinalScore, new { htmlAttributes = new { @id = "finalscore", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.decFinalScore, "", new { @class = "text-danger" })
+                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.DocMasName, "Selected Month")
+                                        @Html.EditorFor(m => Model.Filename, new { htmlAttributes = new { @readonly = "resadonly", @id = "filename", @class = "form-control" } })
+                                        @Html.LabelFor(m => m.newpdfFile, "Select File")
+                                        @*<input type="file" name="UploadedFile" class="form-control" />*@
+                                        @Html.TextBoxFor(model => model.newpdfFile, "", new { @type = "file", @class = "form-control", @id = "pdffile" })
+                                        @Html.ValidationMessageFor(model => model.newpdfFile, "", new { @class = "text-danger" })
+                                    </div>
+                                                    <button type="submit" id="btnSubmit" class="btn btn-primary">Upload</button>}
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+<script src="~/Scripts/jqueryui/jquery-ui.js"></script>
+<script type="text/javascript">
+   // $("#btnSubmit").click(function (e) {
+   //     e.preventDefault(); // Prevent form submission
+   //     var decimalValue = parseFloat($("#finalscore").val());
+   //     // Check if it's a valid decimal number and not 0.00
+   //     if (isNaN(decimalValue) || decimalValue == 0.00) {
+   //         $("#error-msg").text("Value must be a valid decimal and not 0.00");
+   //     } else {
+   //         $("#error-msg").text(""); // Clear error
+   //         alert("Valid input: " + decimalValue);
+   //     }
+   //});
+</script>

@@ -1,0 +1,145 @@
+﻿@model HRM.Models.UpdatePartialEmployee
+@if (Session["descript"] != null)
+{
+    ViewBag.Title = "UploadFinalDoc";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    <div class="card col-12">
+        <div class="card-body">
+            @if (TempData["PendingDoc"] != null)
+            {
+                <p class="alert alert-danger" id="pendigdoc" align="center">
+                    Document pending for upload<br />
+                    @foreach (var item in TempData["PendingDoc"] as List<HRM.Models.tblDocMas>)
+                    {
+                        @item.vchdocname<br />
+                    }
+                </p>
+            }
+            <div class="form-horizontal">
+                <br />
+                <h3 class="card-title" style="color:black"> Final Update Partial Authorized Candidate View</h3>
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.empid)
+                <div class="form-group">
+                    @Html.LabelFor(model => model.fcode, htmlAttributes: new { @class = "control-label col-md-10" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.fcode, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.tcode, htmlAttributes: new { @class = "control-label col-md-10" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.tcode, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.empname, htmlAttributes: new { @class = "control-label col-md-10" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.empname, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.FatherName, htmlAttributes: new { @class = "control-label col-md-10" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.FatherName, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DOJ, htmlAttributes: new { @class = "control-label col-md-10" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.DOJ, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                        @Html.ValidationMessageFor(model => model.DOJ, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @{
+                        Html.RenderAction("PartialReconsiderationRemarks", "Authorization");
+                    }
+                </div>
+                <div class="form-group">
+                    @{
+                        Html.RenderAction("PartialCompDocument", "Dashboard");
+                    }
+                </div>
+                <div class="card col-12" align="center">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <div class="row">
+                                <!--<div class="col-4">-->
+                                @*<i class="fa fa-hand-point-right"> @Html.ActionLink("UploadNewDoc", "UploadNewDoc", new { id = Model.empid }, new { @class = "btn btn-primary" })</i>*@
+                                <!--<a href="@Url.Action("UploadNewDoc", "Dashboard",routeValues:new { @id = Model.empid})">
+                                <div class="btn btn-primary">
+                                    <h6 align="center" class="fas fa-hand-point-right">
+                                        <i class="fa fa-plus">
+                                            Add New Doc.
+                                        </i>
+                                    </h6>
+                                </div>
+                            </a>
+                        </div>-->
+                                <!--<div class="col-6">-->
+                                @*<i class="fa fa-hand-point-right"> @Html.ActionLink("Completed", "Complete", new { id = Model.empid }, new { @class = "btn btn-success" })</i>*@
+                                <!--<a href="@Url.Action("Completed", "Dashboard",routeValues:new { @id = Model.empid})">
+                            <div class="btn btn-success">
+                                <h6 align="center" class="fas fa-hand-point-right">
+                                    <i class="fa fa-question">
+                                        Completed
+                                    </i>
+                                </h6>
+                            </div>
+                        </a>-->
+                                <div class="col-6">
+                                    @*<i style="color:green" class="fa fa-hand-point-right"> @Html.ActionLink("IsUploadCompleted?", "Completed", new { id = Model.empid }, new { @class = "btn btn-success" })</i>*@
+                                    <button class="confirmButton btn btn-success" id="btnComplete" data-record-id="@Model.empid"><i class="fa fa-hand-point-right">&nbsp; CompleteUploads?</i></button>
+                                    @*<div class="btn btn-info">
+                                        Upload module under construction Contact to admin for more details.
+                                </div>*@
+                                </div>
+                                <div class="col-6">
+                                    @*<i class="fa fa-hand-point-right">  @Html.ActionLink("Cancel", "CancelBack", new { id = Model.empid }, new { @class = "btn btn-danger" })</i>*@
+                                    <a href="@Url.Action("Cancel", "Dashboard",routeValues:new { @id = Model.empid})">
+                                        <div class="btn btn-danger">
+                                            <h6 align="center" class="fas fa-hand-point-right">
+                                                <i class="fa ui-icon-cancel">
+                                                    &nbsp;Cancel
+                                                </i>
+                                            </h6>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+
+
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script type="text/javascript">
+        document.querySelectorAll('.confirmButton').forEach(function (button) {
+            button.addEventListener('click', function () {
+                var recordid = this.getAttribute("data-record-id");
+                if (!confirm("Are your sure you want to lock employee uploads?")) {
+                    //do nothing
+                }
+                else {
+                    window.location.href = '/Dashboard/Completed/' + recordid;
+                }
+
+            });
+        });
+    </script>
+}

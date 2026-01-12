@@ -1,0 +1,99 @@
+﻿@model HRM.Models.UpdateSalaryViewModel
+<link href="~/Content/dist/css/icons/font-awesome/css/fontawesome-all.min.css" rel="stylesheet" />
+<link href="~/Content/css/select2.min.css" rel="stylesheet" />
+<link href="~/Content/assets/libs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+<script src="~/Content/assets/libs/jquery/jquery.min.js"></script>
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "AuthoriserUpdateSalary";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    }
+    using (Html.BeginForm("UpdateSalary", "Authorization", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <br />
+        <h3 class="col-10" style="color:black">Authorizer salary update pannel</h3>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(Model => Model.empid, htmlAttributes: new { @id = "id" })
+        <div class="col-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.salary, htmlAttributes: new { @class = "control-lable col-md-12" })
+                @Html.TextBoxFor(model => model.salary, htmlAttributes: new { @id = "oldsal", @class = "form-control" })
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.newsalary, htmlAttributes: new { @class = "control-lable col-md-12" })
+                @Html.TextBoxFor(model => model.newsalary, htmlAttributes: new { @id = "newsal", @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="col-6">
+            <div class="form-group">
+                @*<input type="button" value="Update Password" class="btn btn-success" id="uppass" onclick="UpdatePass()" />*@
+                <input type="button" value="Update Salary" class="btn btn-primary" id="btnupdate" />&nbsp;&nbsp;&nbsp;&nbsp;
+                <a class="btn btn-danger" href="@Url.Action("ViewFullDetails", "Authorization", new { id = Model.empid })">Cancel</a>
+
+            </div>
+        </div>
+    }
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script type="text/javascript">
+        //function for post new password
+        $("#btnupdate").click(function () {
+            var newsal = $("#newsal").val().toString();
+            var id = $("#id").val().toString();
+            if (newsal != "" && newsal != "" && newsal != "0") {
+
+                $.ajax({
+                    url: "/Authorization/UpdateSalary",
+                    type: "POST",
+                    data: {
+                        empid: id,
+                        salary: newsal
+                    },
+                    success: function (result) {
+                        //code here
+                        if (result.success == "1") {
+                            alert(result.output1);
+                            window.location = "/Authorization/ViewFullDetails/" + id;
+                        }
+                        if (result.success == "2") {
+                            alert(result.output2);
+                        }
+                        if (result.success == "3") {
+                            alert(result.output3);
+                        }
+                        if (result.success == "4") {
+                            alert(result.output4);
+                        }
+                        if (result.success == "5") {
+                            alert(result.output5);
+                        }
+                        //for session error
+                        if (result.success == "6") {
+                            alert(result.output6);
+                            window.location = "/Home/_SessionError1";
+                        }
+                    }
+                })
+
+            }
+            else {
+                alert("Enter new salary, amount should not be zero!");
+                return false;
+            }
+        });
+    </script>
+}

@@ -1,0 +1,59 @@
+﻿@model HRM.Models.ReSendAuthorViewModel
+    @{ Layout = "";}
+@if (Session["descript"] != null)
+{
+    using (Html.BeginForm("PartialResendAuthorization", "Authorization", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.id)
+
+            <div class="form-group" align="center">
+                @*<h5 class="card-title" align="center">Do you want to re-send candidate for authorization?<span style="color:crimson">*</span></h5>*@
+                <fieldset class="radio" hidden>
+                    <label class="radio">
+                        Yes
+                        @Html.RadioButtonFor(model => model.bitAuthorBack, "true", htmlAttributes: new {@checked="checked", id = "chkyes", @class = "radio" })
+                    </label><br />
+                    @*<label class="radio">
+                        No
+                        @Html.RadioButtonFor(model => model.bitAuthorBack, "false", htmlAttributes: new { id = "chkno", @class = "radio" })
+                    </label><br />
+                    @Html.ValidationMessageFor(model => model.bitAuthorBack, "", new { @class = "text-danger" })*@
+                </fieldset>
+            </div>
+            <div>
+                <h3 style="color:black">Enter new message to authorizer<span style="color:red"> (max lenght 2000 characters)</span></h3>
+                @Html.TextAreaFor(model => model.vchHrSolRemark, htmlAttributes: new { @id = "txtcancel", @class = "form-control", @rows = "7", @size = "1500" })
+                @Html.ValidationMessageFor(model => model.vchHrSolRemark, "", new { @class = "text-danger" })
+                <br />
+            </div>
+            <div align="center">
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Send" class="btn btn-outline-success" />
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <a class="btn btn-outline-dark" href="@Url.Action("ViewAssignAuthorization", "Authorization")"> Back </a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+@section Scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+
+}
+
+
+

@@ -1,0 +1,141 @@
+﻿@model IEnumerable<HRM.Models.tblEmpAssesmentMas>
+@if(Session["descript"] != null)
+    {
+        {
+            ViewBag.Title = "ViewCurrentEmp";
+            Layout = "~/Views/Shared/_LayoutMain.cshtml";
+        }
+
+    <link href="//cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <div class="card">
+        <div class="card-body">
+            <div class="card-title" align="center">
+                <h3 class="card-title">Current Experience Certificate Create, Update View</h3>
+                </div>
+                @if (TempData["Success"] != null)
+                {
+                    <p class="alert alert-success" id="success" align="center">@TempData["Success"]</p>
+                }
+                @if (TempData["Error"] != null)
+                {
+                    <p class="alert alert-danger" id="error" align="center">@TempData["Error"]</p>
+                }
+                @if (TempData["Empty"] != null)
+                {
+                    <p class="alert alert-danger" id="empty" align="center">@TempData["Empty"]</p>
+                }
+                @if (ViewBag.Error != null)
+                {
+                    <p class="alert alert-danger" id="verror" align="center">@ViewBag.Error</p>
+                }
+                <table id="currexp" class="table table-sm" style="font-size:90%">
+                    <thead class="bg-success text-white col-12">
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.vchName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.vchEmpFcode)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.tblDeptMas.vchdeptname)
+                            </th>
+                            <th>
+                                Designation
+                            </th>
+                            <th>
+                                DOJ
+                            </th>
+                            <th>
+                                Actions
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody class="border border-success">
+                        @if (TempData["Empty"] != null)
+                        {
+                            <p class="alert alert-danger" id="empty" align="center">@TempData["Empty"]</p>
+                        }
+                        else
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.vchName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.vchEmpFcode)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.tblDeptMas.vchdeptname)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.tblDesignationMas.vchdesignation)
+                                    </td>
+                                    <td>
+                                        @{if (item.dtFDOJ != null)
+                                            {
+                                                @Html.DisplayFor(modelItem => item.dtFDOJ)
+                                            }
+                                            else
+                                            {
+                                                @Html.DisplayFor(modelItem => item.dtDOJ)
+                                            }
+
+
+}
+                                    </td>
+                                    <td>
+                                        @{
+                                            if (item.bitIsCurrentExp == false)
+                                            {
+                                                @Html.ActionLink("CurrentExp", "CreateCurrExp", new { id = item.intid }, htmlAttributes: new { @class = "btn btn-success btn-sm" })
+                                                @*@Html.ActionLink("CurrentExp", "CurrentExp", new { id = item.intid }, htmlAttributes: new { @class = "btn btn-primary btn-sm", target = "_blank" })*@
+                                            }
+                                            else
+                                            {
+                                                @Html.ActionLink("PrintExp", "PrintCurrExp", new { id = item.intid }, htmlAttributes: new { @class = "btn btn-warning btn-sm", @target = "_blank" })
+                                                
+                                                if (Session["MainAdmin"] != null)
+                                                {
+                                                    string isAdmin = Session["MainAdmin"].ToString();
+                                                    if (isAdmin == "True")
+                                                    {
+                                                        @Html.ActionLink("Update", "EditCurrentExp", new { id = item.intid }, htmlAttributes: new { @class = "btn btn-success btn-sm" })
+                                                        }
+                                                        else
+                                                        {
+
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#currexp').DataTable();
+        });
+    </script>
+}
+

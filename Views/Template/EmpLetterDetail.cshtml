@@ -1,0 +1,106 @@
+﻿@model HRM.Models.tblTemplateDetail
+
+@{
+    ViewBag.Title = "EmpLetterDetail";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<h2>EmpLetterDetail</h2>
+
+
+<div class="col-lg-12">
+    <div class="card">
+        <a href="@Url.Action("ViewAllCertificate", "Template")">
+            <div class="btn btn-primary">
+                <h6 align="center" class="fas fa-hand-point-right"></h6>
+                <h6 align="center" class="fas fa-plus">
+                    Back to list
+                </h6>
+            </div>
+        </a>
+        <div class="card-body">
+            <h3 class="card-title">Experience Letter View Detail</h3>
+            <div>
+                <hr />
+                <dl class="dl-horizontal col-10" style="color:black">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.vchEmpName)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.vchEmpName)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.vchFaterName)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.vchFaterName)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.dtSdate)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.dtSdate)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.dtEdate)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.dtEdate)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.dtRelieved)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.dtRelieved)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.vchDepartment)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.vchDepartment)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.vchCompany)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.vchCompany)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.txtContent)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.txtContent)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.vchCreatedBy)
+                    </dt>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.vchRef_Code)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.vchRef_Code)
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
+            

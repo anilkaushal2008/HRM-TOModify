@@ -1,0 +1,172 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="IndusGroupModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="IndusCompanies">
+          <Key>
+            <PropertyRef Name="intPK" />
+          </Key>
+          <Property Name="intPK" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="descript" Type="nvarchar" MaxLength="80" />
+          <Property Name="DESCRIPT1" Type="nvarchar" MaxLength="80" />
+          <Property Name="add1" Type="nvarchar" MaxLength="100" />
+          <Property Name="add2" Type="nvarchar" MaxLength="80" />
+          <Property Name="add3" Type="nvarchar" MaxLength="80" />
+          <Property Name="add4" Type="nvarchar" MaxLength="80" />
+          <Property Name="email" Type="nvarchar" MaxLength="50" />
+          <Property Name="itnum" Type="nvarchar" MaxLength="80" />
+          <Property Name="Lstnum" Type="nvarchar" MaxLength="80" />
+          <Property Name="istnum" Type="nvarchar" MaxLength="80" />
+          <Property Name="mnt" Type="nvarchar" MaxLength="30" />
+          <Property Name="fdate" Type="smalldatetime" />
+          <Property Name="tdate" Type="smalldatetime" />
+          <Property Name="bdate" Type="smalldatetime" />
+          <Property Name="security" Type="nvarchar" MaxLength="1" />
+          <Property Name="suser" Type="nvarchar" MaxLength="25" />
+          <Property Name="pwd" Type="nvarchar" MaxLength="25" />
+          <Property Name="ses_code" Type="smallint" />
+          <Property Name="brep" Type="varchar" MaxLength="250" />
+          <Property Name="company_type" Type="varchar" MaxLength="30" />
+          <Property Name="phone1" Type="varchar" MaxLength="50" />
+          <Property Name="phone2" Type="varchar" MaxLength="50" />
+          <Property Name="drep" Type="varchar" MaxLength="250" />
+          <Property Name="ss_name" Type="varchar" MaxLength="50" />
+          <Property Name="corp_id" Type="varchar" MaxLength="20" />
+          <Property Name="cperson" Type="varchar" MaxLength="50" />
+          <Property Name="cphone" Type="varchar" MaxLength="40" />
+          <Property Name="state" Type="varchar" MaxLength="50" />
+          <Property Name="country" Type="varchar" MaxLength="50" />
+          <Property Name="Location" Type="nvarchar" MaxLength="50" />
+          <Property Name="UHIDPreFix" Type="nvarchar" MaxLength="20" />
+          <Property Name="isActive" Type="char" MaxLength="1" />
+          <Property Name="HeadOffice" Type="int" />
+          <Property Name="vchGSTNumber" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityContainer Name="IndusGroupModelStoreContainer">
+          <EntitySet Name="IndusCompanies" EntityType="Self.IndusCompanies" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="IndusGroupModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="IndusCompanies">
+          <Key>
+            <PropertyRef Name="intPK" />
+          </Key>
+          <Property Name="intPK" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="descript" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="DESCRIPT1" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="add1" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="add2" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="add3" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="add4" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="itnum" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="Lstnum" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="istnum" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="mnt" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="fdate" Type="DateTime" Precision="0" />
+          <Property Name="tdate" Type="DateTime" Precision="0" />
+          <Property Name="bdate" Type="DateTime" Precision="0" />
+          <Property Name="security" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="suser" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="pwd" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="ses_code" Type="Int16" />
+          <Property Name="brep" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="company_type" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="phone1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="phone2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="drep" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="ss_name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="corp_id" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="cperson" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="cphone" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="state" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="country" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Location" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UHIDPreFix" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="isActive" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="HeadOffice" Type="Int32" />
+          <Property Name="vchGSTNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityContainer Name="IndusGroupEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="IndusCompanies" EntityType="Self.IndusCompanies" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="IndusGroupModelStoreContainer" CdmEntityContainer="IndusGroupEntities">
+          <EntitySetMapping Name="IndusCompanies">
+            <EntityTypeMapping TypeName="IndusGroupModel.IndusCompanies">
+              <MappingFragment StoreEntitySet="IndusCompanies">
+                <ScalarProperty Name="intPK" ColumnName="intPK" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="descript" ColumnName="descript" />
+                <ScalarProperty Name="DESCRIPT1" ColumnName="DESCRIPT1" />
+                <ScalarProperty Name="add1" ColumnName="add1" />
+                <ScalarProperty Name="add2" ColumnName="add2" />
+                <ScalarProperty Name="add3" ColumnName="add3" />
+                <ScalarProperty Name="add4" ColumnName="add4" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="itnum" ColumnName="itnum" />
+                <ScalarProperty Name="Lstnum" ColumnName="Lstnum" />
+                <ScalarProperty Name="istnum" ColumnName="istnum" />
+                <ScalarProperty Name="mnt" ColumnName="mnt" />
+                <ScalarProperty Name="fdate" ColumnName="fdate" />
+                <ScalarProperty Name="tdate" ColumnName="tdate" />
+                <ScalarProperty Name="bdate" ColumnName="bdate" />
+                <ScalarProperty Name="security" ColumnName="security" />
+                <ScalarProperty Name="suser" ColumnName="suser" />
+                <ScalarProperty Name="pwd" ColumnName="pwd" />
+                <ScalarProperty Name="ses_code" ColumnName="ses_code" />
+                <ScalarProperty Name="brep" ColumnName="brep" />
+                <ScalarProperty Name="company_type" ColumnName="company_type" />
+                <ScalarProperty Name="phone1" ColumnName="phone1" />
+                <ScalarProperty Name="phone2" ColumnName="phone2" />
+                <ScalarProperty Name="drep" ColumnName="drep" />
+                <ScalarProperty Name="ss_name" ColumnName="ss_name" />
+                <ScalarProperty Name="corp_id" ColumnName="corp_id" />
+                <ScalarProperty Name="cperson" ColumnName="cperson" />
+                <ScalarProperty Name="cphone" ColumnName="cphone" />
+                <ScalarProperty Name="state" ColumnName="state" />
+                <ScalarProperty Name="country" ColumnName="country" />
+                <ScalarProperty Name="Location" ColumnName="Location" />
+                <ScalarProperty Name="UHIDPreFix" ColumnName="UHIDPreFix" />
+                <ScalarProperty Name="isActive" ColumnName="isActive" />
+                <ScalarProperty Name="HeadOffice" ColumnName="HeadOffice" />
+                <ScalarProperty Name="vchGSTNumber" ColumnName="vchGSTNumber" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

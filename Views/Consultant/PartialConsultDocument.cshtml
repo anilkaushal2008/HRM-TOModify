@@ -1,0 +1,53 @@
+﻿@model IEnumerable<HRM.Models.tblConsultantDocDetail>
+@{
+    Layout = "";
+}
+@if (Session["descript"] != null)
+{
+    <div class="card">
+        @if (ViewBag.OtherDoc != null)
+        {
+            <div class="card-body">
+                <h3 class="card-title" style="color: Highlight">Other Documents</h3>
+                <table class="table table-sm">
+                    <thead class="">
+                        <tr style="color:black">
+                            <th>
+                                Document Name
+                            </th>
+
+                            <th>
+                                Action
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="">
+                        @foreach (var doc in ViewBag.OtherDoc as IEnumerable<SelectListItem>)
+                        {
+                            <tr style="color:black">
+                                <td>
+                                    @Html.Label(doc.Text)
+                                </td>
+                                <td>
+                                    <a class="btn btn-success btn-sm" href="@Url.Content("~/Content/Uploads/" + doc.Value)" target="_blank"><i class="fa fa-hand-point-right">  View</i></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+
+        }
+    </div>
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+
+
+
+

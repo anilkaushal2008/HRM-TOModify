@@ -1,0 +1,103 @@
+﻿@model IEnumerable<HRM.Models.tblEmpAssesmentMas>
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "ViewAllEmp";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    }
+
+<div class="card">
+    @if (TempData["Success"] != null)
+    {
+        <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <p class="alert alert-danger" id="errormsg">@TempData["Error"]</p>
+    }
+    <div class="card-body">
+        <h3 class="card-title">All New Employee Command View</h3>
+        <div class="table">
+            <table class="table table-sm bg-dark text-white col-12">
+                <thead class="bg-success text-white col-12">
+                    <tr>
+                        <th>
+                            Temp Code
+                        </th>
+                       
+                        <th>
+                            Name
+                        </th>                     
+                        <th>
+                           Department
+                        </th>
+                        <th>
+                          Designation
+                        </th>
+                        <th>
+                           DOJ
+                        </th>
+                        <th>
+                           Salary
+                        </th>
+                        <th>Action</th>
+                   
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (TempData["Empty"] != null)
+                    {
+                        <p class="alert alert-danger" id="errormsg">@TempData["Empty"]</p>
+                    }
+                    else
+                    {
+                        foreach (var item in Model)
+                        {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.vchEmpTcode)
+                            </td>
+                     
+                            <td>
+                                @Html.DisplayFor(modelItem => item.vchName)
+                            </td>
+                  
+                            <td>
+                                @Html.DisplayFor(modelItem => item.tblDeptMas.vchdeptname)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.tblDesignationMas.vchdesignation)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.dtDOJ)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.intsalary)
+                            </td>
+                            <td>
+                                @if (item.bitofficialdetails == false)
+                                {
+                                    @Html.ActionLink("Edit", "EditEmpl", new { id = item.intid })
+                                }
+                                else if(item.bitofficialdetails==true)
+                                {
+                                    @Html.Label("Completed")
+                                }
+                            </td>
+                            
+                        </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+
+
+

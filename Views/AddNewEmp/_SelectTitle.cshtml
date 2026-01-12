@@ -1,0 +1,11 @@
+﻿@model HRM.Models.tblTitleMas
+
+@if (ViewBag.TitleList != null)
+{ 
+    @Html.LabelFor(m => m.vchname)<span style="color:crimson">*</span>
+    <br />
+    @Html.DropDownListFor(m => m.vchname, ViewBag.TitleList as SelectList, "Select Title", htmlAttributes: new {@class="form-control" })
+    @Html.ValidationMessageFor(m => m.vchname, "", new { @class = "text-danger" })
+}
+
+

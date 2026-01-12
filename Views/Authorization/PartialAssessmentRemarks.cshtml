@@ -1,0 +1,64 @@
+﻿@model IEnumerable<HRM.Models.spGetAssesmentRemarks_Result>
+@{
+    Layout = "";
+}
+@if (Session["descript"] != null)
+{
+ <div class="card">
+    @if (Model != null)
+    {
+        <div class="card-body">
+            <h3 class="card-title" style="color: black; font-weight: bold; color: Highlight">Assessment Remarks Details</h3>
+            <table class="table table-sm">
+                <thead class="">
+                    <tr style="color:black;font-weight:bold">
+                        <th>
+                            Assessment Remarks
+                        </th>
+                        <th>
+                            Assessed By
+                        </th>
+                        <th>
+                            Assessed Date
+                        </th>
+                        @*<th>
+                            View Assessment
+                        </th>*@
+                    </tr>
+                </thead>
+                <tbody class="">
+                    @foreach (var item in Model)
+                    {
+
+
+                      <tr style="color:black">
+                            <td>                             
+                                @Html.DisplayFor(modelItem => item.vchSpecialRemarks)                                
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.vchAssesmentBy)
+                            </td>
+                            <td>
+                                @Convert.ToDateTime(item.dtAssesment).ToString("dd/MM/yyyy")
+                            </td>
+                            @*<td>
+                                <a href="@Url.Action("SingleStatusView", "Assesment", new { id = item.tblEmpAssesmentMas.intid, uid = item.fk_userid })">                                   
+                                </a>
+                            </td>*@
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    @*else
+    {
+        <p class="alert alert-danger" id="successMessage" align="center">@ViewBag.Empty</p>
+    }*@
+</div>
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+

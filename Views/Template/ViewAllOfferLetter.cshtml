@@ -1,0 +1,89 @@
+﻿@model IEnumerable<HRM.Models.tblOfferLetter>
+
+@{
+    ViewBag.Title = "ViewAllOfferLetter";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<div class="col-lg-12">
+    <div class="card">
+        <div class="card-body">
+            @if (TempData["Success"] != null)
+            {
+                <p align="center" class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+            }
+            @if (TempData["Success1"] != null)
+            {
+                <p align="center" class="alert alert-success" id="successMessage">@TempData["Success1"]</p>
+            }
+            @if (TempData["Error"] != null)
+            {
+                <p align="center" class="alert alert-success" id="successMessage">@TempData["Error"]</p>
+            }
+            <h3 class="card-title">All Offer Letter View</h3>
+
+            <div align="right">
+                <a href="@Url.Action("EmpOfferLetter", "Template")">
+                    <div class="btn btn-primary">
+                        <h6 align="center" class="fas fa-hand-point-right"></h6>
+                        <h6 align="center" class="fas fa-plus">
+                            Create Offer Letter
+                        </h6>
+                    </div>
+                </a>
+            </div>
+            <div class="table">
+                <table class="table table-sm col-12">
+                    <thead class="bg-primary text-white col-12">
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.vchName)
+                            </th>
+                            <th>
+                                Ref. Code
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.tblDeptMas.vchdeptname)
+                            </th>
+                            <th>
+                                Position
+                            </th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    @if (TempData["Empty"] != null)
+                    {
+                        <p class="alert alert-danger" id="emptymsg">@TempData["Empty"]</p>
+                    }
+                    else
+                    {
+                        <tbody class="border border-primary">
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.vchName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.vchRef_Code)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.tblDeptMas.vchdeptname)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.tblPositionCategoryMas.vchPosCatName)
+                                    </td>
+                                    <td>
+                                        @Html.ActionLink("View", "OfferLetterPrint", new { id = item.intid },new { @target = "_blank" }) &nbsp;&nbsp;
+                                        @Html.ActionLink("Edit", "EditEmpOfferLetter", new { id = item.intid })
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    }
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+                    

@@ -1,0 +1,112 @@
+﻿@model HRM.Models.OfficialDetailsModelView
+@using System.Web;
+@using System.Web.Optimization;
+@{ 
+    Layout = "";
+}
+@if (Session["descript"] != null)
+{
+    Html.EnableClientValidation(true);
+    using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <a3 style="color:black;font-weight:600">Selected Employee Details:-</a3>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.Hidden("EmpID", (string)ViewBag.ID)
+        @Html.Hidden("EnteredDate", (string)ViewBag.DtCreated)
+        <div class="row col-12">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <a style="color:black;font-weight:600">Employee Name : </a>
+                    @Html.Label("Nam", (string)ViewBag.Name, htmlAttributes: new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <a style="color:black;font-weight:600">Mobile : </a>
+                    @Html.Label("Mobile", (string)ViewBag.Contact, htmlAttributes: new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <a style="color:black;font-weight:600">Selected Employee Temp Code : </a>
+                    @Html.Label("Tcode", (string)ViewBag.EmpTcode, htmlAttributes: new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+        <div class="row col-12">
+            <div class="col-md-7">
+                <div class="form-group">
+                    <a style="color:black;font-weight:600">Selected Position : </a>
+                    @Html.Label("Position", (string)ViewBag.Position, htmlAttributes: new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="form-group">
+                    <a style="color:black;font-weight:600">Candidate Entered Date : </a>
+                    @Html.Label("CreatedDate", (string)ViewBag.DtCreated, htmlAttributes: new { @class = "form-control", @id = "CreatedDate" })
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row col-12">
+            <div class="col-md-6">
+                @Html.Label("Selected department")
+                @Html.Label("Depart", (string)ViewBag.Deprt, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                @Html.LabelFor(model => model.fk_dptid, (string)ViewBag.DPTID, htmlAttributes:new { @id = "dptm", @class = "form-control",@hidden="hidden" })
+                @*, htmlAttributes: new { @id = "dptm", @class = "form-control", @Value= "@model.fk_dptid" })*@
+                @*<label hidden="hidden" value="@ViewBag.DPTID" id="dptm"></label>*@
+
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.fk_desiid)<span style="color:red">*</span>
+                    <select class="form-control" id="designation" name="selecteddesi" required="required"></select>
+                </div>
+            </div>
+        </div>
+        <div class="row col-12">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Expected DOJ(dd/mm/yyyy)")<span style="color:crimson">*</span>
+                    @Html.EditorFor(model => model.dtDOJ, new { htmlAttributes = new { @class = "form-control", @type = "text", @id = "getdate" } })
+                    @Html.ValidationMessageFor(model => model.dtDOJ, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.Label("Salary")<span style="color:crimson">*</span>
+                    @Html.EditorFor(model => model.intsalary, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.intsalary, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="form-group" align="center">
+            <h5 class="card-title">Is final submission<span style="color:crimson">*</span></h5>
+            <fieldset class="radio">
+                <label class="radio">
+                    Yes
+                    @Html.RadioButtonFor(Model => Model.bitoffdetail, "true", htmlAttributes: new { id = "chkyes", @class = "radio1" })
+                </label>
+                <label class="radio">
+                    No
+                    @Html.RadioButtonFor(Model => Model.bitoffdetail, "false", htmlAttributes: new { id = "chkno", @class = "radio1" })
+                </label>
+                @Html.ValidationMessageFor(model => model.bitoffdetail, "", new { @class = "text-danger" })
+            </fieldset>
+        </div>
+    }
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+@section Scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/Scripts/jqueryui/jquery-ui.js"></script>    
+}

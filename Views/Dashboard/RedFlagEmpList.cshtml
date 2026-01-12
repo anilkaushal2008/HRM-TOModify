@@ -1,0 +1,164 @@
+﻿@model IEnumerable<HRM.Models.tblEmpAssesmentMas>
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "RedFlagEmpList";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+
+    }
+    <link href="//cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <div class="card">
+        <div class="card-body">
+            <h3 class="card-title">Red Flag Employee List View</h3>
+            @if (ViewBag.Success != null)
+            {
+                <p class="alert alert-success" id="success" align="center">@ViewBag.Success</p>
+            }
+            @if (ViewBag.Empty != null)
+            {
+                <p class="alert alert-danger" id="danger" align="center">@ViewBag.Empty</p>
+            }
+            <table id="redFlag" class="table table-sm">
+                <thead class="bg-danger text-white col-12">
+                    <tr>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            Mobile
+                        </th>
+                        <th>
+                            AadhaarNo
+                        </th>
+                        <th>
+                            EmpCode
+                        </th>
+                        <th>
+                            DOJ
+                        </th>
+                        <th>
+                            DOL
+                        </th>
+                        <th>
+                            Branch
+                        </th>
+                        <th>
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="border border-danger">
+                    @if (Model != null)
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.vchName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.vchMobile)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.vchAadharNo)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.vchEmpFcode)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.dtDOJ)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.dtDOL)
+                                </td>
+                                <td>
+                                    @if (item.intcode == 2)
+                                    {
+                                        <label>IH Hygiea</label>
+                                    }
+                                    @if (item.intcode == 3)
+                                    {
+                                        <label>ISSH</label>
+                                    }
+                                    @if (item.intcode == 4)
+                                    {
+                                        <label>IH 3B2</label>
+                                    }
+                                    @if (item.intcode == 14)
+                                    {
+                                        <label>IHH DB</label>
+                                    }
+                                    @if (item.intcode == 15)
+                                    {
+                                        <label>IFSH</label>
+                                    }
+                                    @if (item.intcode == 16)
+                                    {
+                                        <label>KS HOMECARE</label>
+                                    }
+                                    @if (item.intcode == 21)
+                                    {
+                                        <label>MH AMBALA</label>
+                                    }
+                                    @if (item.intcode == 22)
+                                    {
+                                        <label>Healthsure</label>
+                                    }
+                                    @if (item.intcode == 23)
+                                    {
+                                        <label>My Hospital</label>
+                                    }
+                                    @if (item.intcode == 24)
+                                    {
+                                        <label>KS Pharma</label>
+                                    }
+                                    @if (item.intcode == 25)
+                                    {
+                                        <label>Velmed</label>
+                                    }
+                                </td>
+                                <td>
+                                    <a class="btn btn-primary btn-sm" href="@Url.Action("ViewHrFullDetails", "Authorization", new { id = item.intid })">Detail</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+
+            <!-- Pagination controls -->
+            @if (ViewBag.TotalPages > 1)
+            {
+
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                        {
+                            <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
+                                <a class="page-link" href="@Url.Action("RedFlagEmpList", new { page = i })">@i</a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+            }
+        </div>
+    </div>
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#redFlag').DataTable();
+        });
+    </script>
+}
+
+

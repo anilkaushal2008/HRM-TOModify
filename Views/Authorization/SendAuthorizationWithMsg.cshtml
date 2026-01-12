@@ -1,0 +1,49 @@
+﻿@model HRM.Models.ReSendAuthorViewModel
+    @{ 
+        Layout = "";
+    }
+@if (Session["descript"] != null)
+{
+    Html.EnableClientValidation(true);
+    using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div>
+            <div class="form-horizontal">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.id)
+
+                <div>
+                    <h5 style="color:black">Enter message to authorizer<span style="color:red"> (max length 2000 characters)</span></h5>
+                    @Html.TextAreaFor(model => model.vchHrSolRemark, htmlAttributes: new { @id = "txtcancel", @class = "form-control", @rows = "7", @size = "1500" })
+                    @Html.ValidationMessageFor(model => model.vchHrSolRemark, "", new { @class = "text-danger" })
+                    <br />
+                </div>
+                <div align="center">
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <input type="submit" value="Send" class="btn btn-success" />
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a class="btn btn-primary" href="@Url.Action("NewAuthorization", "Authorization")">Cancel</a>
+                            </div>
+                        </div>
+                 </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+
+@section Scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+}
+
+
+

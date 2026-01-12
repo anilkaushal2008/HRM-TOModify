@@ -1,0 +1,86 @@
+﻿@model IEnumerable<HRM.Models.tblEmpAssesmentMas>
+@if (Session["descript"] != null)
+{
+    <div class="card">
+        <div class="card-body">
+          <h4 class="card-title" style="color: Highlight">Employee Official Details</h4>
+            <div class="table table-sm">
+                <table class="table">
+                    <thead class="bg-facebook text-white col-12">
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.vchName)
+                            </th>
+                            <th>
+                                Department
+                            </th>
+                            <th>
+                                Designation
+                            </th>
+                            <th>
+                                Experience
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.dtDOJ)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.intsalary)
+                            </th>
+                            @{ if (Session["Authoriser"] != null)
+                                {
+                                    var author = Session["Authoriser"].ToString();
+                                    if (author == "True")
+                                    {
+                                        <th>
+                                           Action
+                                        </th>
+                                    }
+                               }
+                            }
+                        </tr>
+                    </thead>
+                    <tbody class="border border-dark">
+                        @foreach (var item in Model)
+                        {
+                        <tr style="color:black">
+                            <td>
+                                @Html.DisplayFor(modelItem => item.vchName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.tblDeptMas.vchdeptname)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.tblDesignationMas.vchdesignation)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.decExperience)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.dtDOJ)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.intsalary)
+                            </td>
+                            @{ if (Session["Authoriser"] != null)
+                                {
+                                    var author = Session["Authoriser"].ToString();
+                                    if (author == "True")
+                                    {
+                                        <td>
+                                            @Html.ActionLink("Update Salary", "AuthoriserUpdateSalary", new { id = item.intid })
+                                        </td>
+                                        }
+                                    }
+                                }
+                         </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}

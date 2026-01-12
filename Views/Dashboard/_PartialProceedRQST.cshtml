@@ -1,0 +1,94 @@
+﻿@model HRM.Models.tblConsultantSlipDetail
+    <div class="modal fade" id="_PartialProceedRQST" tabindex="-1" role="dialog" aria-labelledby="fullscreenModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-success">
+                    <h5 class="modal-title" style="color:white">Create salary slip</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    @using (Html.BeginForm("ProceedRequest", "Dashboard", FormMethod.Post, new { id = "salarySlipForm" }))
+                    {
+                        @Html.HiddenFor(m => m.fk_SlipId)
+                        if (@ViewBag.MonthList != null)
+                        {
+                            <table class="table table-responsive">
+                                <thead>
+                                    <tr style="color:black">
+                                        <td>
+                                            Month
+                                        </td>
+                                        <td>
+                                            Professional Fee
+                                        </td>
+                                        <td>
+                                            TDS(10%)
+                                        </td>
+                                        <td>
+                                            NetPayable
+                                        </td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in ViewBag.MonthList as IEnumerable<SelectListItem>)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <input type="text" name="Months[]" value="@item.Text" class="form-control" readonly />
+                                            </td>
+                                            <td>
+                                                <input type="text" name="Fees[]" class="form-control fee" required="required"/>
+                                                <span class="text-danger field-validation-valid"></span>
+                                            </td>
+                                            <td>
+                                                <input type="text" name="TDS[]" class="form-control tds" readonly />
+                                            </td>
+                                            <td>
+                                                <input type="text" name="NetPayables[]" class="form-control netpay" readonly />
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success">Complete Request</button>
+                        </div>
+                    }
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/Scripts/jqueryui/jquery-ui.js"></script>  
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#salarySlipForm").submit(function (event) {
+                if (!$(this).valid()) {
+                    event.preventDefault();
+                }
+            });
+
+            $(".fee").on("input", function () {
+                let fee = parseFloat($(this).val()) || 0;
+                let tds = fee * 0.10;
+                let netPay = fee - tds;
+
+                let row = $(this).closest("tr");
+                row.find(".tds").val(tds.toFixed(2));
+                row.find(".netpay").val(netPay.toFixed(2));
+            });
+        });
+    </script>
+}
+
+

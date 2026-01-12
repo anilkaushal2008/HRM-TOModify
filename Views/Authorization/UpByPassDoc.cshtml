@@ -1,0 +1,125 @@
+﻿@model IEnumerable<HRM.Models.tblPosDocMap>
+
+
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "UpByPassDoc";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    }
+
+<div class="card col-12">
+    <br />
+    <h3 class="col-10" style="color: black; font-weight: bold; color: Highlight">Upload document</h3>
+        @if (Model != null)
+        {
+<div class="card-body">
+    @if (TempData["Error"] != null)
+    {
+        <p align="center" class="alert alert-danger" id="empty">@TempData["Error"]</p>
+    }
+    @if (ViewBag.Error != null)
+    {
+        <p align="center" class="alert alert-danger" id="empty">@ViewBag.Error</p>
+    }
+    @if (TempData["Success"] != null)
+    {
+        <p align="center" class="alert alert-success" id="empty">@TempData["Success"]</p>
+    }
+    @if (ViewBag.Success != null)
+    {
+        <p align="center" class="alert alert-success" id="success">@ViewBag.Success</p>
+    }
+    <h4 class="card-title" style="color: Highlight">Compulsory document</h4>
+    <table class="table table-sm">
+        <thead class="">
+            <tr style="color:black">
+                <th>
+                    Document Name
+                </th>
+                <th>
+                    Upload DateTime
+                </th>
+                <th>
+                    Action
+                </th>
+            </tr>
+        </thead>
+        <tbody class="">
+            @foreach (var item in Model)
+            {
+
+
+<tr style="color:black">
+    <td>
+        @if (item.bitRequireForAuthorization == true)
+        {
+            <label class="required">@item.tblDocMas.vchdocname</label>
+        }
+        else
+        {
+            @Html.DisplayFor(model => item.tblDocMas.vchdocname)
+        }
+    </td>
+                    <td>
+                        @{if (item.dt_TempUploaded != null)
+                            {
+                                @Html.DisplayFor(model => item.dt_TempUploaded)
+                            }
+                            else
+                            {
+                                @Html.Label("Pending")
+                            }
+                        }
+                    </td>
+                    <td>
+                        @{if (item.ComparedFileName != null)
+                            {
+                                string isAdmin = string.Empty;
+                                string isHRAdmin = string.Empty;
+                                if (Session["MainAdmin"] != null)
+                                {
+                                    isAdmin = Session["MainAdmin"].ToString();
+                                }
+                                if (Session["HrAdmin"] != null)
+                                {
+                                    isHRAdmin = Session["HrAdmin"].ToString();
+                                }
+                                                <a class="btn btn-success btn-sm" href="@Url.Content("~/Content/Uploads/" + @item.ComparedFileName)" target="_blank">&nbsp;&nbsp;View&nbsp;&nbsp;</a>
+
+                                if (isAdmin == "True" || isHRAdmin=="True")
+                                {
+                                @Html.ActionLink("Delete", "deleteDocument", new { id = item.fk_docid, empid = item.fk_TempEmpId }, htmlAttributes: new { @class = "btn btn-danger btn-sm" })                               
+                                }                               
+                            }
+                            else
+                            {
+                                @Html.ActionLink("Upload", "UpNewDoc", new { id = item.fk_TempEmpId, docid = item.fk_docid }, htmlAttributes: new { @style = "color:white", @class = "btn btn-primary btn-sm" })
+                                }
+                            }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+        }
+        else
+        {
+            <p class="alert alert-danger" id="empty" align="center">@TempData["Empty"]</p>
+        }
+    </div>
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+@section scripts{ 
+ <script type="text/javascript">
+
+ </script>
+}
+
+
+
+

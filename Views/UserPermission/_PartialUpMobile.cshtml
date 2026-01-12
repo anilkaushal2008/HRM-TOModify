@@ -1,0 +1,33 @@
+﻿@model HRM.Models.tblEmpLoginUser
+    @{ Layout = "";}
+<div class="modal fade" id="_PartialUpMobile" tabindex="-1" role="dialog">
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header bg-success text-white">
+            <h5 class="modal-title">Update mobile number</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            @using (Html.BeginForm("UpdateMobile", "USerPermission", FormMethod.Post))
+            {
+                @Html.HiddenFor(m => m.fk_intEmpID)               
+                <div class="form-group">
+                    @Html.Label("Mobile Number")
+                    @Html.EditorFor(m => m.vchmobile,  new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.vchmobile, "", new { @class = "text-danger" })
+                </div>
+                <button type="submit" class="btn btn-success">Update</button>
+            }
+        </div>
+    </div>
+</div>
+</div>
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+<script src="~/Scripts/jqueryui/jquery-ui.js"></script>
+
+

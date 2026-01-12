@@ -1,0 +1,107 @@
+﻿@model IEnumerable<HRM.Models.tblTransferDetail>
+
+@if (Session["descript"] != null)
+
+{
+    {
+        ViewBag.Title = "ViewTransferEmp";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    }
+
+
+<div class="card">
+    <div class="card-body">
+        <h3 class="card-title">Transfer/Receive Employee View</h3>
+        @if (TempData["Success"] != null)
+        {
+            <p class="alert alert-success" id="success" align="center">@TempData["Success"]</p>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <p class="alert alert-danger" id="error" align="center">@TempData["Error"]</p>
+        }
+        @if (ViewBag.Success != null)
+        {
+            <p class="alert alert-success" id="vsuccess" align="center">@ViewBag.Success</p>
+        }
+        @if (ViewBag.Error != null)
+        {
+            <p class="alert alert-danger" id="verror" align="center">@ViewBag.Error</p>
+        }
+        <table class="table table-sm">
+            <thead class="bg-facebook text-white col-12">
+                <tr>
+                    <th>
+                        EmpCode
+                    </th>
+                    <th>
+                        TransferFrom
+                    </th>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        DateRelieving
+                    </th>
+                    <th>
+                        Old DOJ
+                    </th>
+                    <th>
+                        Salary
+                    </th>
+
+                    <th>
+                        TansferBy
+                    </th>
+                    <th>
+                        Action
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="border border-primary">
+                @if (ViewBag.Empty != null)
+                {
+                    <p class="alert alert-danger" id="empty" align="center">@ViewBag.Empty</p>
+                }
+                else
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.vchOldEmpCode)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.vchTransferFromBranch)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.vchTransferToBranch)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.dtRelieved)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.dtTransferredDOJ)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.intTransferSalary)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.vchTransferBy)
+                            </td>
+                            <td>
+                                <a class="btn btn-primary btn-sm" href="@Url.Action("ViewHrFullDetails", "Authorization", new { id = item.fk_empid })">FullDetails</a>&nbsp;
+                                <a class="btn btn-success btn-sm" href="@Url.Action("TransferRecieve", "Dashboard", new { id = item.fk_empid })">Receive/Reject</a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}

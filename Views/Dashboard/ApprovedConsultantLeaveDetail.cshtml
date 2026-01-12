@@ -1,0 +1,216 @@
+﻿@model HRM.Models.tblLeaveApplication
+@{
+    ViewBag.Title = "ApprovedConsultantLeaveDetail";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+<div class="row">
+    <div class="col-12" style="font-size:90%;color:black">
+        <div class="card" style="background-color:aliceblue">
+            <div class="card-body col-12">
+                <div class="card-title" align="center">
+                    <hr />
+                    <h3 class="card-title">Consultant single leave detail view</h3>
+                </div>
+                @if (TempData["Error"] != null)
+                {
+                    <p align="center" class="alert alert-danger" id="empty">@TempData["Error"]</p>
+                }
+                @if (ViewBag.Error != null)
+                {
+                    <p align="center" class="alert alert-danger" id="empty">@ViewBag.Error</p>
+                }
+                @if (TempData["Success"] != null)
+                {
+                    <p align="center" class="alert alert-success" id="empty">@TempData["Success"]</p>
+                }
+                @if (ViewBag.Success != null)
+                {
+                    <p align="center" class="alert alert-success" id="success">@ViewBag.Success</p>
+                }
+                <h6 class="card-subtitle"></h6>
+                <hr />
+                <dl class="dl-horizontal">
+                    <div class="row">
+                        <div class="col-12">
+                            <h4 style="font-weight:bold">Request detail</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                    <dt>
+                        Date From
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.dtStartFrom)
+                    </dd>
+            </div>
+            <div class="col-4">
+                <dt>
+                    To Date
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.dtEndDate)
+                </dd>
+            </div>
+            <div class="col-4">
+                <dt>
+                    Request Days
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.decdaysRequest)
+                </dd>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-4">
+                <dt>
+                    Status
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.vchStatus)
+                </dd>
+            </div>
+            <div class="col-4">
+                <dt>
+                    Requested by
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.vchCreatedBy)
+                </dd>
+
+            </div>
+            <div class="col-4">
+                <dt>
+                    Request DateTime
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.dtCreated)
+                </dd>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-4">
+                <dt>
+                    Leave type
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.tblLeaveType.leaveType)
+                </dd>
+            </div>
+            <div class="col-8">
+                <dt>
+                    Request remarks
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.vchReason)
+                </dd>
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-4">
+                <div class="row">
+                    <div class="col-12">
+                        <h4 style="font-weight:bold">Approval detail</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-4">
+                @if (@Model.vchStatus != "Rejected")
+                {
+                    <dt>
+                        Approved by
+                    </dt>
+                }
+                else
+                {
+                    <dt>
+                        Rejected By
+                    </dt>
+                }
+
+                <dd>
+                    @Html.DisplayFor(model => model.vchApprovedBy)
+                </dd>
+            </div>
+            <div class="col-4">
+
+                <dt>
+                    Approved Days
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.decdaysApproved)
+                </dd>
+            </div>
+            <div class="col-4">
+
+                <dt>
+                    Approved daterange
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.appovedDateRange)
+                </dd>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-4">
+                @if (@Model.bitIsRejected != true)
+                {
+                    <dt>
+                        Approved DateTime
+                    </dt>
+                }
+                else
+                {
+                    <dt>
+                        Reject DateTime
+                    </dt>
+                }
+                <dd>
+                    @Html.DisplayFor(model => model.dtApproved)
+                </dd>
+
+            </div>
+            <div class="col-4">
+                @if (@Model.bitIsRejected != true)
+                {
+                    <dt>
+                        Approved type
+                    </dt>
+                }
+                else
+                {
+                    <dt>
+                        Is-Rejected
+                    </dt>
+                }
+                <dd>
+                    @Html.DisplayFor(model => model.vchApprovedBy)
+                </dd>
+
+            </div>
+            <div class="col-3">
+
+            </div>
+            <div class="col-3">
+
+            </div>
+        </div>      
+        </dl>
+        <hr />
+
+        @*//for logged in employee*@
+        <div class="row" align="center">
+            <div class="col-12">
+                <a class="btn btn-outline-success btn-block" href="@Url.Action("ConsultantApproved", "Dashboard")">Back</a>
+            </div>
+        </div>
+    </div>
+</div>
+

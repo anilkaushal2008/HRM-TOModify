@@ -1,0 +1,471 @@
+﻿@model HRM.Models.tblLeaveApplication
+@using System.Collections
+@using System.Web
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Apply Leave";
+}
+
+@if (Session["Ename"] != null)
+{
+    <!-- Essential CSS for Animations and DatePicker -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+    <style>
+        /* --- HIGH-END DESIGN SYSTEM --- */
+        :root {
+            --primary-glow: rgba(79, 70, 229, 0.15);
+            --accent-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+        }
+
+        .card-apply {
+            border-radius: 24px;
+            background-color: var(--bg-card) !important;
+            border: 1px solid var(--border) !important;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .section-header {
+            background: var(--accent-gradient);
+            padding: 30px;
+            color: white !important;
+        }
+
+        .info-strip {
+            background: var(--bg-body);
+            border: 1px solid var(--border);
+            border-left: 5px solid #4f46e5;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 35px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .form-label {
+            font-weight: 800;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        /* Modern Input Styling */
+        .form-control {
+            border-radius: 12px;
+            padding: 12px 18px;
+            border: 1.5px solid var(--border);
+            background-color: var(--bg-card);
+            color: var(--text-main) !important;
+            font-weight: 600;
+            height: 52px; /* Fixed height for consistency */
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* FIXED: Dropdown Visibility Fix */
+        select.form-control {
+            cursor: pointer;
+            appearance: auto !important; /* Ensure native dropdown arrow is visible */
+            -webkit-appearance: menulist !important;
+            line-height: 1.5;
+        }
+
+        .form-control:focus {
+            box-shadow: 0 0 0 4px var(--primary-glow);
+            border-color: #4f46e5;
+            outline: none;
+        }
+
+        /* Rule Display Box */
+        .rule-box-dynamic {
+            background-color: rgba(79, 70, 229, 0.04) !important;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(79, 70, 229, 0.1);
+            border-radius: 16px;
+            padding: 18px;
+            margin-top: 15px;
+        }
+
+        .rule-item b {
+            color: #4f46e5;
+            font-size: 0.95rem;
+        }
+
+        /* Modern Segmented Toggle */
+        .duration-toggle-container {
+            background: var(--bg-body);
+            padding: 4px;
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            display: flex;
+            height: 52px;
+        }
+
+            .duration-toggle-container label {
+                flex: 1;
+                text-align: center;
+                padding: 10px;
+                margin: 0;
+                cursor: pointer;
+                border-radius: 10px;
+                font-weight: 700;
+                font-size: 0.85rem;
+                color: var(--text-muted);
+                transition: 0.2s;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+                .duration-toggle-container label.active {
+                    background: white;
+                    color: #4f46e5;
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+                }
+
+        [data-theme="dark"] .duration-toggle-container label.active {
+            background: var(--bg-card);
+            color: white;
+        }
+
+        /* Sidebar Design */
+        .summary-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 30px;
+        }
+
+        .consumption-pill {
+            background: var(--bg-body);
+            padding: 15px;
+            border-radius: 16px;
+            margin-bottom: 12px;
+            border: 1px solid transparent;
+            transition: 0.2s;
+        }
+
+            .consumption-pill:hover {
+                border-color: var(--accent);
+                transform: scale(1.02);
+            }
+
+        /* Calendar Positioning & Arrow Visibility Fixes */
+        .calendar-anchor {
+            position: relative;
+        }
+
+        .daterangepicker {
+            z-index: 99999 !important;
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
+            border-radius: 16px !important;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.2) !important;
+            border: 1px solid var(--border) !important;
+            margin-top: 8px !important;
+            padding: 10px;
+        }
+
+            /* Nav Arrows Visibility */
+            .daterangepicker .next span,
+            .daterangepicker .prev span {
+                border-width: 0 3px 3px 0 !important;
+                padding: 4px !important;
+                border-color: #4f46e5 !important; /* Bold blue for high visibility */
+                opacity: 1 !important;
+            }
+
+            .daterangepicker .calendar-table th,
+            .daterangepicker .calendar-table td {
+                width: 32px !important;
+                height: 32px !important;
+                font-size: 0.75rem !important;
+                line-height: 32px !important;
+            }
+
+        .pulse-btn {
+            background: var(--accent-gradient);
+            color: white !important;
+            font-weight: 800;
+            border-radius: 16px;
+            padding: 16px 45px;
+            border: none;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            box-shadow: 0 10px 20px -5px rgba(79, 70, 229, 0.4);
+            transition: 0.3s;
+        }
+
+            .pulse-btn:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 15px 25px -5px rgba(79, 70, 229, 0.5);
+            }
+    </style>
+
+    <div class="container-fluid py-4" id="leaveApplicationRoot">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.fk_Empid)
+
+            <div class="row">
+                <!-- FORM COLUMN - DECREASED TO col-lg-8 FOR BETTER BREADTH BALANCE -->
+                <div class="col-lg-8">
+                    <div class="card card-apply mb-4">
+                        <div class="section-header d-flex justify-content-between align-items-center">
+                            <div>
+                                <h3 class="mb-0 font-weight-bold text-white"><i class="fas fa-calendar-plus mr-3"></i>Apply for Leave</h3>
+                                <div class="mt-2 opacity-80 small font-weight-bold uppercase tracking-wider">Session: @ViewBag.ActiveYearName</div>
+                            </div>
+                            <a href="@Url.Action("AllLeave","Leave",new { id = Model.fk_Empid })" class="btn btn-white btn-sm rounded-pill px-4 font-weight-bold shadow-sm" style="background:white; color: #4f46e5;">
+                                <i class="fas fa-history mr-2"></i> Track History
+                            </a>
+                        </div>
+
+                        <div class="card-body p-5">
+                            <!-- Requester Info -->
+                            <div class="info-strip shadow-sm">
+                                <div>
+                                    <label class="form-label mb-1">Employee</label>
+                                    <p class="font-weight-bold mb-0 text-dark" style="font-size: 1.1rem;">@ViewBag.Name (@ViewBag.Code)</p>
+                                </div>
+                                <div class="text-right">
+                                    <label class="form-label mb-1">Session Validity</label>
+                                    <p class="font-weight-bold mb-0 text-primary">@ViewBag.SessionRange</p>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <!-- Type Selection -->
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label">Category of Leave</label>
+                                    @Html.DropDownListFor(m => m.fk_LeaveType, (SelectList)ViewBag.Types, new { id = "ltype", @class = "form-control" })
+
+                                    <div id="rule-info" class="rule-box-dynamic d-none animate__animated animate__fadeInUp">
+                                        <div class="row text-center">
+                                            <div class="col-4 border-right">
+                                                <small class="text-muted d-block">Min Selection</small>
+                                                <b id="lblMin" class="text-primary"></b>
+                                            </div>
+                                            <div class="col-4 border-right">
+                                                <small class="text-muted d-block">Max Selection</small>
+                                                <b id="lblMax" class="text-primary"></b>
+                                            </div>
+                                            <div class="col-4">
+                                                <small class="text-muted d-block">Available</small>
+                                                <b id="lblRem" class="text-success"></b>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Duration -->
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label">Select Duration</label>
+                                    <div class="duration-toggle-container">
+                                        <label class="active" id="labelFull">
+                                            <input type="radio" name="Dur" value="Full" checked class="d-none"> Full Day
+                                        </label>
+                                        <label id="labelHalf">
+                                            <input type="radio" name="Dur" value="Half" class="d-none"> Half Day
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- Date Range -->
+                                <div class="col-md-6 mb-4 calendar-anchor">
+                                    <label class="form-label">Choose Date(s)</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text bg-white border-right-0" style="border-radius: 12px 0 0 12px;"><i class="far fa-calendar-alt text-primary"></i></span>
+                                        </div>
+                                        @Html.TextBoxFor(m => m.leaveDateRange, new { id = "dtrange", @class = "form-control border-left-0", @readonly = "readonly", placeholder = "Select dates..." })
+                                    </div>
+                                </div>
+
+                                <!-- Days Count -->
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label">Total Leave Units</label>
+                                    @Html.TextBoxFor(m => m.decdaysRequest, new { id = "totaldays", @class = "form-control text-center", @readonly = "readonly", style = "font-size: 1.6rem; color: #4f46e5; background: #f8fafc; border-style: dashed;" })
+                                </div>
+
+                                <!-- Reason -->
+                                <div class="col-12 mb-5">
+                                    <label class="form-label">Explain your Reason</label>
+                                    @Html.TextAreaFor(m => m.vchReason, new { @class = "form-control", rows = 3, placeholder = "Please provide a brief reason for your leave request...", style = "height: auto;" })
+                                </div>
+                            </div>
+
+                            <div class="text-center">
+                                <button type="submit" id="postbtn" class="btn pulse-btn px-5 shadow-lg">
+                                    Submit Application <i class="fas fa-chevron-right ml-2"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SIDEBAR - INCREASED TO col-lg-4 FOR MORE SPACE FOR QUOTA TEXT -->
+                <div class="col-lg-4">
+                    <div class="summary-card shadow-sm sticky-top" style="top: 100px;">
+                        <h5 class="font-weight-bold mb-4 text-primary d-flex align-items-center">
+                            <i class="fas fa-chart-pie mr-3"></i> Session Quota
+                        </h5>
+                        <div class="consumption-list">
+                            @foreach (var item in (IEnumerable<dynamic>)ViewBag.LeaveCounter)
+                            {
+                                <div class="consumption-pill d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <span class="d-block font-weight-bold text-dark" style="font-size: 0.9rem;">@item.LeaveType</span>
+                                        <small class="text-muted">Quota Consumption</small>
+                                    </div>
+                                    <div class="text-right ml-2">
+                                        <span class="badge badge-primary px-3 py-2 rounded-pill font-weight-bold shadow-sm" style="background: rgba(79, 70, 229, 0.1); color: #4f46e5; white-space: nowrap;">
+                                            @item.ConsumedCount Days
+                                        </span>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <div class="mt-4 p-3 rounded-lg bg-light text-center small text-muted" style="background: #f8fafc !important; border: 1px dashed var(--border);">
+                            <i class="fas fa-info-circle mr-2"></i> Records are updated in real-time upon approval.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    @section Scripts {
+        <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+        <script>
+            var leaveRules = @Html.Raw(ViewBag.LeaveRules ?? "[]");
+            var appliedDates = @Html.Raw(Json.Encode(ViewBag.AppliedDates ?? new List<string>()));
+            // Parsing hyphenated backend dates (DD-MM-YYYY)
+            var minDateStr = '@ViewBag.MinDate';
+            var maxDateStr = '@ViewBag.MaxDate';
+            var minDate = moment(minDateStr, 'DD-MM-YYYY');
+            var maxDate = moment(maxDateStr, 'DD-MM-YYYY');
+
+            function runValidation(days) {
+                var typeId = $('#ltype').val();
+                if (!typeId || typeId === "0") { $('#rule-info').addClass('d-none'); return true; }
+
+                var rule = leaveRules.find(r => String(r.id).toLowerCase() === String(typeId).toLowerCase());
+                if (!rule) return true;
+
+                // Get the text name of the selected leave type
+                var typeName = $('#ltype option:selected').text();
+
+                $('#rule-info').removeClass('d-none');
+                var today = new Date();
+                var isH1 = today.getMonth() < 6;
+                var available = (rule.halfCheck && isH1) ? (rule.totalAllowed / 2) - rule.firstHalfConsumed : rule.totalAllowed - rule.consumed;
+
+                $('#lblMin').text(rule.min);
+                $('#lblMax').text(rule.max);
+                $('#lblRem').text(available);
+
+                // Validation logic for Max Limit and Balance
+                if (days > 0) {
+                    if (days > rule.max) {
+                        alert("Validation Error: The maximum selection allowed for " + typeName + " is " + rule.max + " days.");
+                        $('#totaldays').val(0);
+                        $('#dtrange').val('');
+                        return false;
+                    }
+                    if (days > available) {
+                        alert("Validation Error: Insufficient balance for " + typeName + ". You only have " + available + " days remaining for this session.");
+                        $('#totaldays').val(0);
+                        $('#dtrange').val('');
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+
+            function initCalendar(isHalf) {
+                var $i = $('#dtrange');
+                if ($i.data('daterangepicker')) { $i.data('daterangepicker').remove(); }
+                $i.off('.daterangepicker');
+
+                $i.daterangepicker({
+                    singleDatePicker: isHalf,
+                    autoApply: true,
+                    minDate: minDate,
+                    maxDate: maxDate,
+                    drops: 'auto',
+                    opens: 'left',
+                    //parentEl: '.calendar-anchor', // Bounds the picker to the local container
+                    locale: { format: 'DD/MM/YYYY' }
+                });
+
+                $i.on('apply.daterangepicker', function (e, p) {
+                    var days = isHalf ? 0.5 : (p.endDate.diff(p.startDate, 'days') + 1);
+                    if(runValidation(days)) {
+                        $('#totaldays').val(days);
+                    }
+                });
+            }
+
+            $('#ltype').on('change', function () { runValidation(parseFloat($('#totaldays').val()) || 0); });
+
+            $('input[name="Dur"]').on('change', function () {
+                $('.duration-toggle-container label').removeClass('active');
+                $(this).closest('label').addClass('active');
+
+                var isHalf = $(this).val() === "Half";
+                $('#dtrange').val('');
+                $('#totaldays').val(isHalf ? 0.5 : 0);
+                initCalendar(isHalf);
+                runValidation(isHalf ? 0.5 : 0);
+            });
+
+            $('#postbtn').on('click', function(e) {
+                var d = parseFloat($('#totaldays').val()) || 0;
+                var rangeText = $('#dtrange').val();
+
+                // Final validation check on click
+                if (!runValidation(d) || d <= 0 || rangeText === "") {
+                    e.preventDefault();
+                    alert("Please select a valid date range and ensure you have sufficient balance.");
+                    return;
+                }
+
+                // Restore Overlap Check Logic
+                var parts = rangeText.split(' - ');
+                var start = moment(parts[0], 'DD/MM/YYYY');
+                var end = parts[1] ? moment(parts[1], 'DD/MM/YYYY') : start;
+
+                for (var m = moment(start); m.isSameOrBefore(end); m.add(1, 'days')) {
+                    if (appliedDates.includes(m.format('DD-MM-YYYY'))) {
+                        e.preventDefault();
+                        alert("Overlap Error: You already applied for a request on " + m.format('DD/MM/YYYY'));
+                        return;
+                    }
+                }
+
+                $(this).html('<i class="fas fa-spinner fa-spin mr-2"></i> Submitting...').prop('disabled', true);
+                $(this).closest('form').submit();
+            });
+
+            $(document).ready(function () {
+                initCalendar(false);
+                if($('#ltype').val() !== "0") runValidation(0);
+            });
+        </script>
+    }
+}
+else
+{
+    @Html.Action("_SessionError", "NewEmployeeLogin")
+}

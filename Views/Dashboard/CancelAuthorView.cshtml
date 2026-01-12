@@ -1,0 +1,86 @@
+﻿@model IEnumerable<HRM.Models.tblEmpAssesmentMas>
+    @if(Session["descript"]!=null)
+    {
+        {
+            ViewBag.Title = "CancelledAuthor";
+            Layout= "~/Views/Shared/_LayoutMain.cshtml";
+        }
+
+
+<div class="card">
+    <div class="card-body">
+        <h3 class="card-title">Cancelled Authorization View</h3>
+        @if (TempData["Success"] != null)
+        {
+            <p class="alert alert-success" id="success" align="center">@TempData["Success"]</p>
+        }
+        <table class="table table-sm" style="font-size:90%">
+            <thead class="bg-danger text-white">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.vchName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.tblDeptMas.vchdeptname)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.tblDesignationMas.vchdesignation)
+                    </th>
+                    <th>
+                        CanceledBy
+                    </th>
+                    <th>
+                        Action
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="border border-danger">
+                @if (TempData["Empty"] != null)
+                {
+                    <p class="alert alert-danger" id="empty" align="center">@TempData["Empty"]</p>
+                }
+                else
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.vchName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.tblDeptMas.vchdeptname)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.tblDesignationMas.vchdesignation)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.vchauthorisedby)
+                            </td>
+                            <td>
+                                @Html.ActionLink("CancelReason", "ViewActiveDetails1", new { id = item.intid }, htmlAttributes: new { @class = "btn btn-sm btn-success" })
+                                &nbsp;
+                                @{
+                                    if (Session["MainAdmin"] != null)
+                                    {
+                                        string isadminuser = Session["MainAdmin"].ToString();
+                                        if (isadminuser == "True")
+                                        {
+
+                                            @Html.ActionLink("FullDetail", "ViewActiveDetails", new { id = item.intid }, htmlAttributes: new { @class = "btn btn-sm btn-primary" })
+
+                                        }
+                                    }
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+    }
+    else
+    {
+        Html.RenderAction("_SessionError1", "Home");
+    }

@@ -1,0 +1,242 @@
+﻿@model IEnumerable<HRM.Models.tblLeaveApplication>
+@using System.Data
+@using System.Collections
+@using System.Web
+@{
+    // 1. LINK TO THE MASTER LAYOUT
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Leave History";
+
+    // EASY LINK CONFIGURATION
+    var applyLeaveLink = Url.Action("ApplyLeave", "Leave");
+}
+
+@if (Session["Ename"] != null)
+{
+    <style>
+        /* Table Component Styles */
+        .modern-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+            padding: 24px;
+            margin-bottom: 30px;
+        }
+
+        .filter-section {
+            background: rgba(0,0,0,0.02);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        [data-theme="dark"] .filter-section {
+            background: rgba(255,255,255,0.03);
+        }
+
+        /* Typography Hierarchy */
+        table.dataTable thead th {
+            font-weight: 700 !important;
+            color: var(--text-main) !important;
+            font-size: 0.85rem !important;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid var(--border) !important;
+            background-color: transparent !important;
+        }
+
+        table.dataTable tbody td {
+            padding: 15px !important;
+            border-bottom: 1px solid var(--border) !important;
+            vertical-align: middle;
+            color: var(--text-muted);
+            font-size: 0.82rem !important;
+        }
+
+        [data-theme="dark"] table.dataTable tbody td {
+            color: var(--text-main) !important;
+        }
+
+        .status-pill {
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: inline-block;
+        }
+
+        .field-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .badge-type {
+            background: rgba(79, 70, 229, 0.05);
+            color: var(--accent);
+            border: 1px solid rgba(79, 70, 229, 0.1);
+            font-weight: 700;
+        }
+    </style>
+
+    <div class="d-flex justify-content-between align-items-center mb-4 px-2">
+        <div>
+            <h3 class="font-weight-bold mb-0">Record Management</h3>
+            <p class="text-muted small mb-0">Reviewing leave timeline for <strong>@Session["Ename"]</strong>.</p>
+        </div>
+        <a href="@applyLeaveLink" class="btn btn-primary rounded-pill px-4 shadow-sm font-weight-bold">
+            <i class="fas fa-plus mr-2"></i> New Request
+        </a>
+    </div>
+
+    <div class="modern-card">
+        @if (TempData["Success"] != null)
+        {<div class="alert alert-success border-0 shadow-sm mb-4" style="border-radius: 12px;">@TempData["Success"]</div>}
+        @if (TempData["Error"] != null)
+        {<div class="alert alert-danger border-0 shadow-sm mb-4" style="border-radius: 12px;">@TempData["Error"]</div>}
+
+        <!-- SESSION FILTERS -->
+        <div class="filter-section shadow-sm">
+            <div class="row align-items-center">
+                <div class="col-md-5">
+                    <label class="field-label">Filter By Session Year</label>
+                    <div class="input-group" style="border-radius: 12px; overflow: hidden; border: 1px solid var(--border);">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text bg-white border-right-0 text-primary"><i class="fas fa-calendar-check"></i></span>
+                        </div>
+                        @Html.DropDownList("SessionFilter", (SelectList)ViewBag.Sessions, new { @id = "SessionFilter", @class = "form-control font-weight-bold border-left-0 shadow-none", @style = "height: 45px;" })
+                    </div>
+                </div>
+                <div class="col-md-7 text-md-right mt-3 mt-md-0">
+                    <span class="text-muted small mr-2 font-weight-bold">Summary: </span>
+                    <span class="badge badge-primary p-2 px-3 rounded-pill" style="background: var(--accent); color: white; font-weight: 700;">
+                        @Model.Count() Records Found
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- APPLICATIONS TABLE -->
+        <div class="table-responsive">
+            <table id="allleave" class="table no-wrap v-middle mb-0" style="width:100%;">
+                <thead>
+                    <tr>
+                        <th class="px-3">Submission Date</th>
+                        <th>Duration</th>
+                        <th class="text-center">Units</th>
+                        <th class="text-center">Approved</th>
+                        <th>Type</th>
+                        <th class="text-center">Status</th>
+                        <th class="text-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="px-3">
+                                <strong class="text-main" style="font-size: 0.88rem;">@item.dtCreated.ToString("dd MMM yyyy")</strong>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <span class="text-primary font-weight-bold">@item.dtStartFrom.ToString("dd/MM/yy")</span>
+                                    <i class="fas fa-long-arrow-alt-right mx-2 opacity-30"></i>
+                                    <span class="text-danger font-weight-bold">@item.dtEndDate.ToString("dd/MM/yy")</span>
+                                </div>
+                            </td>
+                            <td class="text-center font-weight-bold text-dark">@item.decdaysRequest</td>
+                            <td class="text-center font-weight-bold text-success">@(item.decdaysApproved ?? 0)</td>
+                            <td>
+                                @if (item.tblLeaveType != null)
+                                {
+                                    <span class="badge badge-type px-2 py-1">@item.tblLeaveType.leaveType</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted small italic">Standard</span>
+                                }
+                            </td>
+                            <td class="text-center">
+                                @{
+                                    string status = item.vchStatus?.ToString() ?? "Pending";
+                                    if (status == "Pending")
+                                    { <span class="status-pill" style="background: #4f46e5; color: white;">Pending</span> }
+                                    else if (item.bitSameApprove == true)
+                                    { <span class="status-pill" style="background: #10b981; color: white;">Approved</span> }
+                                    else if (item.bitIsPartialApproved == true)
+                                    { <span class="status-pill text-white" style="background: #f59e0b;">Partial</span> }
+                                    else if (item.bitIsRejected == true)
+                                    { <span class="status-pill" style="background: #ef4444; color: white;">Rejected</span> }
+                                    else
+                                    { <span class="status-pill badge-light border text-muted">@status</span> }
+                                }
+                            </td>
+                            <td class="text-center">
+                                @if (status != "Pending")
+                                {
+                                    <a class="btn btn-outline-primary btn-sm rounded-pill px-3 font-weight-bold" href="@Url.Action("EmployeeApprovedLeaveDetail","Leave", new { id = item.unID })">
+                                        <i class="fas fa-info-circle mr-1"></i> Details
+                                    </a>
+                                }
+                                else
+                                {
+                                    <span class="text-muted small font-italic opacity-50">Review Pending</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Scripts Section -->
+    <script src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script>
+       // Use a self-executing check for jQuery
+    (function checkJquery() {
+        if (window.jQuery) {
+            // Use standard jQuery initialization
+            $(function() {
+                // 1. Initialize DataTable
+                if ($.fn.DataTable && !$.fn.DataTable.isDataTable('#allleave')) {
+                    $('#allleave').DataTable({
+                        pageLength: 10,
+                        ordering: true,
+                        responsive: true
+                    });
+                }
+
+                // 2. Set Initial Value (Removed .toLowerCase() to avoid mismatch)
+                var currentSelectedYear = '@ViewBag.SelectedYear';
+                if (currentSelectedYear) {
+                    $('#SessionFilter').val(currentSelectedYear);
+                }
+
+                // 3. The Change Event
+                // Use 'change' directly on the ID since it exists in the DOM at this point
+                $('#SessionFilter').on('change', function () {
+                    var selectedYearId = $(this).val();
+                    if (selectedYearId) {
+                        var baseUrl = '@Url.Action("AllLeave", "Leave")';
+                        window.location.href = baseUrl + '?yearId=' + encodeURIComponent(selectedYearId);
+                    }
+                });
+            });
+        } else {
+            setTimeout(checkJquery, 50);
+        }
+    })();
+    </script>
+}
+else
+{
+    @Html.Action("_SessionError", "NewEmployeeLogin")
+}

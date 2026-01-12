@@ -1,0 +1,94 @@
+﻿@model HRM.Models.tblDeptMas
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "EditDept";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+        Html.EnableClientValidation(true);
+    }
+
+    using (Html.BeginForm("EditDept", "Master", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal col-12">
+            <br />
+            @if (TempData["Success"] != null)
+            {
+                <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+            }
+            <h4 style="color:black;font-weight:bold" align="center">Update department master setup</h4>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.intid)
+        </div>
+        <div class="col-12">
+            <div class="row">
+                <div class="col">
+                    @{ string ViewDept = Session["ViewDepartmentMas"].ToString();
+                        if (ViewDept == "True")
+                        {
+                            <div align="right">
+                                <a href="@Url.Action("ViewAllDept", "Master")">
+                                    <div class="btn btn-success">
+                                        <h6 align="right" class="fas fa-hand-point-right">
+                                            View All Department
+                                        </h6>
+                                    </div>
+                                </a>
+                            </div>
+                        }
+                    }
+                </div>            
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-3">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.vchdeptname, htmlAttributes: new { @class = "control-label col-md-8" })
+                        @Html.EditorFor(model => model.vchdeptname, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.vchdeptname, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                @*<div class="col-3">
+            <div class="form-group">
+                @Html.LabelFor(model => model.intManPower, htmlAttributes: new { @class = "control-label col-md-8" })
+                @Html.EditorFor(model => model.intManPower, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.intManPower, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+                <div class="col-3">
+                    <div class="form-group" align="center">
+                        @Html.Label("Allowed manpower?", htmlAttributes: new { @class = "control-label col-md-8" })
+                        @Html.EditorFor(model => model.bitIsCounterApplied, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.bitIsCounterApplied, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="form-group" align="center">
+                        @Html.Label("Allow bypass selection?", htmlAttributes: new { @class = "control-label col-md-8" })
+                        @Html.EditorFor(model => model.bitIsByPassDept, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.bitIsByPassDept, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="form-group" align="center">
+                        @Html.Label("Active?", htmlAttributes: new { @class = "control-label col-md-8" })
+                        @Html.EditorFor(model => model.bitIsActive, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.bitIsActive, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col">
+                    <input type="submit" value="Update" class="btn btn-success btn-block" />
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}

@@ -1,0 +1,76 @@
+﻿@model IEnumerable<HRM.Models.tblEmpDetails>
+@if (Session["descript"] != null)
+{
+
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Employee Personal Details</h4>
+            <table class="table table-sm">
+                <thead class="bg-facebook text-white col-12">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.vchsex)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.vchmaritalststus)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.dtDob)
+                        </th>
+                        <th>
+                            Nominee
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.vchFatherName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.vchmothername)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.vchtstate)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.vchtmobile)
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="border border-dark">
+
+                    @foreach (var item in Model)
+                    {
+                    <tr style="color:black">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.vchsex)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.vchmaritalststus)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.dtDob)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.vchNominee)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.vchFatherName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.vchmothername)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.vchtstate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.vchtmobile)
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+else
+{
+  Html.RenderAction("_SessionError1", "Home");
+}

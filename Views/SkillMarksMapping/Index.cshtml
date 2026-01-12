@@ -1,0 +1,127 @@
+﻿@model IEnumerable<HRM.Models.tblSkillMarksAndPositionMappMas>
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "Index";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+        Html.EnableClientValidation(true);
+    }
+
+<div class="col-lg-12">
+    @if (TempData["Success"] != null)
+    {
+        <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <p class="alert alert-danger" id="successMessage">@TempData["Error"]</p>
+    }
+    <div class="card">
+
+        <div class="card-body">
+            <h3 class="card-title">All skill master mapping view</h3>
+            @{ string newmap = Session["Psview"].ToString();
+                if (newmap == "True")
+                {
+            <div align="right">
+                <a href="@Url.Action("Create", "SkillMarksMapping")">
+                    <div class="btn btn-primary">
+                        <h6 class="fas fa-hand-point-right"></h6>
+                        <h6 align="center" class="fa fa-plus">
+                            New Mapping
+                        </h6>
+                    </div>
+                </a>
+            </div>
+                    }
+                }
+            <div class="table">
+                <table class="table table-sm col-12">
+                    <thead class="bg-primary text-white col-12">
+                        <tr>
+                            <th>
+                                MarksFrom
+                            </th>
+                            <th>
+                                MarksTo
+                            </th>
+                            <th>
+                                CreatedBy
+                            </th>
+                            <th>
+                                CreatedDate
+                            </th>
+
+                            <th>
+                                Position Name
+                            </th>
+                            <th>
+                                Actions
+                            </th>
+                        </tr>
+
+                    </thead>
+                    <tbody class="border border-primary">
+                        @if (TempData["Empty"] != null)
+                        {
+                            <p class="alert alert-danger" id="successMessage">@TempData["Empty"]</p>
+                        }
+                        else
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.intSkillMarksFm)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.intSkillMarksTo)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.vchCreatedBy)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.dtCreated)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.tblPositionCategoryMas.vchPosCatName)
+                                    </td>
+                                    <td>
+                                        @{ string mapedit = Session["Psedit"].ToString();
+                                            if (newmap == "True")
+                                            {
+                                                <a href="@Url.Action("Edit", "SkillMarksMapping", new { id = item.intid })">
+                                                    <h6 align="center" class="fa fa-edit" data-placement="left" data-toggle="tooltip" data-original-title="Edit"></h6>
+                                                </a>}
+                                        }
+                                        &nbsp; &nbsp;
+                                        @{ string mapdel = Session["Psdelete"].ToString();
+                                            if (newmap == "True")
+                                            { <a href="@Url.Action("Delete", "SkillMarksMapping", new { id = item.intid })">
+                                                    <h6 align="center" class="fa fa-trash" data-placement="right" data-toggle="tooltip" data-original-title="Delete"></h6>
+                                                </a>}
+                                            }
+                                            &nbsp; &nbsp;
+                                            </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+}

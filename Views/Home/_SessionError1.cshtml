@@ -1,0 +1,42 @@
+﻿<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href=@Url.Content("~/Content/assets/images/logo1.png")>
+    <title>HrModule</title>
+    <!-- Custom CSS -->
+    <link href=@Url.Content("~/Content/dist/css/style.min.css") rel="stylesheet" type="text/css">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+    @{ Layout = "";}
+    <div class="auth-wrapper d-flex no-block justify-content-center align-items-center position-relative"
+         style="background:url(/Content/assets/images/big/auth-bg.jpg) no-repeat center center;">
+        <div class="auth-box row col-12"@*style="background:url(/Content/assets/images/big/HRindusback.jpg) no-repeat right;"*@>
+            <div class="card col-12">
+                <div class="card-body" align="center">
+                    <h3 class="card-title">Your session has expired!</h3>
+                    <div align="center">
+                        <a href="@Url.Action("Index","Home")">
+                            <div class="btn btn-primary">
+                                <h6 align="center" class="fas fa-hand-point-right">
+                                    Click here to re-login your account
+                                </h6>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

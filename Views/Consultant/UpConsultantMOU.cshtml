@@ -1,0 +1,147 @@
+﻿@model HRM.Models.UpMOUViewModel
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "UpConsultantMOU";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    }
+    using (Html.BeginForm("UpConsultantMOU", "Consultant", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        <br />
+        <div class="form-horizontal">
+            <div class="card">
+                <div class="card-body" style="background-color:gainsboro">
+                    <h3 class="card-title" align="center">MOU upload view</h3>
+                    <br />
+                    <hr />
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(Model => Model.empID)
+                    <div class="row" style="color:black">
+                        <div class="col-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-6" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @readonly = "readonly", @class = "form-control" } })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.EmpTcode, htmlAttributes: new { @class = "control-label col-md-6" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.EmpTcode, new { htmlAttributes = new { @readonly = "readonly", @class = "form-control" } })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.mobile, htmlAttributes: new { @class = "control-label col-md-6" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.mobile, new { htmlAttributes = new { @readonly = "readonly", @class = "form-control" } })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.dtCreatedMOU, htmlAttributes: new { @class = "control-label col-md-6" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.dtCreatedMOU, new { htmlAttributes = new { @type = "date", @class = "form-control", @id = "date" } })
+                                    @Html.ValidationMessageFor(model => model.dtCreatedMOU, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.dtEffectFrom, htmlAttributes: new { @class = "control-label col-md-6" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.dtEffectFrom, new { htmlAttributes = new { @type = "date", @class = "form-control", @id = "datefrom" } })
+                                    @Html.ValidationMessageFor(model => model.dtEffectFrom, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.dtEffectTo, htmlAttributes: new { @class = "control-label col-md-6" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.dtEffectTo, new { htmlAttributes = new { @type = "date", @class = "form-control", @id = "todate" } })
+                                    @Html.ValidationMessageFor(model => model.dtEffectTo, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.fileName, htmlAttributes: new { @class = "control-label col-md-6" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.fileName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                    @Html.ValidationMessageFor(model => model.fileName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.pdfFile, htmlAttributes: new { @class = "control-label col-md-6" })
+                                <div class="col-md-10">
+                                    @Html.TextBoxFor(model => model.pdfFile, "", new { @type = "file", @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.pdfFile, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="form-group" align="center">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Save" class="btn btn-primary" />
+                            &nbsp;&nbsp;&nbsp;
+                            <a class="btn btn-danger" href="@Url.Action("UploadConsultantDoc", "Consultant")">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+
+@section scripts{
+    <script src="~/Content/assets/extra-libs/taskboard/js/jquery-ui.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#datefrom').change(function () {
+                // Get the entered date
+                var enteredDate = $('#datefrom').val();
+                if (enteredDate) {
+                    // Create a Date object from the entered date
+                    var date = new Date(enteredDate);
+
+                    //Add five years to the date
+                    date.setFullYear(date.getFullYear() + 5);
+
+                    //Format the new date (yyyy-mm-dd)
+                    var year = date.getFullYear();
+                    var month = ('0' + (date.getMonth() + 1)).slice(-2);
+                    var day = ('0' + date.getDate()).slice(-2);
+                    var newDate = year + '-' + month + '-' + day;
+
+                    // Display the new date
+                    $('#todate').val(newDate);
+                } else {
+                    $('#result').text('Please enter a valid date.');
+                }
+            });
+        });
+                    //check registration validity
+
+    </script>
+}
+
+
+
+

@@ -1,0 +1,107 @@
+﻿@model IEnumerable<HRM.Models.tblAssQuestMas>
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "ViewAllQuest";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    }
+
+    <div class="col-lg-12">
+         @if (TempData["Success"] != null)
+            {
+                <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+            }
+        <div class="card">
+           
+            <div class="card-body">
+                <h3 class="card-title">All questions master view</h3>
+                @{ string Asnew = Session["Asqnew"].ToString();
+                    if (Asnew == "True")
+                    {
+                        <div align="right">
+                            <a href="@Url.Action("AddnewQuest", "Assesment")">
+                                <div class="btn btn-primary">
+                                    <h6 class="fas fa-hand-point-right"></h6>
+                                    <h6 align="center" class="fa fa-plus">
+                                        Create new
+                                    </h6>
+                                </div>
+                            </a>
+                        </div>
+                    }
+                }
+                <div class="table">
+                    <table class="table table-sm col-12">
+                        <thead class="bg-primary text-white col-12">
+                            <tr>
+                                <th>
+                                    Question
+                                </th>
+                                <th>
+                                    Answer Type
+                                </th>
+                                <th>
+                                    Date Created
+                                </th>
+                                <th>
+                                    CreatedBy
+                                </th>
+
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="border border-primary">
+                            @if (TempData["Empty"] != null)
+                            {
+                                <p class="alert alert-danger" id="successMessage">@TempData["Empty"]</p>
+                            }
+                            else
+                            {
+                                foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.vchQuestion)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.vchAnsType)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.dtcreated)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.vchcreatedby)
+                                        </td>
+
+                                        <td>
+                                            @{ string Qedit = Session["Asqedit"].ToString();
+                                                if (Qedit == "True")
+                                                {
+                                                    <a href="@Url.Action("QMasEdit", "Assesment", new { id = item.intqid })">
+                                                        <h6 align="center" class="fa fa-edit" data-placement="left" data-toggle="tooltip" data-original-title="Edit"></h6>
+                                                    </a> 
+                                                }
+                                            }
+                                            @{ string qdel = Session["Asqdelete"].ToString();
+                                                if (qdel == "True")
+                                                {
+                                                    <a href="@Url.Action("DeleteQuest", "Assesment", new { id = item.intqid })">
+                                                        <h6 align="center" class="fa fa-trash" data-placement="right" data-toggle="tooltip" data-original-title="Delete"></h6>
+                                                    </a>
+                                                    }
+                                                }
+                                                </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+Html.RenderAction("_SessionError1", "Home");
+}

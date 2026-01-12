@@ -1,0 +1,71 @@
+﻿@model HRM.Models.DnbFeeVerificationViewModel
+
+<div class="modal fade" id="verifyModal" tabindex="-1" aria-labelledby="verifyModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content shadow-lg border-0 rounded-4">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="verifyModalLabel">
+                    <i class="bi bi-check2-circle me-2"></i> Payment Verification
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <p><strong>Employee ID:</strong> @Model.EmployeeId</p>
+                        <p><strong>Year:</strong> @Model.YearNumber</p>
+                        <p><strong>Amount:</strong> ₹@Model.Amount</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Payment Mode:</strong> @Model.PaymentMode</p>
+                        <p><strong>Reference No:</strong> @Model.PaymentReferenceNo</p>
+                        <p><strong>Payment Date:</strong> @Model.PaymentDate.Value.ToString("dd/MM/yyyy")</p>
+                    </div>
+                </div>
+
+                <hr />
+
+                <form id="verifyForm">
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(m => m.SubmissionId)
+
+                    <div class="form-group mb-3">
+                        <label for="VerifiedRemarks" class="form-label fw-semibold">
+                            Remarks <span class="text-danger">*</span>
+                        </label>
+                        @Html.TextAreaFor(m => m.VerifiedRemarks, new
+                        {
+                            @class = "form-control",
+                            rows = 3,
+                            required = "required",
+                            placeholder = "Enter verification remarks..."
+                        })
+                        <span class="text-danger field-validation-valid" data-valmsg-for="VerifiedRemarks" data-valmsg-replace="true"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="Status" class="form-label fw-semibold">
+                            Change Status <span class="text-danger">*</span>
+                        </label>
+                        @Html.DropDownListFor(m => m.Status,
+                            new SelectList(new[] { "Verified", "Rejected" }),
+                            "-- Select Status --",
+                            new { @class = "form-control", required = "required" })
+                        <span class="text-danger field-validation-valid" data-valmsg-for="Status" data-valmsg-replace="true"></span>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="saveVerify" class="btn btn-success">
+                    <i class="bi bi-save me-1"></i> Save
+                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle me-1"></i> Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+

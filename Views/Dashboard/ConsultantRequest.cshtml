@@ -1,0 +1,155 @@
+﻿@model IEnumerable<HRM.Models.tblConsultantSlips>
+
+@{
+    ViewBag.Title = "ConsultantRequest";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<br />
+<link href="//cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" rel="stylesheet" />
+<div class="card">
+    @if (TempData["Success"] != null)
+    {
+        <p class="alert alert-success" id="tsuccess" align="center">@TempData["Success"]</p>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <p class="alert alert-danger" id="terror" align="center">@TempData["Error"]</p>
+    }
+    @if (ViewBag.Success != null)
+    {
+        <p class="alert alert-success" id="vSuccess" align="center">@ViewBag.Success</p>
+    }
+    @if (ViewBag.Error != null)
+    {
+        <p class="alert alert-danger" id="error" align="center">@ViewBag.Error</p>
+    }
+    @if (ViewBag.Empty != null)
+    {
+        <p class="alert alert-danger" id="vSuccess" align="center">@ViewBag.Empty</p>
+    }
+    <div class="card-body">
+        <h3 align="center" class="card-title">Salary Slips Request View</h3>
+        <hr />
+        <table id="requestList" class="table table-sm" style="font-size:90%">
+            <thead class="bg-success" style="color:white">
+                <tr>
+                    <th>
+                        RequestBy
+                    </th>
+                    <th>
+                        RequestDate
+                    </th>
+                    <th>
+                        RequestType
+                    </th>
+                    @*<th>
+                        Duration
+                    </th>*@
+                    <th>
+                        Status
+                    </th>
+                    <th>
+                        Action
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="border border-success">
+                @if (TempData["Empty"] != null)
+                {
+                    <p class="alert alert-danger" id="empty" align="center">@TempData["Empty"]</p>
+                }
+                else
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.tblEmpAssesmentMas.vchName)
+                            </td>
+                            <td>@item.dtRequest.ToString("dd/MM/yyyy")</td>
+
+                            <td>
+                                @if (item.bitIsQuraterRequest == true)
+                                {
+                                <label>Quraterly Request</label>
+                                }
+                                else if (item.bitIsMonthRequest == true)
+                                {
+                                    <label>Month Wise</label>
+                                }
+                                                    </td>
+
+                            @*<td>
+                                @if (item.bitIsQuraterRequest == true)
+                                {
+                                    @Html.DisplayFor(modelItem => item.fk_MonthNames)
+                                }
+                                else if (item.bitIsMonthRequest == true)
+                                {
+                                    <label>@</label>
+                                }
+                            </td>*@
+                            <td>
+                                @{
+                                    if (item.bitIsRequest == true && item.bitIsPending && item.bitIsComplete == false)
+                                    {
+                                        @Html.Label("Pending")
+                                    }
+                                    else
+                                    {
+                                        @Html.Label("Completed")
+                                    }
+
+
+                                }
+                            </td>
+                            <td>
+                                @{
+                                    if (item.bitTempComplete == false)
+                                    {
+                                        <button type="button" class="btn btn-success btn-sm open-modal fa fa-hand-point-right" data-id="@item.UNid" style="color:white">&nbsp;Proceed Request</button>
+                                    }
+                                    if (item.bitTempComplete == true && item.bitIsComplete == false)
+                                    { 
+                                        <a class="=btn btn-primary btn-sm" href="@Url.Action("PrintSlip", "Dashboard", new { id = item.UNid })" target="_blank">CheckPrint</a>
+                                        @*<a class="=btn btn-primary btn-sm" href="@Url.Action("PrintSlip", "Dashboard", new { id = item.UNid })" target="_blank">CheckPrint</a>*@
+                                        <a class="=btn btn-success btn-sm" href="@Url.Action("DoFinalPrint", "Dashboard", new { id = item.UNid })">VerifyPrint</a>
+                                    }
+                                    if (item.bitTempComplete == true && item.bitIsComplete == true)
+                                    {
+                                        <a class="=btn btn-primary btn-sm" href="@Url.Action("PrintSlip", "Dashboard", new { id = item.UNid })" target="_blank">PrintSlip</a>
+                                    }
+
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+        <div id="modalContainer"></div>
+    </div>
+</div>
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script type="text/javascript">
+        $(document).on("click", ".open-modal", function () {
+            var id = $(this).data("id");
+            $.get('/Dashboard/ProceedRequest', { id: id }, function (data) {
+                $('#modalContainer').html(data);
+                $('#_PartialProceedRQST').modal('show');
+            });
+        });
+        $(document).on('input', '.fee, .tds', function () {
+            let row = $(this).closest('tr');
+            let fee = parseFloat(row.find('.fee').val()) || 0;
+            let tds = fee * 0.1; // Calculate 10% TDS
+            row.find('.tds').val(tds.toFixed(2));
+            row.find('.netpay').val((fee - tds).toFixed(2));
+        });
+    </script>
+}

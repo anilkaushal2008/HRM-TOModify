@@ -1,0 +1,42 @@
+﻿
+@{
+    ViewBag.Title = "ContactDetails";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title">Add Employee Contact Details</h3>
+                <h6 class="card-subtitle">
+                </h6>
+                <div class="button-box">
+                    <button type="button" class="btn btn-secondary btn-outline" data-toggle="tooltip"
+                            data-placement="left" title="Add Official Details">
+                        <a class="text-white" href="@Url.Action("OfficialDetails","AddNewEmp")">Official Details</a>
+                    </button>
+                    <button type="button" class="btn btn-secondary btn-outline" data-toggle="tooltip"
+                            data-placement="top" title="" data-original-title="Add Qualification">
+                        <a class="text-white" href="@Url.Action("QualificationDetails","AddNewEmp")">
+                            Qualification Details
+                        </a>
+                    </button>
+                    <button type="button" class="btn btn-secondary btn-outline" data-toggle="tooltip"
+                            data-placement="top" title="" data-original-title="Add Personal Details">
+                        <a class="text-white" href="@Url.Action("PersonalDetails","AddNewEmp")">
+                            Personal Details
+                            </a>
+                    </button>
+                    <button type="button" class="btn btn-primary btn-outline" data-toggle="tooltip"
+                            data-placement="top" title="" data-original-title="Add Contact Details">
+                        
+                            Contact Details
+                        </a>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

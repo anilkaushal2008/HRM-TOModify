@@ -1,0 +1,235 @@
+﻿@model HRM.Models.NewDocMapModelView
+@if (Session["descript"] != null)
+{ 
+{
+    ViewBag.Title = "AddnewDocMap";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    Html.EnableClientValidation(true);
+}
+
+using (Html.BeginForm("SaveNewDocMap", "Master", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <br />
+
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 style="color:black" class="col-md-12">Position and document mapping master</h4>
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.PositionName, htmlAttributes: new { @class = "control-label col-md-8" })
+                    <div class="col-md-12">
+                        @Html.DropDownListFor(model => model.PositionName, new SelectList(ViewBag.SelectDoc, "Text", "Value", Model.SelectedDocument, "-Select position-"), htmlAttributes: new { @id = "sltPosition", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.PositionName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <hr />
+
+                <div align="right">
+                    <a href="@Url.Action("ViewAllDocMap", "Master")">
+                        <div class="btn btn-primary">
+                            <h6 align="center" class="fas fa-hand-point-right">
+                                Click here to view all mapping
+                            </h6>
+                        </div>
+                    </a>
+                </div>
+                <div align="center">
+                    <div class="checkbox">
+                        @*<label style="color:black">Select All</label>&nbsp;&nbsp;<input type="checkbox" id="checkall" checked="checked" />&nbsp;&nbsp;&nbsp;&nbsp;*@
+                        <label style="color:black">Uncheck/Check All</label>&nbsp;&nbsp;<input type="checkbox" id="uncheckall" />
+                    </div>
+                </div>
+                @*<div class="table">*@
+                <table class="table table-sm" id="pertable">
+                    <thead class="bg-primary text-white">
+                        <tr>
+                            <td>
+                                Designations
+                            </td>
+                            <td align="center">
+                                Check/Uncheck
+                            </td>
+                            <td align="center">
+                                Must For Authorization
+                            </td>
+                            <td align="center">
+                                Must For PartialToFullActivate
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody class="border" id="tablekibody">
+                        @for (int i = 0; i < Model.AllDocument.Count(); i++)
+                        {
+                        <tr>
+                            <td>
+                                @*@Html.Hidden(Model.AllPermission[i].Value)*@
+                                @Html.Label(Model.AllDocument[i].Text)
+                            </td>
+                            <td>
+                                <div class="checkbox" align="center">                                
+                                    <input type="checkbox" name="ForDocument" id="check_@Model.AllDocument[i].Value" checked="" class="form-control" />
+                                    @Html.HiddenFor(model => model.AllDocument)                                                              
+                                </div>
+                            </td>
+                            <td>
+                            <div class="checkbox">
+                               
+                                <input type="checkbox" name="ForAuthor" id="check_@Model.AllForAuthor[i].Value" checked="" class="form-control" />
+                                @Html.HiddenFor(model => model.AllDocument)                              
+                            </div>
+                            </td>
+                            <td>
+                                <div class="checkbox">                                    
+                                    <input type="checkbox" name="ForComplete" id="check_@Model.AllForComplete[i].Value" checked="" class="form-control" />
+                                    @Html.HiddenFor(model => model.AllDocument)                           
+                                </div>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+                <div class="form-group" align="center">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="button" value="Save Record" class="btn btn-block btn-primary" onclick="SaveNewDocMap()" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+}
+else{
+    Html.RenderAction("_SessionError1", "Home");
+}
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script type="text/javascript">
+        //check all and uncheck all
+        $('#uncheckall').click(function () {
+            if ($(this).is(':checked')) {
+                $('#tablekibody').find('input[type=checkbox]:checked').removeAttr('checked');
+            }
+            else {
+                $('#tablekibody').find('input[type=checkbox]').attr('checked', true);
+            }
+        });
+
+        //on sumbit post all value
+        var SaveNewDocMap = function () {
+            //var postxt = $("#sltPosition option:selected").text().toString();
+            var Posid = $("#sltPosition option:selected").val().toString();
+            //if (postxt != "-Select position-") {
+            var arryitem = [];
+            var aarynitem = [];
+            var arrayAuthor = [];
+            var arrayNAuthor = [];
+            var arrayComplete = [];
+            var arrayNComplete = [];
+            var commaseprateYfield = "";
+            var commasepratedNfield = "";
+            var authorYes = "";
+            var authorNo = "";
+            var completeYes = "";
+            var completeNo = "";
+            var Pid = "";
+            //var Ptxt = "";
+            //FOr document Allow
+            $("#tablekibody input[name=ForDocument]").each(function (AddnewDocMap, val) {
+                var checkid = $(val).attr("Id");
+                var arr = checkid.split('_');
+                var currentcheckboxid = arr[1];
+                var currentuncheckboxid = arr[1];
+                var ischecked = $("#" + checkid).is(":checked", true);
+                if (ischecked) {
+                    arryitem.push(currentcheckboxid);
+                }
+                var isunchecked = $("#" + checkid).is(":unchecked", true);
+                if (isunchecked) {
+                    aarynitem.push(currentuncheckboxid);
+                }
+            })
+            //For Required to Send Authorization
+            $("input[type='checkbox'][name='ForAuthor']").each(function (index,val) {
+                // Your code here
+                var checkid = $(val).attr("Id");
+                var arr2 = checkid.split('_');
+                var checkAuthorY = arr2[1];
+                var checkAuthorN = arr2[1];
+                if ($(this).is(":checked")) {
+                    arrayAuthor.push(checkAuthorY);
+                }
+                else {
+                    arrayNAuthor.push(checkAuthorN);
+                }
+            });
+            //For Required Partial To Complete/Fully Activation
+            $("input[type='checkbox'][name='ForComplete']").each(function (index1, val) {
+                var checkid = $(val).attr("Id");
+                var arr2 = checkid.split('_');
+                var checkCompleteY = arr2[1];
+                var checkCompleteN = arr2[1];
+                if ($(this).is(":checked")) {
+                    arrayComplete.push(checkCompleteY);
+                }
+                else {
+                    arrayNComplete.push(checkCompleteN);
+                }
+            })
+        
+
+                if (arryitem.length != 0) {
+                    commaseprateYfield = arryitem.toString();
+                    commasepratedNfield = aarynitem.toString();
+                    authorYes = arrayAuthor.toString();
+                    authorNo = arrayNAuthor.toString();
+                    completeYes = arrayComplete.toString();
+                    completeNo = arrayNComplete.toString();
+                    Pid = Posid.toString();
+                    //Ptxt = postxt.toString();
+                    $.ajax({
+                        url: "/Master/SaveNewDocMap",
+                        type: "POST",
+                        data: {
+                            YesValiDoc: commaseprateYfield,
+                            NoValiDoc: commasepratedNfield,
+                            YesAuthor: authorYes,
+                            NoAuthor: authorNo,
+                            YesComplete: completeYes,
+                            NoComplete: completeNo,
+                            PoID: Pid
+                            //PositionText: Ptxt
+                        },
+                        success: function (result) {
+                            if (result.success == "1") {
+                                alert(result.output1);
+                                window.location = "/Master/ViewAllDocMap";
+                            }
+                            else if (result.success == "3") {
+                                alert(result.output3);
+                            }
+                            else if (result.success == "4") {
+                                alert(result.output4);
+                            }
+                            else if (result.success == "2") {
+                                alert(result.output2);
+                                location.href = "/Home/_SessionError1"
+                            }
+                        }
+                    })
+                }
+                else {
+                    alert("Check atleast 1 document name");
+                    return false
+                }
+        }
+    </script>
+}
+

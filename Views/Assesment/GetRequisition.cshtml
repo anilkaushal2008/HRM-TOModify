@@ -1,0 +1,153 @@
+﻿@model HRM.Models.tblRequisition
+
+@{
+    ViewBag.Title = "GetRequisition";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+
+@if (Model != null)
+{
+<div class="card">
+    <div class="card-body" style="font-size:90%">
+        <div class="card-title" align="center">
+            <h3 class="card-title">Requisition Full View</h3>
+        </div>
+
+        <hr />
+        <div class="row" style="color:black">
+            <div class="col-md-4">
+                <dt>
+                    Requisition Type
+                </dt>
+                <dd>
+                    @if (Model.vchReqType == 1)
+                    {
+                        @Html.Label("New")
+                    }
+                    else
+                    {
+                        @Html.Label("Replacement")
+                    }
+                </dd>
+            </div>
+            <div class="col-md-4">
+                <dt>
+                    Replacement details
+                </dt>
+
+                <dd>
+                    @if (Model.BitIsReplacement == true)
+                    {
+                        <a class="link" style="color:blue" href="@Url.Action("ViewHrFullDetails", "Authorization", new { id = Model.fkReplacement_empid })">ViewDetails</a>
+                    }
+                    else
+                    {
+                        @Html.Label("N/A")
+                    }
+                </dd>
+            </div>
+            <div class="col-md-4">
+                <dt>
+                    Required Education
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.vchEducation)
+                </dd>
+            </div>
+        </div>
+
+        <div class="row" style="color:black">
+            <div class="col-md-4">
+                <dt>
+                    Aditional Education
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.vchAditionalEducation)
+                </dd>
+            </div>
+            <div class="col-md-4">
+                <dt>
+                    Skill/Worked Area
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.vchSkill)
+                </dd>
+            </div>
+            <div class="col-md-4">
+                <dt>
+                    Experience Required
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.intExpRequired)
+                </dd>
+            </div>
+        </div>
+        <div class="row" style="color:black">
+            <div class="col-md-4">
+                <dt>
+                    OnDate Required
+                </dt>
+                <dd>
+                    @Model.dtRequiredDate.ToString("dd/MM/yyyy")
+                </dd>
+            </div>
+            <div class="col-md-4">
+                <dt>
+                    Request date
+                </dt>
+                <dd>
+                    @Model.dtRequest.ToString("dd/MM/yyyy")
+                </dd>
+            </div>
+            <div class="col-md-4">
+                <dt>
+                    Remarks
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.vchRemarks)
+                </dd>
+            </div>
+        </div>
+        <hr />
+        @if (Model.bitISAssignToHR == true && Model.bitStatusPending == true)
+        {
+            string checkHR = Session["HrAdmin"].ToString();
+            if (checkHR == "True")
+            {
+                {
+                    Html.RenderAction("PartialRequisitionActionView");
+                }
+            }
+        }
+        else if (Model.bitISAssignToVPHR == true && Model.bitStatusPending == true)
+        {
+            string checkVP = Session["ISVPHR"].ToString();
+            if (checkVP == "True")
+            {
+                {
+                    Html.RenderAction("PartialRequisitionActionView");
+                }
+            }
+            @*check CFO
+                else if (Model.bitISAssignToVPHR == true)
+                {
+                    string checkVP = Session["ISVPHR"].ToString();
+                    if (checkVP == "True")
+                    {
+
+                    }
+                }*@
+
+        }
+
+        <hr />
+    </div>
+</div>
+}
+else
+{
+    <p class="alert alert-danger" id="Empty" align="center">@ViewBag.Empty</p>
+}
+
+

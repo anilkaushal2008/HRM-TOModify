@@ -1,0 +1,34 @@
+﻿@model HRM.Models.DateRemarksViewModel
+@using System.Web;
+@using System.Web.Optimization;
+@if (Session["descript"] != null)
+{
+    Html.EnableClientValidation(true);
+    using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(m=>m.id)
+        <div class="col-md-12">
+            <div class="modal-title" align="center" style="color:black">Enter reason, if expected DOJ is less than from current date</div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.dateRemarks)<span style="color:red"> (max length 2000 characters)</span>
+                @Html.TextAreaFor(model => model.dateRemarks, htmlAttributes: new { @type="text",@id = "remarks", @class = "form-control", @rows = "7", @size = "1500" })
+                @Html.ValidationMessageFor(model => model.dateRemarks, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+    }
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+@section Scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/Scripts/jquery-ui.js"></script>
+}

@@ -1,0 +1,206 @@
+﻿@model IEnumerable<HRM.Models.tblEmpAssesmentMas>
+
+@{
+    ViewBag.Title = "EmpDetailActions";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<br />
+<div class="col-lg-12">
+    <div class="card" align="center">
+        @if (TempData["Success"] != null)
+        {
+            <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+        }
+        @if (TempData["DeleteDone"] != null)
+        {
+            <p class="alert alert-success" id="successMessage">@TempData["DeleteDone"]</p>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <p class="alert alert-danger" id="successMessage">@TempData["Error"]</p>
+        }
+        <div class="card-body col-12">
+            <h3 class="card-title">Employee master view</h3>
+            <hr />
+            <div class="table-responsive" style="font-size:90%">
+                <table class="table-sm col-12">
+                    <thead class="bg-success text-white">
+                        <tr>
+                            <th>
+                                Emp Name
+                            </th>
+                            <th>
+                                Mobile
+                            </th>
+                            <th>
+                                WorkedArea
+                            </th>
+                            <th>
+                                Personal Details
+                            </th>
+                            <th>
+                                Compulsory Document
+                            </th>
+                            <th>
+                                Qualification Document
+                            </th>
+                            <th>
+                                Photograph
+                            </th>
+                        </tr>
+                    <tbody class="border border-success">
+                        @foreach (var item in Model)
+                        {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.vchName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.vchMobile)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.vchWorkedArea)
+                            </td>
+                            @{if (Session["AllowDocPenUpload"] != null)
+                                {
+                                    string aloowupload = Session["AllowDocPenUpload"].ToString();
+                                    if (aloowupload == "True")
+                                    {
+                                                        <td>
+
+                                                            @if (item.bittempperdetails == false)
+                                                            {
+                                                                @Html.ActionLink("Add", "AddEmpDetails", new { id = item.intid })
+                                                            }
+                                                            else if (item.bitperdetails == false && item.bittempperdetails == true)
+                                                            {
+                                                                @Html.ActionLink("Edit", "EditDetail", new { id = item.intid })
+                                                            }
+                                                            else
+                                                            {
+                                                                @Html.Label("Completed")
+                                                                <br />
+                                                                @Html.ActionLink("View", "ViewDetails", new { id = item.intid })<br />
+                                                            }
+                                                            @{ if (item.bitperdetails == true && item.bittempperdetails == true)
+                                                                {
+                                                                    if (Session["HrAdmin"].ToString() != null)
+                                                                    {
+                                                                        string ishr = Session["HrAdmin"].ToString();
+                                                                        if (ishr == "True")
+                                                                        {
+                                                                           @Html.ActionLink("Unlock", "UnlockEmpDetail", new { id = item.intid })
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            </td>
+                                                        <td>
+                                                            @if (item.bitperdetails == true && item.bittempperdetails == true)
+                                                            {
+                                                                if (item.bitCompDocT == false)
+                                                                {
+                                                                    @Html.ActionLink("Upload Document", "UpCompDoc", new { id = item.intid })
+                                                                }
+                                                                else if (item.bitCompDocT == true && item.bitCompDocP != true)
+                                                                {
+                                                                    @Html.ActionLink("Upload More", "UpCompDoc", new { id = item.intid })
+                                                                    <br />
+                                                                    @Html.ActionLink("View Document", "ViewCompDoc", new { id = item.intid })
+
+                                                                }
+                                                                else if (item.bitCompDocP == true)
+                                                                {
+                                                                    @Html.Label("Completed")
+                                                                    <br />
+                                                                    @Html.ActionLink("View", "ViewCompDoc", new { id = item.intid })<br />
+                                                                    if (Session["HrAdmin"].ToString() != null)
+                                                                    {
+                                                                        string ishr = Session["HrAdmin"].ToString();
+                                                                        if (ishr == "True")
+                                                                        {
+                                                                            @Html.ActionLink("Unlock", "UnlockCompDoc", new { id = item.intid })
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                @Html.Label("Complete personal details")
+                                                            }
+                                                        </td>
+                                                        <td>
+                                                            @if (item.bitCompDocP == true && item.bitCompDocT == true)
+                                                            {
+                                                                if (item.bittempcontdetails == false)
+                                                                {
+                                                                    @Html.ActionLink("Upload Document", "employeeupload", new { id = item.intid })
+                                                                }
+                                                                else if (item.bittempcontdetails == true && item.bitcontdetails != true)
+                                                                {
+                                                                    @Html.ActionLink("Upload More", "employeeupload", new { id = item.intid })
+                                                                    <br />
+                                                                    @Html.ActionLink("View Document", "ViewEmpDoc", new { id = item.intid })
+
+                                                                }
+                                                                else if (item.bitcontdetails == true)
+                                                                {
+                                                                    @Html.Label("Completed")
+                                                                    <br />
+                                                                    @Html.ActionLink("View", "ViewEmpDoc", new { id = item.intid })<br />
+                                                                    if (Session["HrAdmin"].ToString() != null)
+                                                                    {
+                                                                        string ishr = Session["HrAdmin"].ToString();
+                                                                        if (ishr == "True")
+                                                                        {
+                                                                            @Html.ActionLink("Unlock", "UnlockQualiDoc", new { id = item.intid })
+                                                                        }
+                                                                    }
+
+                                                                }
+                                                            }
+                                                            else if (item.bitCompDocP == false && item.bitCompDocT == false)
+                                                            {
+                                                                @Html.Label("Upload compulsory doc")
+                                                            }
+                                                        </td>
+                                                        <td>
+                                                            @if (item.bittempcontdetails == true && item.bitcontdetails == true)
+                                                            {
+                                                                if (item.bitProfileComplete == false)
+                                                                {
+                                                                    @Html.ActionLink("Upload Photo", "ProfilePic", new { id = item.intid })
+                                                                }
+
+                                                                else if (item.bitProfileComplete == true)
+                                                                {
+                                                                    @Html.Label("Completed")
+                                                                    <br />
+                                                                    @Html.ActionLink("View", "viewProfile", new { id = item.intid })
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                @Html.Label("Upload qualification doc")
+                                                            }
+                                                        </td>
+                                    }
+                                }
+                                else
+                                {
+                                    <td>
+                                        @Html.Label("You are not authorised to Upload")
+                                    </td>
+
+                                    }
+                                }
+                                </tr>
+                        }
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,64 @@
+﻿@model HRM.Models.tblDesiQualification
+@{
+    ViewBag.Title = "AddNew";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+@using (Html.BeginForm("AddNew", "Master", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <br />
+    <div class="form-horizontal">
+        @if (TempData["Success"] != null)
+        {
+            <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+        }
+        <h4 class="col-md-10" style="color:black">Add New Master Qualification</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.Label("Select designation", htmlAttributes: new { @class = "control-label col-md-8" })
+            <div class="col-md-10">
+                @if (ViewBag.DesiList != null)
+                {
+                    @Html.DropDownListFor(model => model.fk_desiid, ViewBag.DesiList as IEnumerable<SelectListItem>, "Select designation", htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.fk_desiid, "", new { @class = "text-danger" })
+                }
+                else
+                {
+
+                }
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.vchQualification, htmlAttributes: new { @class = "control-label col-md-8" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.vchQualification, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.vchQualification, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save Record" class="btn btn-primary" />
+                <div align="center">
+                    <a href="@Url.Action("ViewDesiQuali", "Master")">
+                        <div class="btn btn-primary">
+                            <h6 align="center" class="fas fa-hand-point-right">
+                                View all qualification
+                            </h6>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+}
+

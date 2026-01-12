@@ -1,0 +1,74 @@
+﻿@model IEnumerable<HRM.Models.tblUserMaster>
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "ViewAllUserPermissionEmp";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    }
+    <div class="card">
+        <div class="card-body">
+            <h3 class="card-title">View all user permission pannel</h3>
+            <div align="right">
+                <a href="@Url.Action("AssignNewUserPermission", "UserPermission")">
+                    <div class="btn btn-success">
+                        <h6 align="center" class="fas fa-hand-point-right">
+                            Click here add new user permission.
+                        </h6>
+                    </div>
+                </a>
+            </div>
+            <div class="table">
+                @if (TempData["Error"] != null)
+                {
+                    <p class="alert alert-danger" id="errormsg" align="center">@TempData["Error"]</p>
+                }
+                @if (TempData["Success"] != null)
+                {
+                    <p class="alert alert-success" id="successMessage" align="center">@TempData["Success"]</p>
+                }
+                <table class="table table-sm col-12">
+                    <thead class="bg-success text-white col-12">
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.vchUsername)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.vchcreatedby)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.dtcreated)
+                            </th>
+
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="border border-success">
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.vchUsername)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.vchcreatedby)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.dtcreated)
+                                </td>
+
+                                <td>
+                                    @Html.ActionLink("Edit", "EditUserPermission", new { id = item.intid }) &nbsp;&nbsp;&nbsp;
+                                    @Html.ActionLink("Delete", "DeleteUserPermission", new { id = item.intid })
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+     Html.RenderAction("_SessionError1", "Home");
+}

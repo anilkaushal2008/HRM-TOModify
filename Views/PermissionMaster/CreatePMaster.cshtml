@@ -1,0 +1,76 @@
+﻿@model HRM.Models.tblPermissionMaster
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "CreatePMaster";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+        Html.EnableClientValidation(true);
+    }
+
+
+    using (Html.BeginForm())
+    {
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <br />
+        <h3>Create permission master panel</h3>
+        <hr />
+        <div class="form-body">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.fk_GName, htmlAttributes: new { @class = "control-label col-md-8" })
+                <div class="col-md-8">
+                    @if (ViewBag.GpName != null)
+                    {
+                        @Html.DropDownListFor(model => model.fk_GName, ViewBag.GpName as SelectList, "Select Group Name", htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.fk_GName, "", new { @class = "text-danger" })
+                    }
+                    else
+                    {
+                        @Html.ValidationMessageFor(model => model.fk_GName, "", new { @class = "text-danger" })
+                    }
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.vchPermissionName, htmlAttributes: new { @class = "control-label col-md-8" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.vchPermissionName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.vchPermissionName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                    <div align="center">
+                        @{ string ViewAllPMaster = Session["ViewPerMas"].ToString();
+                            if (ViewAllPMaster == "True")
+                            {
+                                <a href="@Url.Action("ViewALLPMaster", "PermissionMaster")">
+                                    <div class="btn btn-primary">
+                                        <h6 align="center" class="fas fa-hand-point-right">
+                                            View permission master
+                                        </h6>
+                                    </div>
+                                </a>
+                            }
+                            }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+                                }
+                            }
+                            else
+                            {
+                                Html.RenderAction("_SessionError1", "Home");
+                            }
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+}

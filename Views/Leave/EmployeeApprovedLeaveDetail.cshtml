@@ -1,0 +1,177 @@
+﻿@model HRM.Models.tblLeaveApplication
+@using HRM.Models
+@using System.Data
+@using System.Collections
+@using System.Web
+@{
+    // 1. LINK TO THE MASTER LAYOUT
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Leave Application Detail";
+
+    // 2. EASY LINK CONFIGURATION
+    var historyLink = Url.Action("AllLeave", "Leave");
+}
+
+@if (Session["Ename"] != null)
+{
+    <style>
+        /* Specific Detail View Hierarchy */
+        .modern-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 25px;
+        }
+
+        .detail-header {
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            padding: 20px 30px;
+            color: white;
+        }
+
+        /* Bold Titles, Bit Small Information Text */
+        .info-label {
+            font-size: 0.88rem !important;
+            font-weight: 700 !important;
+            text-transform: uppercase;
+            color: var(--text-main);
+            letter-spacing: 0.5px;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            font-weight: 500;
+            color: var(--text-muted);
+            font-size: 0.82rem !important;
+        }
+
+        /* Dark Mode Consistency for labels/values */
+        [data-theme="dark"] .info-label {
+            color: var(--text-main) !important;
+        }
+
+        [data-theme="dark"] .info-value {
+            color: var(--text-muted) !important;
+        }
+
+        .approval-strip {
+            border-left: 4px solid var(--accent);
+            background: rgba(0,0,0,0.02);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+
+        .status-badge {
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+        }
+
+        [data-theme="dark"] .approval-strip {
+            background: rgba(255,255,255,0.03);
+        }
+
+        [data-theme="dark"] .bg-light {
+            background-color: rgba(255,255,255,0.05) !important;
+        }
+
+        [data-theme="dark"] .text-dark {
+            color: var(--text-main) !important;
+        }
+    </style>
+
+    <div class="mb-4">
+        <h3 class="font-weight-bold">Application Record</h3>
+        <p class="text-muted small">Viewing details for Leave ID: #@Model.unID</p>
+    </div>
+
+    <!-- REQUEST OVERVIEW -->
+    <div class="modern-card">
+        <div class="detail-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0 font-weight-bold"><i class="fas fa-file-alt mr-2"></i>Overview</h5>
+            <span class="badge badge-light px-3 py-2 rounded-pill" style="color: #6366f1; font-weight: 800;">ID: #@Model.unID</span>
+        </div>
+        <div class="p-4">
+            <div class="row">
+                <div class="col-md-3 mb-3">
+                    <span class="info-label">Date From</span>
+                    <span class="info-value">@Model.dtStartFrom.ToString("dd MMM yyyy")</span>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <span class="info-label">Date To</span>
+                    <span class="info-value">@Model.dtEndDate.ToString("dd MMM yyyy")</span>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <span class="info-label">Duration</span>
+                    <span class="info-value text-primary font-weight-bold">@Model.decdaysRequest Days</span>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <span class="info-label">Current Status</span>
+                    <span class="status-badge badge-primary">@Model.vchStatus</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- APPROVAL HISTORY -->
+    <div class="modern-card">
+        <div class="p-4 border-bottom bg-light">
+            <h5 class="mb-0 font-weight-bold text-dark">
+                <i class="fas fa-check-double mr-2 text-success"></i>Approval Lifecycle
+            </h5>
+        </div>
+        <div class="p-4">
+            @{
+                List<tblLeaveApplicationDetail> newList = ViewBag.DetailLeave;
+                if (newList != null && newList.Count > 0)
+                {
+                    foreach (var data in newList)
+                    {
+                        <div class="approval-strip">
+                            <div class="row align-items-center">
+                                <div class="col-md-4">
+                                    <span class="info-label">Processed By</span>
+                                    <span class="info-value">@data.vchApprovedBy</span>
+                                </div>
+                                <div class="col-md-4 text-center">
+                                    <span class="info-label">Decision</span>
+                                    <span class="status-badge @(data.vchCurrentStatus == "Rejected" ? "badge-danger" : "badge-success")">
+                                        @data.vchCurrentStatus
+                                    </span>
+                                </div>
+                                <div class="col-md-4 text-md-right">
+                                    <span class="info-label">Action Date</span>
+                                    <span class="info-value small">@data.dtApproved</span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="text-center text-muted p-5">
+                        <i class="fas fa-clock fa-3x mb-3 opacity-20"></i>
+                        <p class="mb-0">No approval history available for this record yet.</p>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+
+    <!-- NAVIGATION FOOTER -->
+    <div class="text-center mt-4 mb-5">
+        <a class="btn btn-outline-primary rounded-pill px-5 font-weight-bold" href="@historyLink">
+            <i class="fas fa-arrow-left mr-2"></i> Return to Leave History
+        </a>
+    </div>
+}
+else
+{
+    @Html.Action("_SessionError", "NewEmployeeLogin")
+}

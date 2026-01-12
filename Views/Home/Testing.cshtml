@@ -1,0 +1,70 @@
+﻿@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "Testing";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    }
+    <br />
+    <br />
+
+    <div class="box" align="center">
+        <h4>Testing Link:</h4>
+        <br />
+        <a href="@Url.Action("Testing", "Home")" class="btn btn-primary" value="">GetIP</a>
+        <br />
+        <br />
+        @{ if (ViewBag.ClientIp != null)
+            {
+              <label>ClientIp :&nbsp;&nbsp;@ViewBag.ClientIp</label><br />
+            }
+            else
+            {
+              <label> ClientIp :&nbsp;&nbsp;Null </label><br />
+            }
+            if (ViewBag.PCName != null)
+            {
+              <label>PCName :&nbsp;&nbsp;@ViewBag.PCName</label><br />
+            }
+            else
+            {
+              <label>PCName :&nbsp; &nbsp; Null </label><br />
+            }
+            if (ViewBag.HostName != null)
+            {
+              <label>HostName :&nbsp;&nbsp;@ViewBag.HostName</label><br />
+            }
+            else
+            {
+              <label>HostName :&nbsp; &nbsp; Null </label><br />
+            }
+            if (ViewBag.RemoteUser != null)
+            {
+              <label>RemoteUser :&nbsp;&nbsp;@ViewBag.RemoteUser</label><br />
+            }
+            else
+            {
+                 <label>InstanceID :&nbsp; &nbsp; Null </label><br />
+            }
+            if (ViewBag.InstanceID != null)
+            {
+              <label>InstanceID :&nbsp;&nbsp;@ViewBag.InstanceID</label><br />
+            }
+            else
+            {
+              <label>InstanceID :&nbsp; &nbsp; Null </label><br />
+            }
+            if (ViewBag.HostAddress != null)
+            {
+              <label>HostAddress :&nbsp;&nbsp;@ViewBag.HostAddress</label><br />
+            }
+            else
+            {
+              <label>HostAddress :&nbsp; &nbsp; Null </label><br />
+                }
+
+            }
+    </div>}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}

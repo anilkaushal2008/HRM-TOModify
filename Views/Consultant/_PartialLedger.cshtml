@@ -1,0 +1,35 @@
+﻿@model HRM.Models.UploadLedgerViewModel
+    @{ 
+        Layout = "";
+    }
+<div class="modal fade" id="_partialLedger" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Upload Ledger</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>           
+            <div class="modal-body">
+                @using (Html.BeginForm("uploadLedger", "Consultant", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+        @Html.HiddenFor(m => m.empid)
+                    <div class="form-group">
+                        @Html.Label("Selected year")
+                        @Html.EditorFor(m => Model.DocMasName, new { htmlAttributes = new { @id = "filename", @class = "form-control" } })
+                        @Html.LabelFor(m => m.newpdfFile, "Select File")
+                        @*<input type="file" name="UploadedFile" class="form-control" />*@
+                        @Html.TextBoxFor(model => model.newpdfFile, "", new { @type = "file", @class = "form-control", @id = "pdffile" })
+                        @Html.ValidationMessageFor(model => model.newpdfFile, "", new { @class = "text-danger" })
+                    </div>
+                 <button type="submit" class="btn btn-success" style="color:black">Upload</button>}
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+<script src="~/Scripts/jqueryui/jquery-ui.js"></script>

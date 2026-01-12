@@ -1,0 +1,95 @@
+﻿@model IEnumerable<HRM.Models.tblDeptMas>
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "ViewAllDept";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+        Html.EnableClientValidation(true);
+    }
+
+      <div class="card">
+            <div class="card-body">
+                @if (TempData["Success"] != null)
+                {
+                    <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+                }
+                <h3 class="card-title">All Department Master View</h3>
+                    @{ string Dept = Session["EditDepartmentMas"].ToString();
+                        if (Dept == "True")
+                        {
+                            <div align="right">
+                                <a href="@Url.Action("Department", "Master")">
+                                    <div class="btn btn-primary">
+                                        <h6 align="center" class="fas fa-hand-point-right"></h6>
+                                        <h6 align="center" class="fa fa-plus">
+                                            New Department
+                                        </h6>
+                                    </div>
+                                </a>
+                            </div>
+                        }
+                    }
+                
+                <div class="table">
+                    <table class="table table-sm col-12">
+                        <thead class="bg-primary text-white col-12">
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.vchdeptname)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.vchcreatedby)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.dtcreated)
+                                </th>
+                                @{ string Dept1 = Session["EditDepartmentMas"].ToString();
+                                    if (Dept1 == "True")
+                                    {
+                                        <th>Action</th>
+                                    }
+                                }
+                            </tr>
+                        </thead>
+                        @if (TempData["Empty"] != null)
+                        {
+                            <p class="alert alert-danger" id="successMessage">@TempData["Success"]</p>
+                        }
+                        else
+                        {
+                            <tbody class="border border-primary">
+
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.vchdeptname)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.vchcreatedby)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.dtcreated)
+                                        </td>
+                                        @{ string Dept2 = Session["EditDepartmentMas"].ToString();
+                                            if (Dept2 == "True")
+                                            {
+                                                <td>
+                                                    @Html.ActionLink("Edit", "EditDept", new { id = item.intid })
+                                                </td>
+                                            }
+                                        }
+                                    </tr>
+
+                                }
+                            </tbody>
+                        }
+                    </table>
+                </div>
+            </div>
+        </div>
+}
+else
+{
+Html.RenderAction("_SessionError1", "Home");
+}

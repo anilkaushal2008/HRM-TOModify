@@ -1,0 +1,108 @@
+﻿@model HRM.Models.TemplateMasDetailViewModelFemale
+@{
+    ViewBag.Title = "ExpLetterFemale";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+@if (Session["id"] != null)
+{
+    using (Html.BeginForm("ExpLetterFemale", "Template", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-horizontal">
+            @if (TempData["Success"] != null)
+            {
+                <p align="center" class="alert alert-success" id="Empty">@TempData["Success"]</p>
+            }
+            @if (TempData["Error"] != null)
+            {
+                <p align="center" class="alert alert-danger" id="Empty">@TempData["Error"]</p>
+            }
+            <div class="col-lg-12">
+                <br />
+                <hr />
+                @Html.HiddenFor(m => m.fk_letterid)
+                <h3 style="color:black">New Experience Letter For Female Employee</h3>
+                <div class="row col-12">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Name)<span style="color:crimson">*</span>
+                            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @id = "empname" } })
+                            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.spouse)<span style="color:crimson">*</span>
+                            @Html.EditorFor(model => model.spouse, new { htmlAttributes = new { @id = "spouse", @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.spouse, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row col-12">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Department)<span style="color:red">*</span>
+                            @Html.DropDownListFor(model => model.Department, ViewBag.DeptList as SelectList, "Select department", htmlAttributes: new { @id = "selectedDpt", @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Department, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Sdate)<span style="color:crimson">*</span>
+                            @Html.EditorFor(model => model.Sdate, new { htmlAttributes = new { @type = "date", @class = "form-control", @id = "Sdate" } })
+                            @Html.ValidationMessageFor(model => model.Sdate, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row col-12">
+                    <div class="col-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Edate)<span style="color:crimson">*</span>
+                            @Html.EditorFor(model => model.Edate, new { htmlAttributes = new { @type = "date", @class = "form-control", @id = "Sdate" } })
+                            @Html.ValidationMessageFor(model => model.Edate, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Rdate)<span style="color:crimson">*</span>
+                            @Html.EditorFor(model => model.Rdate, new { htmlAttributes = new { @type = "date", @class = "form-control", @id = "Sdate" } })
+                            @Html.ValidationMessageFor(model => model.Rdate, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row col-12">
+                    <div class="col-12">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.LetterContent, htmlAttributes: new { @class = "control-control" })
+                            @Html.TextAreaFor(model => model.LetterContent, htmlAttributes: new { @class = "form-control", @rows = "9", @size = "1500" })
+                            @Html.ValidationMessageFor(model => model.LetterContent, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12" align="center">
+                    <div class="form-group">
+                        <input type="submit" value="Save" class="btn btn-success" />
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <a href="@Url.Action("NewLetter", "Template")" class="btn btn-outline-danger">Cancel</a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+@*query for if permanent address is same as contact address(on check box click)*@
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/Scripts/jquery-ui.js"></script>
+}
+
+

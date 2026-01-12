@@ -1,0 +1,84 @@
+﻿@model HRM.Models.PrintDNBSlipVM
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Fee Slip</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 14px;
+            color: #222;
+            margin: 40px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+            .header img {
+                width: 100px;
+                height: auto;
+                margin-bottom: 10px;
+            }
+
+          /*  .header h2 {
+                margin: 0;
+                font-size: 22px;
+                font-weight: 700;
+            }*/
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+            .table th, .table td {
+                border: 1px solid #ddd;
+                padding: 8px;
+                text-align: left;
+            }
+
+            .table th {
+                background-color: #f8f8f8;
+                width: 35%;
+            }
+
+        .footer {
+            margin-top: 30px;
+            text-align: right;
+            font-style: italic;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <!-- Replace logo path below -->
+        <img src="~/Content/assets/images/logo123.jpg" alt="Institution Logo" />
+        <h2>DNB Fee Payment Slip</h2>
+    </div>
+
+    <table class="table">
+        <tr><th>Student Name</th><td>@Model.vchName</td></tr>
+        <tr><th>Employee Code. Code</th><td>@Model.vchEmpFcode</td></tr>       
+        <tr><th>Amount</th><td>@Model.Amount</td></tr>
+        <tr><th>Payable To</th><td>@Model.PayableTo</td></tr>
+        <tr><th>Payment Ref No</th><td>@Model.PaymentReferenceNo</td></tr>
+        <tr><th>Payment Mode</th><td>@Model.PaymentMode</td></tr>
+        <tr><th>Payment Date</th><td>@Model.PaymentDate.Value.ToString("dd/MM/yyyy")</td></tr>
+        <tr><th>Payment Date</th><td>@Model.SubmittedDate.Value.ToString("dd/MM/yyyy")</td></tr>
+        <tr><th>Verified By</th><td>@Model.VerifiedBy</td></tr>
+        <tr><th>Remarks</th><td>@Model.VerifiedRemarks</td></tr>
+        <tr><th>Status</th><td><strong>@Model.Status</strong></td></tr>
+    </table>
+
+    <div class="footer" align="center">
+        *** This is a system-generated slip. Signature not required. ***
+        <br />
+        Printed on @DateTime.Now.ToString("dd-MMM-yyyy hh:mm tt")
+    </div>
+</body>
+</html>

@@ -1,0 +1,270 @@
+﻿@model HRM.Models.tblEmpDetails
+
+@{
+    ViewBag.Title = "ViewDetails";
+    Layout = "~/Views/Shared/_layout_EmpUserLogin.cshtml";
+}
+
+<h2>ViewDetails</h2>
+
+<div>
+    <hr />
+    <div class="card" align="center">
+        <div class="card-title" style="font-size:x-large">Personal details view</div>
+        <div align="right">
+            <a href="@Url.Action("EmpDetailActions", "NewEmployeeLogin",routeValues:new { @id = Model.fk_intempid })">
+                <div class="btn btn-success">
+                    <h6 align="center" class="fas fa-hand-point-right">
+                        Go Back
+                    </h6>
+                </div>
+            </a>
+        </div>
+        <hr />
+        <dl class="dl-horizontal">
+            <div class="row">
+                <div class="col-md-4">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.tblTitleMas.vchname)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.tblTitleMas.vchname)
+                    </dd>
+
+                </div>
+                <div class="col-md-4">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.vchfname)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.vchfname)
+                    </dd>
+                </div>
+                <div class="col-md-4">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.vchmname)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.vchmname)
+                    </dd>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.vchlname)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.vchlname)
+                    </dd>
+                </div>
+                <div class="col-md-4">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.vchsex)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.vchsex)
+                    </dd>
+                </div>
+                <div class="col-md-4">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.vchmaritalststus)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.vchmaritalststus)
+                    </dd>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.dtDob)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.dtDob)
+                    </dd>
+                </div>
+                <div class="col-md-4">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.intage)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.intage)
+                    </dd>
+                </div>
+                <div class="col-md-4">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.vchspouse)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.vchspouse)
+                    </dd>
+
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.vchmothername)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.vchmothername)
+                    </dd>
+                </div>
+                <div class="col-md-4">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.vchFatherName)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.vchFatherName)
+                    </dd>
+                </div>
+                <div class="col-md-4">
+                    <dt>
+                        Nominee
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.vchNominee)
+                    </dd>
+                </div>
+                <div class="col-md-4">
+                    <dt>
+                        Relation
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.vchRelation)
+                    </dd>
+                </div>
+                <div class="col-md-4">
+                    <dt>
+                        Temporary employee code
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.vchEmpTcode)
+                    </dd>
+                </div>
+            </div>
+            <label style="color:black" align="left">Temporary contact address </label>
+            <br />
+            <div class="row">
+                <div class="col-md-4">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.vchtaddress)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.vchtaddress)
+                    </dd>
+                </div>
+                <div class="col-md-4">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.vchtstate)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.vchtstate)
+                    </dd>
+                </div>
+                <div class="col-md-4">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.vchtcity)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.vchtcity)
+                    </dd>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-md-4">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.inttpin)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.inttpin)
+                    </dd>
+                </div>
+                <div class="col-md-4">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.vchtmobile)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.vchtmobile)
+                    </dd>
+                </div>
+            </div>
+            <label style="color:black">Permanent contact address </label>
+            <br />
+            <div class="row">
+                <div class="col-md-4">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.vchpaddress)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.vchpaddress)
+                    </dd>
+                </div>
+                <div class="col-md-4">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.vchpstate)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.vchpstate)
+                    </dd>
+                </div>
+                <div class="col-md-4">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.vchpcity)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.vchpcity)
+                    </dd>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.intppin)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.intppin)
+                    </dd>
+                </div>
+                <div class="col-md-4">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.vchpmobile)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.vchpmobile)
+                    </dd>
+                </div>
+            </div>
+        </dl>
+    </div>
+</div>
+

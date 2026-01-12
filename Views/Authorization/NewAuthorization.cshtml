@@ -1,0 +1,85 @@
+﻿@model IEnumerable<HRM.Models.tblEmpAssesmentMas>
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "NewAuthorization";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    }
+
+    <div class="card">
+        <div class="card-body">
+            <h3 class="card-title">Send Authorization View</h3>
+            @if (TempData["Success"] != null)
+            {
+                <p class="alert alert-success" id="success" align="center">@TempData["Success"]</p>
+            }
+            <div class="table-responsive" style="font-size:90%">
+                <table class="table table-sm bg-transparent col-12" style="font-size:90%">
+                    <thead class="bg-success text-white col-12">
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.vchName)
+                            </th>
+                            <th>
+                                Emp Tcode
+                            <th>
+                                @Html.DisplayNameFor(model => model.tblDeptMas.vchdeptname)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.tblDesignationMas.vchdesignation)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.dtDOJ)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.intsalary)
+                            </th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="border border-success">
+                        @if (TempData["Empty"] != null)
+                        {
+                            <p class="alert alert-danger" align="center" id="empty">@TempData["Empty"]</p>
+                        }
+                        else
+                        {
+                            foreach (var item in Model)
+                            {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.vchName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.vchEmpTcode)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.tblDeptMas.vchdeptname)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.tblDesignationMas.vchdesignation)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.dtDOJ)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.intsalary)
+                                </td>
+                                <td>
+                                    @Html.ActionLink("AssignAuthorization", "SetAuthorization", new { id = item.intid })
+
+                                </td>
+                            </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+

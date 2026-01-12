@@ -1,0 +1,240 @@
+﻿@model HRM.Models.tblLeaveApplication
+@{ Layout = null; }
+
+<div class="modal fade" id="leaveDetailsModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title">Leave Details</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="leaveDetailsForm" method="post" action="/Dashboard/SubmitLeaveQuickAction">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="unID" value="@Model.unID" />
+                    <div class="row">
+                        <div class="col-md-10">
+                            <h4 style="color:orangered;font-weight:500">Leave request date</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label>From Date:</label>
+                            <input type="text" id="dtfrom" class="form-control" value="@ViewBag.dtFrom" disabled />
+                        </div>
+                        <div class="col-md-3">
+                            <label>To Date:</label>
+                            <input type="text" class="form-control" value="@ViewBag.dtTo" disabled />
+                        </div>
+                        <div class="col-md-3">
+                            <label>Type:</label>
+                            <input type="text" class="form-control" value="@ViewBag.Type" disabled />
+                        </div>
+                    </div>
+                    @if (ViewBag.LeaveCounter != null)
+                    {
+                        var leavecheck = ViewBag.LeaveCounter as IEnumerable<dynamic>;
+                        if (leavecheck != null)
+                        {
+                            <hr />
+                            <h4 style="color: orangered; font-weight: 500" align="center">Employee leave history</h4>
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            Leave Type
+                                        </th>&nbsp;&nbsp;&nbsp;&nbsp;
+
+                                        <th>
+                                            Consumed count
+                                        </th>
+                                        <th>
+                                            Approval Status
+                                        </th>
+                                    </tr>
+                                </thead>
+                                @foreach (var item in leavecheck)
+                                {
+                                    <tbody class="border-primary">
+                                    <td>
+                                        @item.LeaveType
+                                    </td>
+                                    <td>
+                                        @item.ConsumedCount
+                                    </td>
+                                    <td>
+                                        @if (item.IsHalfYearReached == true)
+                                        {
+                                            <span class="badge bg-warning text-dark">Limit Reached</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-success text-white">Can approve</span>
+                                        }
+                                    </td>
+                                 </tbody>
+                                }
+                            </table>
+                        }
+                    }
+                    <div class="row" align="center">
+                        <fieldset class="radio col-12">
+                            <div class="col-4">
+                                <label class="radio">
+                                    <span style="color:black;font-weight:800">SameApproved?</span>
+                                    @Html.RadioButtonFor(Model => Model.vchApprovalType,"Same", htmlAttributes: new { id = "same", @class = "radio1" })
+                                </label>
+                            </div>
+                            <div class="col-4">
+                                <label class="radio">
+                                    <span style="color:black;font-weight:800">
+                                        Partially?
+                                    </span>
+                                    @Html.RadioButtonFor(Model => Model.vchApprovalType, "Partial", htmlAttributes: new { id = "partial", @class = "radio2" })
+                                </label>
+                            </div>
+                            <div class="col-4">
+                                <label class="radio">
+                                    <span style="color:black;font-weight:800">
+                                        Rejected?
+                                    </span>
+                                    @Html.RadioButtonFor(Model => Model.vchApprovalType, "Rejected", htmlAttributes: new { id = "rejected", @class = "radio3" })
+                                </label>
+                                @Html.ValidationMessageFor(model => model.vchApprovalType,"", new { @class = "text-danger" })
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="row" id="partialaction" hidden="hidden">
+                        <div class="row col-12">
+                            <div class="col-12">
+                                <hr />
+                                <div class="form-group">
+                                    <div class="col-md-10">
+                                        <h4 style="color:black;font-weight:bold">Partial approval option</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row col-12">
+                            <div class="form-group">
+                                @Html.Label("Select type", htmlAttributes: new { @class = "control-label col-md-8" })
+                                <div class="col-md-10">
+                                    @Html.DropDownListFor(model => model.fk_LeaveType, new SelectList(ViewBag.Types, "Text", "Value"), htmlAttributes: new { @id = "ltype", @class = "form-control" })
+                                    @*@Html.ValidationMessageFor(model => model.fk_LeaveType, "", new { @class = "text-danger" })*@
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    @Html.Label("New date range", htmlAttributes: new { @class = "control-label col-6" })
+                                    <div class="col-md-10">
+                                        @Html.TextBoxFor(m => m.appovedDateRange, "", htmlAttributes: new { @type = "text", @id = "dtrange", name = "dtraneguser", @class = "form-control" })<br />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    @Html.Label("Total days", htmlAttributes: new { @class = "control-label col-6" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.decdaysApproved, new { htmlAttributes = new { @class = "form-control", @id = "totaldays", @readonly = "readonly" } })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+<script src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+<script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<script type="text/javascript">
+
+    $("#partial").click(function () {
+        if ($("#partial").is(":checked")) {
+            $("#partialaction").prop("hidden", false);
+            $("#remarks").prop("hidden", false);
+        }
+    });
+    $("#same").click(function () {
+        if ($("#same").is(":checked")) {
+            $("#partialaction").prop("hidden", true);
+            $("#remarks").prop("hidden", false);
+        }
+    });
+    $("#rejected").click(function () {
+        if ($("#rejected").is(":checked")) {
+            $("#partialaction").prop("hidden", true);
+            $("#remarks").prop("hidden", false);
+        }
+    });
+    $(function () {
+        var aajkidate = new Date();
+        var year = aajkidate.getFullYear();
+        // $document.ready(function () {
+        var mindate = (aajkidate.getDate() + 1);
+        var day = String(aajkidate.getDate()).padStart(2, '0');
+        //var day = mindate.getDate();
+        var month = ("0" + (aajkidate.getMonth() + 1)).slice(-2);
+        var year = aajkidate.getFullYear();
+        var newMidDate = formatDate(aajkidate);
+        var checkDate = $('#dtfrom').val(); //newMidDate;
+        var edate = '31/12/' + year;
+        $('input[id="dtrange"]').daterangepicker({
+            locale: {
+                format: 'DD/MM/YYYY'
+            },
+            startDate: moment(checkDate,'DD/MM/YYYY'),
+            endDate: moment(edate, 'DD/MM/YYYY'),
+            minDate: moment(checkDate, 'DD/MM/YYYY'),
+            maxDate: moment(edate, 'DD/MM/YYYY')
+            //,open: 'right'
+        },
+            function (start, end, label) {
+                //console.log("A new date selection was made: " + start.format('DD/MM/YYYY') + ' to ' + end.format('DD/MM/YYYY'));
+                var dayDifference = (end.diff(start, 'days') + 1);
+                //$("#totaldays").val(dayDifference);
+            }
+        );
+    });
+
+    $('#dtrange').on('apply.daterangepicker', function (ev, picker) {
+        var start = picker.startDate;
+        var end = picker.endDate;
+        var diffDays = end.diff(start, 'days') + 1; //Add 1 to include both start and end dates
+        // Display the result
+        // Display the result
+        var halfDay = 0.5;
+        var setZeroDiff = 0;
+        //check if leave type is half day
+        var getType = $("#ltype").find("option:selected").text();
+        if (getType == "HALF DAY") {
+            if (diffDays > 1) {
+                alert("Half day aplicable on same date, select same date and try again!")
+                $('#totaldays').val(setZeroDiff);
+            }
+            else {
+                $('#totaldays').val(halfDay);
+            }
+        }
+        else {
+            $('#totaldays').val(diffDays);
+        }
+    });
+    //Function to format the date as dd/mm/yyyy
+    function formatDate(mindate) {
+        let day = String(mindate.getDate()).padStart(2, '0');
+        let month = String(mindate.getMonth() + 1).padStart(2, '0'); //Months are zero-based
+        let year = mindate.getFullYear();
+        return day + '/' + month + '/' + year;
+    };
+</script>

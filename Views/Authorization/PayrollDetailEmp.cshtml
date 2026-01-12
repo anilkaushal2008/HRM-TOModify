@@ -1,0 +1,323 @@
+﻿@model HRM.Models.PayrollEmpModelView
+@using System.Web
+@using System.Web.Optimization
+
+@{
+    ViewBag.Title = "PayrollDetailEmp";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    Html.EnableClientValidation(true);
+}
+
+@if (Session["id"] != null)
+{
+    
+    using (Html.BeginForm("PayrollDetailEmp", "Authorization", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-horizontal">
+            <div class="col-lg-12">
+                <hr />
+                <h3 style="color:black">Employment Confirmation</h3>   
+                <div class="row col-12">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.AadharNo)<span style="color:crimson">*</span>
+                            @Html.EditorFor(model => model.AadharNo, new { htmlAttributes = new { @id = "aadhaarno", @class = "form-control", @readonly = "readonly" } })                        
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.fkBranch)<span style="color:crimson">*</span>
+                            @Html.DropDownListFor(model => model.fkBranch, ViewBag.Branch as SelectList, "Select branch", htmlAttributes: new { @id = "branch", @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.fkBranch, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                    <div class="row col-12">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.fk_position)<span style="color:crimson">*</span>
+                                @Html.DropDownListFor(model => model.fk_position, ViewBag.PosList as SelectList, "Select position", htmlAttributes: new { @id = "position", @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.fk_position, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.fk_titid)<span style="color:red">*</span>
+                                @Html.DropDownListFor(model => model.fk_titid, ViewBag.Title2 as SelectList, "Select title", htmlAttributes: new { @id = "selectedtitle", @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.fk_titid, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label>Employee Name<span style="color:crimson">*</span></label>
+                                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @id = "empname" } })
+                                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row col-12">
+                        <div class="col-3">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.salary)<span style="color:red">*</span>
+                                @Html.EditorFor(model => model.salary, new { htmlAttributes = new { @id = "salary", @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.salary, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label>Mobile<span style="color:crimson">*</span></label>
+                                @Html.EditorFor(model => model.vchMobile, new { htmlAttributes = new { @class = "form-control", @id = "vchmobile" } })
+                                @Html.ValidationMessageFor(model => model.vchMobile, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label>Employee code<span style="color:crimson">*</span></label>
+                                @Html.EditorFor(model => model.vchOldCode, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @id = "empoldcode" } })
+                                @Html.ValidationMessageFor(model => model.vchOldCode, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label>Gender<span style="color:crimson">*</span></label>
+                                @Html.EditorFor(model => model.vchgender, new { htmlAttributes = new { @class = "form-control", @id = "gender" } })
+                                @Html.ValidationMessageFor(model => model.vchgender, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row col-12">
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label>D.O.J(dd/mm/yyyy)<span style="color:crimson">*</span></label>
+                                @Html.EditorFor(model => model.DOJ, new { htmlAttributes = new { @class = "form-control", @type = "text", @readonly = "readonly" } })
+                                @Html.ValidationMessageFor(model => model.DOJ, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.fk_deptid)<span style="color:crimson">*</span>
+                                @Html.DropDownListFor(model => model.fk_deptid, ViewBag.DeptList as SelectList, "Select department", htmlAttributes: new { @id = "dptm", @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.fk_deptid, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.fk_desiid)<span style="color:crimson">*</span>
+                                <select class="form-control" id="designation" name="selecteddesi" required="required"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12" align="center">
+                        <div class="form-group">
+                            <h5 class="card-title" style="font-weight:bolder;color:black">Select Employee Type<span style="color:crimson">*</span></h5>
+                            <fieldset class="radio">
+                                <label class="radio">
+                                    @Html.RadioButtonFor(Model => Model.bitIsCorporateemp, "true", htmlAttributes: new { name = "checkyes", @class = "radio1" })
+                                    Is Corporate Employee
+                                </label><br />
+                                <label class="radio">
+                                    @Html.RadioButtonFor(Model => Model.bitIsCorporateemp, "false", htmlAttributes: new { name = "checkno", @class = "radio1" })
+                                    Is Unit Employee
+                                </label>
+                                @Html.ValidationMessageFor(model => model.bitIsCorporateemp, "", new { @class = "text-danger" })
+                            </fieldset>
+                        </div>
+                    </div>
+                    <div class="row col-12" align="center">
+                        <div class="form-group col-12" align="center">
+                            <input type="submit" value="Save" class="btn btn-success" /> &nbsp;&nbsp;
+                            <a href="@Url.Action("PayrollEmployee", "Authorization")" class="btn btn-danger">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    }
+
+}
+else
+                        {
+                            Html.RenderAction("_SessionError1", "Home");
+                        }
+
+                        @section Scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/Scripts/jquery-ui.js"></script>
+    <script type="text/javascript">
+    //function for select designationmas according to dept name
+        //function for select designationmas according to dept name
+        $("#dptm").change(function () {
+                                var deptid = parseInt($(this).val());
+                                if (!isNaN(deptid)) {
+                                    var selecteddesi = $('#designation');
+                                    selecteddesi.empty();
+                                    selecteddesi.append($("<option></option>").val('').html('Please wait ...'));
+                $.ajax({
+                                    url: '@Url.Action("DesiListSelect", "Authorization")',
+                    type: 'GET',
+                    dataType: 'json',
+                    data: { dept_id: deptid },
+                    success: function (result) {
+                                            selecteddesi.empty(); // Clear the please wait
+                                            selecteddesi.append($("<option></option>").val('').html('Select designation'));
+                        $.each(result, function (i, desi) {
+                                                selecteddesi.append($("<option></option>").val(desi.id).html(desi.designation));
+                                            });
+                                        },
+                    error: function () {
+                                            alert('Error!');
+                                        }
+                                    });
+                                }
+                            });
+
+        //calculate age using dob
+        $(document).ready(function () {
+
+                                var age = "";
+            $("#dtdob").datepicker({
+                                dateFormat: 'dd/MM/yy',
+                onSelect: function (value, ui) {
+                                        var aaj = new Date();
+                                        age = aaj.getFullYear() - ui.selectedYear;
+                    $("#txtage").val(age);
+                                    },
+                changeMonth: true,
+                changeYear: true,
+                yearRange: '1970:2022'
+
+            })
+        });
+        $("#getdate").datepicker({
+            dateFormat: 'dd/MM/yy',
+            onSelect: function (value, ui) {
+                var aaj = new Date();
+                var userdate = new Date($(this).val());
+                var today = aaj.getDate();
+                var finalSelected = userdate.getDate();
+                if (finalSelected > today) {
+                    //alert("greater  date");
+                    $("#dateRemarks").attr("hidden", true);
+                }
+                else if (finalSelected == today) {
+                    //alert("Equal date");
+                    $("#dateRemarks").attr("hidden", true);
+                }
+                else {
+                    //alert("Less date");
+                    $("#dateRemarks").attr("hidden", false);
+                }
+            }
+        });
+
+        //post function
+        @*var SaveEmp = function () {
+            var dept = $("#dptm option:selected").val().toString();
+            var desiid = $("#designation option:selected").val().toString();
+            var titid = $('#selectedtitle option:selected').val().toString();
+            var empname = $("#empname").val().toString();
+            var dtdoj = $("#dtdoj").val().toString();
+            var vchmobile = $("#vchmobile").val().toString();
+            var oldcode = $("#empoldcode").val().toString();
+            var gender = $("#gender").val().toString();
+            var pos = $("#position option:selected").val().toString();
+            var iscorporate = $(".radio1:checked").val();
+            if (titid != "") {
+                if (vchmobile != "") {
+                    if (pos != "Select position" && pos != "0") {
+                        if (dept != "Select department" && desiid != "") {
+                            if (iscorporate != undefined && iscorporate != "") {
+
+                                var depttid = ""
+                                var desiiid = ""
+                                var Fempname = ""
+                                var DOJ = ""
+                                var Foldcode = ""
+                                var Fgender = ""
+                                var Fmobile = ""
+                                var Empco = ""
+                                var position = ""
+                                var titleid=""
+
+                                $.ajax({
+                                    url: '@Url.Action("SaveEmp", "Authorization")',
+                                    type: "POST",
+                                    data: {
+                                        depttid: dept,
+                                        desiiid: desiid,
+                                        Fempname: empname,
+                                        DOJ: dtdoj,
+                                        Foldcode: oldcode,
+                                        Fgender: gender,
+                                        Fmobile: vchmobile,
+                                        Empco: iscorporate,
+                                        position: pos,
+                                        titleid: titid
+                                    },
+                                    success: function (result) {
+                                        //code here
+                                        if (result.success == "1") {
+                                            alert(result.output1);
+                                            window.location = "/Authorization/PayrollEmployee";
+                                        }
+                                        else if (result.success == "2") {
+                                            alert(result.output2);
+                                        }
+                                        else if (result.success == "3") {
+                                            alert(result.output3);
+                                        }
+                                        else if (result.success == "4") {
+                                            alert(result.output4);
+                                        }
+                                        else if (result.success == "5") {
+                                            alert(result.output5);
+                                        }
+                                        else if (result.success == "6") {
+                                            alert(result.output6);
+                                        }
+                                        else if (result.success == "7") {
+                                            alert(result.output7);
+                                        }
+                                        else if (result.success == "8") {
+                                            alert(result.output8);
+                                            location.href = "/Home/_SessionError1"
+                                        }
+                                        else if (result.success == "9") {
+                                            alert(result.output9);
+                                        }
+                                    }
+                                })
+                            }
+                            else {
+                                alert("Select Employee Type!")
+                                return true;
+                            }
+                        }
+                        else {
+                            alert("Select department")
+                            return true;
+                        }
+                    }
+                    else {
+                        alert("Select position")
+                        return true;
+                    }
+                }
+                else {
+                    alert("Enter mobile number")
+                    return true;
+                }
+            }
+            else {
+                alert("Select titile")
+                return true;
+            }
+        }*@
+    </script>
+}
+

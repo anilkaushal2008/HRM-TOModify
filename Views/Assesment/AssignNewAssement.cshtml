@@ -1,0 +1,334 @@
+﻿@model HRM.Models.tblEmpAssesmentMas
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "AssignNewAssement";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+        Html.EnableClientValidation(true);
+    }
+
+
+    using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.vchSkillStatus)
+<div class="form-horizontal" style="color:black">
+    <br />
+    <div class="col-12">
+        <h3 class="card-title" style="color:black">Add new assessment employee master view</h3>
+    </div>
+    @if (TempData["Success"] != null)
+    {
+        <p class="alert alert-success" id="successMessage" align="center">@TempData["Success"]</p>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <p class="alert alert-danger" id="errormsg" align="center">@TempData["Error"]</p>
+    }
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="col-12">
+        <div align="left" class="form-group">
+            <h5 class="card-title">Is replacement of existing employee<span style="color:red">*</span></h5>
+            <fieldset class="radio">
+                <label class="radio">
+                    Yes
+                    @Html.RadioButtonFor(model => model.bitIsReplacement, "true", htmlAttributes: new { @id = "Repyes" })
+                </label>
+                <label class="radio">
+                    No
+                    @Html.RadioButtonFor(model => model.bitIsReplacement, "false", htmlAttributes: new { @id = "Repno" })
+                </label>
+                @Html.ValidationMessageFor(model => model.bitIsReplacement, "", new { @class = "text-danger" })
+            </fieldset>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Enter replacement employee name", htmlAttributes: new { @calss = "control-label col-md-8" })
+                        @Html.EditorFor(model => model.vchRplcmntName, new { htmlAttributes = new { id = "ReplName", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.vchRplcmntName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <hr />
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.vchMobile, htmlAttributes: new { @class = "control-label col-md-10" })
+                    @Html.EditorFor(model => model.vchMobile, new { htmlAttributes = new { @id = "mobile", @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.vchMobile, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    @Html.Label("Search", htmlAttributes: new { @class = "control-label col-md-10" })
+                    <input type="button" class="btn btn-primary" id="btnsearch" value="Get EQ/IQ Marks" />
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="form-group" id="lbleq" style="color:black" hidden="hidden">EQ Result</label><br />
+                    <label id="eqresult" class="form-group"></label>
+                    @Html.HiddenFor(model => model.vchSkillStatus, new { htmlAttributes = new { @id = "skilldata" } })
+
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="form-group" id="lbliq" style="color:black" hidden="hidden">IQ Result</label><br />
+                    <label id="iqresult" class="form-group"></label>
+                </div>
+            </div>
+        </div>
+        <div id="mainEntry" hidden="hidden">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        @*@Html.Label("Adhaar No.", htmlAttributes: new { @class = "control-label col-md-8" })*@
+                        <label class="control-label col-md-10">Aadhaar(XXXX-XXXX-XXXX)</label>
+                        @Html.EditorFor(model => model.vchAadharNo, new { htmlAttributes = new { @class = "form-control", @required = "required", @placeholder = "Aadhaar number" } })
+                        @Html.ValidationMessageFor(model => model.vchAadharNo, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.vchName, htmlAttributes: new { @class = "control-label col-md-8" })
+                        @Html.EditorFor(model => model.vchName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.vchName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        @Html.Label("Experience(YY|MM)", htmlAttributes: new { @class = "control-label col-md-8" })
+                        @Html.EditorFor(model => model.decExperience, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.decExperience, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.vchWorkedArea, htmlAttributes: new { @class = "control-label col-md-8" })
+                        @Html.EditorFor(model => model.vchWorkedArea, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.vchWorkedArea, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Select position", htmlAttributes: new { @class = "control-label col-md-8" })
+                        @Html.DropDownListFor(model => model.fk_PositionId, new SelectList(ViewBag.AllPosition, "Text", "Value"), htmlAttributes: new { @id = "selectPos", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.fk_PositionId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.Label("Select department", htmlAttributes: new { @class = "control-label col-md-8" })
+                        @Html.DropDownListFor(model => model.fk_intdeptid, new SelectList(ViewBag.AllDept, "Text", "Value"), htmlAttributes: new { @id = "selDpt", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.fk_intdeptid, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="row" id="Manpower" hidden="hidden">              
+                <div class="col-md-6">
+                    <div class="form-group">
+                        
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="form-group" id="lblManPower" style="color:darkgreen;font-weight:bold">ManPower Result:</label>
+                        <label id="MpowerResult1" class="form-group"></label>
+                        <label id="MpowerResult2" class="form-group"></label><br />
+                        <label id="MpowerResult3" class="form-group"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-10" id="area" align="center">
+                @Html.Label("Select recruitment area if position Nursing/Medical Officer else select N/A", htmlAttributes: new { @class = "control-label col-md-8", @style = "font-weight:bold" })
+                <fieldset class="radio col-6" id="arearadio" style="color:black">
+                    <label class="radio" id="area">
+                        ICU/Emergency
+                        @Html.RadioButtonFor(model => model.vchArea, "ICU/Emergency", htmlAttributes: new { id = "icu", @class = "radio" })
+                    </label><br />
+                    <label class="radio">
+                        Floor/Ward
+                        @Html.RadioButtonFor(model => model.vchArea, "Floor/Ward", htmlAttributes: new { id = "ward", @class = "radio" })
+                    </label><br />
+                    <label class="radio">
+                        N/A
+                        @Html.RadioButtonFor(model => model.vchArea, "Floor/Ward", htmlAttributes: new { id = "ward", @class = "radio" })
+                    </label>
+                    @Html.ValidationMessageFor(model => model.vchArea, "", new { @class = "text-danger" })
+                </fieldset>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-12">
+                <input type="submit" value="Save Employee" id="btnsubmit" class="btn btn-primary" />
+                @{ if (Session["AssView"] != null)
+                    {
+                        string Asview = Session["AssView"].ToString();
+                        if (Asview == "True")
+                        {
+                            <div align="center">
+                                <a href="@Url.Action("ViewAllAssesment", "Assesment")">
+                                    <div class="btn btn-primary">
+                                        <h6 align="center" class="fas fa-hand-point-right">
+                                            View all new assessment employee
+                                        </h6>
+                                    </div>
+                                </a>
+                            </div>
+                        }
+                    }
+                }
+                <input type="hidden" id="Score" />
+            </div>
+        </div>
+    </div>
+</div>
+    }
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+
+
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script type="text/javascript">
+        $("#Repyes").click(function () {
+            if ($(this).is(':checked')) {
+                $("#ReplName").attr("disabled", false);
+            }
+            else {
+                    $("#ReplName").attr("disabled", true);
+                }
+        })
+        $("#Repno").click(function () {
+            if ($(this).is(':checked')) {
+                $("#ReplName").attr("disabled", true);
+            }
+            else {
+                $("#ReplName").attr("disabled", true);
+            }
+        })
+        $("#btnsearch").click(function () {
+            var mobileno = $("#mobile").val().toString();
+            if (mobileno != "" && mobileno != null) {
+                var URL = 'http://api.indusafrica.org/api/Result?mobileNumber=' + mobileno;
+                //var URL = 'http://192.168.1.13:8080/api/Result?mobileNumber=' + mobileno;
+                var EQOK = 1;
+                var IQOK = 1;
+                $.ajax({
+                    type: 'GET',
+                    url: URL,
+                    dataType: 'json',
+                    success: function (data) {
+                        $("#lbleq").attr("hidden", false)
+                        $("#lbliq").attr("hidden", false)
+                        $("#eqresult").html(data.EQResult);
+                        var s1 = data.EQResult;
+                        if (s1.search("Person Is Eligible") > 0) {
+                            $("#eqresult").css("color", "Green");
+                            EQOK = 0;
+                        }
+                        else {
+                            $("#eqresult").css("color", "Red");
+                            EQOK = 1;
+                        }
+                        $("#iqresult").html(data.IQResult);
+                        var s2 = data.IQResult;
+                        if (s2.search("Person is Eligible") > 0) {
+                            $("#btnsubmit").attr("hidden", false)
+                            $("#iqresult").css("color", "Green");
+                            IQOK = 0;
+                        }
+                        else {
+                            $("#iqresult").css("color", "Red");
+                            IQOK = 1;
+                        }
+
+                        if (EQOK == 0 && IQOK == 0) {
+                            $("#mainEntry").attr("hidden", false);
+                        }
+                        else {
+                            //$("#mainEntry").attr("hidden", true);
+                        }
+                        postfunction(data);
+                    },
+                    error: function (xhr, status, error) {
+                        alert(xhr.status);
+                        alert(status);
+                        alert(error);
+                        //alert("No result found against entered mobile number");
+                    }
+                });
+            }
+            else {
+                alert("Please enter mobile number");
+            }
+        });
+        function postfunction(data) {
+            var newresult = data.IQ;
+            if (newresult != "" && newresult != null) {
+                $.ajax({
+                    type: 'Post',
+                    url: '/Assesment/getyouSkill',
+                    dataType: 'json',
+                    data: {
+                        result: newresult
+                    },
+                    success: function (result) {                       
+                    }
+                })
+            }
+            else {
+
+            }
+        }
+        $("#selDpt").change(function () {
+            //check selecetd department manpower status
+            var dptID = $("#selDpt").val().toString();
+            if (dptID != "" && dptID != 0) {
+                $.ajax({
+                    type: 'GET',
+                    url: '/Assesment/DeptStatus',
+                    dataType: 'json',
+                    data: { dptID:dptID },
+                    success: function (result) {
+                        if (result.message != null) {
+                            $("#Manpower").css("color", "Red");
+                            $("#Manpower").attr("hidden", false)
+                            $("#MpowerResult1").html(result.message);
+                            $("#MpowerResult2").html(result.Param1);
+                            $("#MpowerResult3").html(result.Param2);
+
+                        }
+                        else {
+                            $("#Manpower").attr("hidden", true)
+                        }
+                    },
+                     error: function (xhr, status, error) {
+                        alert(xhr.status);
+                        alert(status);
+                        alert(error);
+                        //alert("No result found against entered mobile number");
+                    }
+                });
+            }
+            else {
+                alert("select department");
+                return false;
+            }
+        })
+
+    </script>
+
+}

@@ -1,0 +1,57 @@
+﻿@model HRM.Models.tblTitleMas
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "EditTitle";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+        Html.EnableClientValidation(true);
+    }
+
+ using (Html.BeginForm("EditTitle", "Master"))
+    {
+    @Html.AntiForgeryToken()
+    <br />
+    <div class="form-horizontal col-12">
+        @if (TempData["Success"] != null)
+        {
+            <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+        }
+        <h4>Edit Ttile Setup</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.intid)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.vchname, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.vchname, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.vchname, "", new { @class = "text-danger" })
+            </div>
+        </div><br />
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Update" class="btn btn-primary" />
+                @{ string TitleMas1 = Session["ViewTitle"].ToString();
+                    if (TitleMas1 == "True")
+                    {
+                        <div align="center">
+                            <a href="@Url.Action("ViewAllTitleMas", "Master")">
+                                <div class="btn btn-primary">
+                                    <h6 align="center" class="fas fa-hand-point-right">
+                                        View All Title
+                                    </h6>
+                                </div>
+                            </a>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+    }
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+

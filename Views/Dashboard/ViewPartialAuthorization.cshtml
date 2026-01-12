@@ -1,0 +1,162 @@
+﻿@model IEnumerable<HRM.Models.tblEmpAssesmentMas>
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "ViewPartialAuthorization";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    }
+    <link href="//cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <div class="card">
+        <div class="card-body">
+            @if (TempData["Success"] != null)
+            {
+                <p class="alert alert-success" id="tSuccess" align="center">@TempData["Success"]</p>
+            }
+            @if (TempData["Error"] != null)
+            {
+                <p class="alert alert-danger" id="tdanger" align="center">@TempData["Error"]</p>
+            }
+            @if (ViewBag.Success != null)
+            {
+                <p class="alert alert-success" id="Success" align="center">@ViewBag.Success</p>
+            }
+            @if (ViewBag.Error != null)
+            {
+                <p class="alert alert-danger" id="verror" align="center">@ViewBag.Error</p>
+            }
+            <h3 class="card-title">Partial Authorized Candidate View</h3>           
+                <table id="partialEmp" class="table table-sm" style="font-size:90%">
+                    <thead class="bg-danger text-white col-12">
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.vchName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.vchEmpFcode)
+                            </th>
+                            <th>
+                                Position
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.tblDeptMas.vchdeptname)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.tblDesignationMas.vchdesignation)
+                            </th>
+                            <th>
+                                DOJ
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.intsalary)
+                            </th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="border border-danger">
+                        @if (TempData["Empty"] != null)
+                        {
+                            <p class="alert alert-danger" id="empty" align="center">@TempData["Empty"]</p>
+                        }
+                        @if (TempData["Error"] != null)
+                        {
+                            <p class="alert alert-danger" id="empty" align="center">@TempData["Error"]</p>
+                        }
+                        else
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.vchName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.vchEmpFcode)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.tblPositionCategoryMas.vchPosCatName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.tblDeptMas.vchdeptname)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.tblDesignationMas.vchdesignation)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.dtDOJ)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.intsalary)
+                                    </td>
+                                    <td>
+                                        @if (Session["HrAdmin"] != null)
+                                        {
+                                            string isHR = Session["HrAdmin"].ToString();
+                                            if (isHR == "True")
+                                            {
+
+                                                @*@Html.ActionLink("UploadFinalDoc", "UploadFinalDoc", new { id = item.intid })*@
+                                                <a href="@Url.Action("UploadFinalDoc", "Dashboard", routeValues:new { @id = item.intid })">
+                                                    <div class="btn btn-success btn-sm">
+                                                        UpFinalDoc
+                                                    </div>
+                                                </a>
+                                            }
+                                        }
+
+                                        @if (Session["MainAdmin"] != null || Session["HrAdmin"] != null)
+                                        {
+
+                                            string MainAdmin = Session["MainAdmin"].ToString();
+                                            string isHR = Session["HrAdmin"].ToString();
+                                            string IsSessionDate = String.Empty;
+                                            if (Session["SessionDate"] != null)
+                                            {
+                                                IsSessionDate = Session["SessionDate"].ToString();
+                                            }
+                                            if (MainAdmin == "True" || isHR == "True" || IsSessionDate != null)
+                                            {
+                                                @*@Html.ActionLink("ViewFullDetail", "ViewHrFullDetails", "Authorization", new { id = item.intid })*@
+                                                <a href="@Url.Action("ViewHrFullDetails", "Authorization", routeValues: new { @id = item.intid })">
+                                                    <div class="btn btn-primary btn-sm">
+                                                        Detail
+                                                    </div>
+                                                </a>
+                                                if (Session["SessionDate"] != null)
+                                                {
+
+                                                }
+                                                else
+                                                {
+                                                    <a href="@Url.Action("MoreUpload", "Dashboard", routeValues: new { @id = item.intid })">
+                                                        <div class="btn btn-primary btn-sm">
+                                                            UploadMore
+                                                        </div>
+                                                    </a>
+                                                }
+                                            }
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+</div>
+    </div>
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#partialEmp').DataTable();
+        });
+    </script>
+}

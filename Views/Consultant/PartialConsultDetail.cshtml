@@ -1,0 +1,159 @@
+﻿@model HRM.Models.tblEmpDetails
+@{
+    Layout = "";
+}
+@if (Model != null)
+{
+    <dl class="dl-horizontal">
+        <h3 style="color: black; font-weight: bold; color: Highlight">Personal</h3>
+        <div class="row" style="color:black">
+            <div class="col-md-3">
+        <dt>
+            @Html.DisplayNameFor(model => model.vchfname)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.vchfname)
+        </dd>
+        </div>
+        <div class="col-md-3">
+        <dt>
+            @Html.DisplayNameFor(model => model.vchmname)
+        </dt>
+
+        <dd>
+            @{if (Model.vchmname != null)
+                {
+                    @Html.DisplayFor(model => model.vchmname)
+                }
+                else
+                {
+                    @Html.Label("N/A")
+                }
+            }
+
+        </dd>
+        </div>
+        <div class="col-md-3">
+        <dt>
+            @Html.DisplayNameFor(model => model.vchlname)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.vchlname)
+        </dd>
+        </div>
+        </div>
+        <div class="row" style="color:black">
+            <div class="col-md-3">
+        <dt>
+            @Html.DisplayNameFor(model => model.vchmothername)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.vchmothername)
+        </dd>
+        </div>
+        <div class="col-md-3">
+        <dt>
+            @Html.DisplayNameFor(model => model.vchFatherName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.vchFatherName)
+        </dd>
+        </div>
+        <div class="col-md-3">
+        <dt>
+            @Html.DisplayNameFor(model => model.intage)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.intage)
+        </dd>
+        </div>
+        <div class="col-md-3">
+        <dt>
+            @Html.DisplayNameFor(model => model.vchsex)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.vchsex)
+        </dd>
+        </div>
+        </div>
+
+        <div class="row" style="color:black">
+            <div class="col-md-3">
+        <dt>
+            @Html.DisplayNameFor(model => model.vchmaritalststus)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.vchmaritalststus)
+        </dd>
+        </div>
+        <div class="col-md-3">
+        <dt>
+            @Html.DisplayNameFor(model => model.dtDob)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.dtDob)
+        </dd>
+        </div>
+        <div class="col-md-3">
+        <dt>
+            Nominee
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.vchNominee)
+        </dd>
+        </div>
+        <div class="col-md-3">
+        <dt>
+            Relation
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.vchRelation)
+        </dd>
+        </div>
+        </div>
+
+        <div class="row" style="color:black">
+            <div class="col-md-3">
+        <dt>
+            @Html.DisplayNameFor(model => model.vchpmobile)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.vchpmobile)
+        </dd>
+        </div>
+        <div class="col-md-3">
+        <dt>
+            @Html.DisplayNameFor(model => model.vchpcity)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.vchpcity)
+        </dd>
+        </div>
+        <div class="col-md-3">
+        <dt>
+            @Html.DisplayNameFor(model => model.vchpstate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.vchpstate)
+        </dd>
+        </div>
+        <div class="col-md-3">
+        <dt>
+            @Html.DisplayNameFor(model => model.vchpaddress)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.vchpaddress)
+        </dd>
+        </div>
+        </div>
+    </dl>
+}
+else
+{
+
+}
+

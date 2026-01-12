@@ -1,0 +1,93 @@
+﻿
+@model HRM.Models.tblConsultantDocDetail
+@{
+    Layout = "";
+}
+<link href=@Url.Content("~/Content/dist/css/icons/font-awesome/css/fontawesome.min.css") rel="stylesheet" />
+
+<style>
+    .box {
+        width: 150px;
+        height: 150px;
+        margin: 10px;
+        float: none;
+        border: 5px solid #fff;
+        overflow: hidden;
+        position: relative;
+        text-align: center;
+        box-shadow: 0px 0px 5px #aaa;
+        display: block;
+        position: relative;
+    }
+
+    a.link {
+        /*background: url( Link image URL) center no-repeat;*/
+        background-size: 150px 150px;
+        display: inline-block;
+        text-decoration: none;
+        padding: 0;
+        text-indent: -999px;
+        width: 50px;
+        height: 50px;
+        position: relative;
+        top: -15px;
+        opacity: 0;
+        transition: opacity 0.1s 0s ease-in-out;
+    }
+
+    .mask {
+        width: 150px;
+        height: 150px;
+        position: absolute;
+        overflow: hidden;
+        top: 0;
+        left: 0;
+        opacity: 0;
+        overflow: visible;
+        border: 5px solid rgba(0,0,0,0.9);
+        box-sizing: border-box;
+        transition: all 0.4s ease-in-out;
+    }
+
+        .mask:hover {
+            opacity: 1;
+            border: 40px solid rgba(0,0,0,0.7);
+        }
+
+            .mask:hover a.link {
+                opacity: 1;
+                transition-delay: 0.3s;
+            }
+</style>
+@if (Session["descript"] != null)
+{
+    if (Model != null)
+    {
+        string filename = string.Empty;
+        filename = Model.vchFileName.ToString();
+
+        @*<div class="card" align="center">*@
+        <div class="card-body" align="center">
+            <h3 class="card-title" align="center" style="color: Highlight">Profile Picture</h3>
+            @*<div class="display">*@
+            @*Change path if publish on server*@
+            <div class="box" align="center" style="position:center">
+                <img width="150" height="150" src="~/Content/Uploads/@Url.Content(filename)" />
+                @*<img src="~/Content/Uploads/@Url.Content(filename)" alt="Avtar" class="fa-image" style="height: 150px; width: 150px;border:double;" />*@
+                <div class="mask" align="center">
+                    <a href="@Url.Content("~/Content/Uploads/" + filename)" target="_blank"><p style="color:black">View</p></a>
+                </div>
+            </div>
+        </div>
+    }
+
+    else
+    {
+
+    }
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+

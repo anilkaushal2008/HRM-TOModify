@@ -1,0 +1,61 @@
+﻿@model HRM.Models.SearchAadhaarModelView
+@{ Layout = "";}
+@{ if (Session["descript"] != null)
+    {
+        Html.EnableClientValidation(true);
+        using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+           <div class="form-horizontal col-12" style="color:black" align="center">
+                <div class="card-body" style="background-color:aliceblue">
+                    <div class="card-title" align="center">
+                        <h3 class="card-title" style="color:black;font-weight:bold">Search aadhaar number cycle view</h3>
+                    </div>
+                    <hr />
+                    <div class="row col-12">
+                        <div class="col-4">
+                            <div class="form-group">
+                                @*<div class="input-group rounded">
+                                    <input type="search" class="form-control rounded" placeholder="Enter aadhaar number" aria-label="Search" aria-describedby="search-addon" />
+                                    <span class="input-group-text border-0" id="search-addon">
+                                        <i class="fas fa-search"></i>
+                                    </span>
+                                </div>*@
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-12">Enter Aadhaar Number(XXXX-XXXX-XXXX)</label>
+                                @Html.EditorFor(model => model.aadhaarno, new { htmlAttributes = new { @class = "form-control", @required = "required", @placeholder = "Aadhaar number" } })
+                                @Html.ValidationMessageFor(model => model.aadhaarno, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" class="btn btn-outline-primary btn-block" value="Search" />
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            @*<div class="form-group">
+                                <label class="control-label col-md-10">Aadhaar(XXXX-XXXX-XXXX)</label>
+                                @Html.EditorFor(model => model.vchAadharNo, new { htmlAttributes = new { @class = "form-control", @required = "required", @placeholder = "Aadhaar number" } })
+                                @Html.ValidationMessageFor(model => model.vchAadharNo, "", new { @class = "text-danger" })
+                            </div>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+            }
+        }
+        else
+        {
+            Html.RenderAction("_SessionError1", "Home");
+        }
+    }
+    
+            @section Scripts {
+                <script src="~/Scripts/jquery.validate.js"></script>
+                <script src="~/Scripts/jquery.validate.min.js"></script>
+                <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+                <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+                <script src="~/Content/Select2/js/select2.js"></script>
+                <script src="~/Content/Select2/js/select2.min.js"></script>
+            }

@@ -1,0 +1,92 @@
+﻿@model IEnumerable<HRM.Models.tblPermissionMaster>
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "ViewAllPMaster";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    }
+
+
+    <div class="card">
+        <div class="card-body">
+            <h3 class="card-title">All permission master View</h3>
+            <div align="right">
+                @{ string CreatePMaster = Session["CreatePerMas"].ToString();
+                    if (CreatePMaster == "True")
+                    {
+                        <a href="@Url.Action("CreatePMaster", "PermissionMaster")">
+                            <div class="btn btn-primary">
+                                <h6 align="center" class="fas fa-hand-point-right">
+                                    Add New Permission Master
+                                </h6>
+                            </div>
+                        </a>
+                    }
+                }
+            </div>
+            @if (Model == null)
+            {
+                <h2><font color="red">No record found</font></h2>
+                <br />
+            }
+
+            <div class="table">
+                <table class="table table-sm col-12">
+                    <thead class="bg-primary text-white col-12">
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.fk_GName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.vchPermissionName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.dtCreated)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.vchCreatedBy)
+                            </th>
+                            @{ string Edit1 = Session["EditPerMas"].ToString();
+                                if (Edit1 == "True")
+                                {
+                                    <th>Actions</th>
+                                }
+                            }
+                        </tr>
+                    </thead>
+                    <tbody class="border border-primary">
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.fk_GName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.vchPermissionName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.dtCreated)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.vchCreatedBy)
+                                </td>
+                                @{ string Edit2 = Session["EditPerMas"].ToString();
+                                    if (Edit2 == "True")
+                                    {
+                                        <td>
+                                            @Html.ActionLink("Edit", "EditPMaster", new { id = item.intid })
+                                        </td>
+                                    }
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}

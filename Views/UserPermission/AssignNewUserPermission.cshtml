@@ -1,0 +1,428 @@
+﻿@model HRM.Models.UserPermissionViewModel
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "AssignNewUserPermission";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+        Html.EnableClientValidation(true);
+    }
+
+    using (Html.BeginForm("SaveList", "UserPermission", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <br />
+        <h3 class="col-10" style="color:black">User permission control pannel</h3>
+        <h5 class="col-10">&nbsp;<strong>Currently Active Users :</strong> <span id="activeUsers">Loading...</span></h5>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="row col-12">
+            <div class="col-md-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Username, htmlAttributes: new { @class = "control-label col-md-8" })
+                    @Html.TextBoxFor(model => model.Username, htmlAttributes: new { @class = "form-control", @id = "selectedusr" })
+                    @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Passcode, htmlAttributes: new { @class = "control-lable col-md-12" })
+                    @Html.TextBoxFor(model => model.Passcode, htmlAttributes: new { @id = "Passcode", @type = "Password", @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DeptName, htmlAttributes: new { @class = "control-lable col-md-8" })
+                    @Html.DropDownListFor(model => model.DeptName, new SelectList(ViewBag.DeptList, "Text", "Value"), htmlAttributes: new { @id = "dpt", @class = "form-control" })
+                </div>
+            </div>
+        </div>
+        <div class="row col-12">
+            <div class="col-md-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Designation, htmlAttributes: new { @class = "control-lable col-md-8" })
+                    <select class="form-control" id="designation" required="required"></select>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.EmailAddess, htmlAttributes: new { @class = "control-lable col-md-10" })
+                    @Html.TextBoxFor(model => model.EmailAddess, htmlAttributes: new { @id = "emailid", @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.MobileNo, htmlAttributes: new { @class = "control-lable col-md-10" })
+                    @Html.TextBoxFor(model => model.MobileNo, htmlAttributes: new { @id = "mob", @class = "form-control" })
+                </div>
+            </div>
+        </div>
+        <div class="row vol-10">
+            <div class="col-md-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.bitAllowAssesment, htmlAttributes: new { @class = "control-lable col-md-12", @align = "center" })
+                    @Html.CheckBoxFor(model => model.bitAllowAssesment, htmlAttributes: new { @id = "AllowAss", @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.bitActive, htmlAttributes: new { @class = "control-lable col-md-12", @align = "center" })
+                    @Html.CheckBoxFor(model => model.bitActive, htmlAttributes: new { @id = "active", @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.bitISHOD, htmlAttributes: new { @class = "control-lable col-md-12", @align = "center" })
+                    @Html.CheckBoxFor(model => model.bitISHOD, htmlAttributes: new { @id = "ISHOD", @class = "form-control" })
+                </div>
+            </div>
+        </div>
+        <hr />
+
+        <div class="form-body col-12">
+            <div align="right">
+                @*<lable style="color:black">Check & unckeck all permissions <input type="checkbox" id="checkall" onclick="CheckAllPer()" /></lable>&nbsp;&nbsp;&nbsp;&nbsp;*@
+                <a href="@Url.Action("ViewAllUserPermissionEmp", "UserPermission")">
+                    <div class="btn btn-primary">
+                        <h6 align="center" class="fas fa-hand-point-right">
+                            Click here to view all user.
+                        </h6>
+                    </div>
+                </a>
+            </div>
+            <div align="center">
+                <div class="checkbox">
+                    @*<label style="color:black">Select All</label>&nbsp;&nbsp;<input type="checkbox" id="checkall" checked="checked" />&nbsp;&nbsp;&nbsp;&nbsp;*@
+                    <label style="color:black">Uncheck/Check All</label>&nbsp;&nbsp;<input type="checkbox" id="uncheckall" />
+                </div>
+            </div>
+            <table class="table table-sm col-12" id="pertable">
+                <thead class="bg-primary text-white col-12">
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.pname, htmlAttributes: new { @class = "control-label col-md-4", @disabled = "disabled" })
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.selectedpermission, htmlAttributes: new { @class = "control-label col-md-4", @disabled = "disabled" })
+                            </div>
+                        </td>
+                    </tr>
+                </thead>
+                <tbody class="border border-primary" id="tablekibody">
+                    @for (int i = 0; i < Model.AllPermission.Count; i++)
+                    {
+                        <tr>
+                            <td>
+                                @*@Html.Hidden(Model.AllPermission[i].Value)*@
+                                @Html.Label(Model.AllPermission[i].Text)
+                            </td>
+                            <td>
+                                <div class="col-md-7">
+                                    <div class="checkbox">
+                                        @*@Html.CheckBox(Model.AllPermission[i].Text,htmlAttributes:new { @checked = "@item.Value" })*@
+                                        <input type="checkbox" id="check_@Model.AllPermission[i].Value" checked="" />
+                                        @Html.HiddenFor(model => model.AllPermission)
+                                        @Html.HiddenFor(model => model.AllGpname)
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        @Html.Label("Salary range required click here", htmlAttributes: new { @calss = "control-lable col-md-10" })
+                        <div class="checkbox">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <h5 class="fas fa-hand-point-right">
+                                @*@Html.CheckBoxFor(model => model.bitSalCheck, new { id = "authyes" })*@
+                                <input type="checkbox" id="authyes" />
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+                @*<div class="col-md-3">
+                        <div class="form-group">
+                            <br />
+                            <lable>Enter Salary Range</lable>
+                        </div>
+                    </div>*@
+                <div class="col-md-3">
+                    <div class="form-group">
+                        @Html.Label("Salary from", htmlAttributes: new { @class = "control-label col-md-10" })
+                        @Html.TextBoxFor(model => model.salaryfrom, htmlAttributes: new { @calss = "form-control", id = "sfrom", @disabled = "disabled" })
+                        @Html.ValidationMessageFor(model => model.salaryfrom, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        @Html.Label("Salary to", htmlAttributes: new { @class = "control-label col-md-10" })
+                        @Html.TextBoxFor(model => model.salaryto, htmlAttributes: new { @calss = "form-control", id = "sto", @disabled = "disabled" })
+                        @Html.ValidationMessageFor(model => model.salaryto, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group" align="center">
+                <div class="col-md-offset-2 col-md-10">
+                    @*<input type="submit" value="Save All" id="btnsubmit" class="btn btn-primary btn-block" />*@
+                    <input type="button" value="Save All" class="btn btn-primary btn-block" onclick="SaveList()" />
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script type="text/javascript">
+         // Refresh every 5 seconds
+        setInterval(refreshActiveUsers, 5000);
+
+        // Initial call
+        refreshActiveUsers();
+        //For active current users counter
+        function refreshActiveUsers() {
+            $.ajax({
+                url: '@Url.Action("GetActiveUsers", "UserPermission")',
+                type: 'GET',
+                success: function (data) {
+                    $('#activeUsers').text(data);
+                },
+                error: function () {
+                    $('#activeUsers').text('Error fetching data');
+                }
+            });
+        }
+        //check all and uncheck all
+        $('#uncheckall').click(function () {
+            if ($(this).is(':checked')) {
+                $('#pertable').find('input[type=checkbox]:checked').removeAttr('checked');
+            }
+            else {
+                $('#pertable').find('input[type=checkbox]').attr('checked', true);
+            }
+        });
+
+        //function for select designationmas according to dept name
+        $("#dpt").change(function () {
+            var deptid = parseInt($(this).val());
+            if (!isNaN(deptid)) {
+                var selecteddesi = $('#designation');
+                selecteddesi.empty();
+                selecteddesi.append($("<option></option>").val('').html('Please wait ...'));
+                $.ajax({
+                    url: '@Url.Action("DesignationList", "UserPermission")',
+                    type: 'GET',
+                    dataType: 'json',
+                    data: { dept_id: deptid },
+                    success: function (result) {
+                        selecteddesi.empty(); // Clear the please wait
+                        selecteddesi.append($("<option></option>").val('').html('Select designation'));
+                        $.each(result, function (i, desi) {
+                            selecteddesi.append($("<option></option>").val(desi.id).html(desi.designation));
+                        });
+                    },
+                    error: function () {
+                        alert('Error!');
+                    }
+                });
+            }
+        });
+
+        //Add a JQuery click event handler onto our checkbox.
+        $("#authyes").click(function () {
+            //If the checkbox is checked.
+            if ($(this).is(':checked')) {
+                //Enable the textbox button.
+                $("#sfrom").attr("disabled", false);
+                $("#sto").attr("disabled", false);
+
+            } else {
+                //If it is not checked, disable the textbox.
+                $('#sfrom').attr("disabled", true);
+                $('#sto').attr("disabled", true);
+            }
+        });
+
+        //on sumbit post all value
+        var SaveList = function () {
+            var selected = $("#selectedusr").val().toString();
+            var dept = $("#dpt option:selected").text().toString();
+            var deptid = $("#dpt option:selected").val().toString();
+            var desi = $("#designation option:selected").text().toString();
+            var desiid = $("#designation option:selected").val();
+            var asscheck = $("#AllowAss").is(":checked").toString();
+            var passcode = $("#Passcode").val().toString();
+            var actchk = $("#active").is(":checked").toString();
+            var HOD = $("#ISHOD").is(":checked").toString();
+            var mob1 = $("#mob").val().toString();
+            var mailid = $("#emailid").val().toString();
+            if (selected != "") {
+                if (passcode != "") {
+                    if (dept != null) {
+                        if (desi != "Select designation" && desi != "") {
+                            if (mob1 != "") {
+                                if (mailid != "") {
+                                    var arryitem = [];
+                                    var aarynitem = [];
+                                    var commasepratefield = "";
+                                    var commasepratedNfield = "";
+                                    var checkval = ""
+                                    var getuser = ""
+                                    var salfrom = ""
+                                    var salto = ""
+                                    var deptt = ""
+                                    var desii = ""
+                                    var depttid = ""
+                                    var desiiid = ""
+                                    var mobile = ""
+                                    var assesment = ""
+                                    var pwd = ""
+                                    var act = ""
+                                    var HOD=""
+                                    var newmailid=""
+                                    var checkboxval = $("#authyes").is(":checked").toString();
+                                    var salf = $("#sfrom").val().toString();
+                                    var sto = $("#sto").val().toString();
+                                    $("#tablekibody input[type=checkbox]").each(function (AssignNewUserPermission, val) {
+                                        var checkid = $(val).attr("Id");
+                                        var arr = checkid.split('_');
+                                        var currentcheckboxid = arr[1];
+                                        var currentuncheckboxid = arr[1];
+                                        var ischecked = $("#" + checkid).is(":checked", true);
+                                        if (ischecked) {
+                                            arryitem.push(currentcheckboxid);
+                                        }
+                                        var isunchecked = $("#" + checkid).is(":unchecked", true);
+                                        if (isunchecked) {
+                                            aarynitem.push(currentuncheckboxid);
+                                        }
+                                    })
+
+                                    if (arryitem.length != 0) {
+                                        commasepratefield = arryitem.toString();
+                                        commasepratedNfield = aarynitem.toString();
+                                        getuser = selected.toString();
+                                        salfrom = salf.toString();
+                                        salto = sto.toString();
+                                        deptt = dept.toString();
+                                        desii = desi.toString();
+                                        depttid = deptid.toString();
+                                        desiiid = desiid.toString();
+                                        mobile = mob1.toString();
+                                        checkval = checkboxval.toString();
+                                        assesment = asscheck.toString();
+                                        newmailid = mailid.toString();
+                                        $.ajax({
+                                            url: "/UserPermission/SaveList",
+                                            type: "POST",
+                                            data: {
+                                                pertable: commasepratefield,
+                                                ntable: commasepratedNfield,
+                                                selectedusr: getuser,
+                                                sfrom: salfrom,
+                                                sto: salto,
+                                                authyes: checkval,
+                                                Dept: deptt,
+                                                Desi: desii,
+                                                Deptid: depttid,
+                                                Desiid: desiiid,
+                                                mobi: mobile,
+                                                ass: assesment,
+                                                pwd: passcode,
+                                                act: actchk,
+                                                ISHOD: HOD,
+                                                email: newmailid
+                                            },
+                                            success: function (result) {
+                                                //code here
+                                                if (result.success == "1") {
+                                                    alert(result.output1);
+                                                    window.location = "/UserPermission/ViewAllUserPermissionEmp";
+                                                }
+                                                else if (result.success == "2") {
+                                                    alert(result.output2);
+                                                }
+                                                else if (result.success == "3") {
+                                                    alert(result.output3);
+                                                }
+                                                else if (result.success == "4") {
+                                                    alert(result.output4);
+                                                }
+                                                else if (result.success == "5") {
+                                                    alert(result.output5);
+                                                    location.href = "/Home/_SessionError1"
+                                                }
+                                                else if (result.success == "6") {
+                                                    alert(result.output6);
+                                                    location.href = "/Home/_SessionError1"
+                                                }
+                                                else if (result.success == "6") {
+                                                    alert(result.output6);
+                                                }
+                                            }
+                                        })
+                                    }
+                                    else {
+                                        alert("Select atleat 1 permission!")
+                                        return false
+                                    }
+                                }
+                                else {
+                                    alert("Enter email id!")
+                                }
+                            }
+                            else {
+                                alert("Enter mobile number!")
+                            }
+                        }
+                        else {
+                            alert("Select designation and Department");
+                            return false
+                        }
+                    }
+                    else {
+                        alert("Select department");
+                        return false
+                    }
+                }
+                else {
+                    alert("Enter password");
+                    return false
+                }
+            }
+
+            else {
+                alert("Enter username");
+                return false
+            }
+        }
+
+        //select and dselect all permission
+        //function CheckAllPer() {
+        //    debugger
+        //    $("#checkall").click(function () {
+        //        if ($(this).is(':checked')) {
+        //            $("#tablekibody input[type=checkbox]").each(function (AssignNewUserPermission, val) {
+        //                var checkid = $(val).attr("Id");
+        //                var ischecked = $("#" + checkid).is(":checked", false);
+        //                if (ischecked) {
+        //                    $("#" + checkid).attr(":checked", true);
+        //                }
+        //            }
+        //        }
+        //    })
+        //}
+    </script>
+}

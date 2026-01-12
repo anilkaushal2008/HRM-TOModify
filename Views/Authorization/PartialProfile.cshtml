@@ -1,0 +1,44 @@
+﻿@model IEnumerable<HRM.Models.tblDocDetails>
+@if (Session["descript"] != null)
+{
+    <div class="card">
+        <div class="card-body">
+            <h3 class="card-title">Employee Profile Picture</h3>
+            <table class="table table-sm">
+                <thead class="bg-facebook text-white col-12">
+                    <tr>
+                        @*<td>
+                                @Html.DisplayNameFor(Model => Model.fk_intdocid)
+                            </td>*@
+                        <th>
+                            Document Name
+                        </th>
+
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="border border-dark">
+                    @foreach (var item in Model)
+                    {
+                        <tr style="color:black">
+                            @*<td>
+                                    @Html.DisplayFor(modelItem => item.fk_intdocid)
+                                </td>*@
+                            <td>
+                                @Html.DisplayFor(modelItem => item.vchdocname)
+                            </td>
+
+                            <td>
+                                <a href="@Url.Content("~/Content/Uploads/" + @item.vchfilename)" target="_blank">View Details</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}

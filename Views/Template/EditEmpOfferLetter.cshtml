@@ -1,0 +1,180 @@
+﻿@model HRM.Models.tblOfferLetter
+@if (Session["id"] != null)
+{
+    {
+        ViewBag.Title = "EditEmpOfferLetter";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    }
+    using(Html.BeginForm("EditEmpOfferLetter", "Template", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <div class="col-lg-12">
+            <br />
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(m => m.intid)
+            <h3 style="color:black">Edit Employee Offer Letter</h3>
+            <div class="row col-12">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.fk_deptId)<span style="color:red">*</span>
+                        @Html.DropDownListFor(model => model.fk_deptId, ViewBag.DeptList as SelectList, "Select department", htmlAttributes: new { @id = "selectedDpt", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.fk_deptId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.fk_positionId)<span style="color:crimson">*</span>
+                        @Html.DropDownListFor(model => model.fk_positionId, ViewBag.PositionList as SelectList, "Select position", htmlAttributes: new { @class = "form-control", @id = "Position" })
+                        @Html.ValidationMessageFor(model => model.fk_positionId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.vchName)<span style="color:crimson">*</span>
+                        @Html.EditorFor(model => model.vchName, new { htmlAttributes = new { @class = "form-control", @id = "empname" } })
+                        @Html.ValidationMessageFor(model => model.vchName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="row col-12">
+                <div class="col-2">
+                    <div class="form-group">
+                        @Html.Label("Old app. date")<br />
+                        @Html.Label("", ViewBag.AppDate as string, new { htmlAttributes = new { @readonly = "readonly", @type = "text", @class = "form-control", @id = "dis1" } })
+                       
+                    </div>
+                </div>
+                <div class="col-2">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.dtApllicationdate)<span style="color:crimson">*</span>
+                        @Html.EditorFor(model => model.dtApllicationdate, new { htmlAttributes = new { @type = "date", @class = "form-control", @id = "aapdate" } })
+                        @Html.ValidationMessageFor(model => model.dtApllicationdate, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-2">
+                    <div class="form-group">
+                        @Html.Label("Old DOJ Before")<br />                
+                        @Html.Label("txt2", ViewBag.BeforeDate as string, new { htmlAttributes = new { @readonly = "readonly", @type = "text", @id = "dis2", @class = "form-control" } })
+                        @*@Html.ValidationMessageFor(model => model.dtAcceptance, "", new { @class = "text-danger" })*@
+                    </div>
+                </div>
+                <div class="co-2">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.dtJoinBefore)<span style="color:crimson">*</span>
+                        @Html.EditorFor(model => model.dtJoinBefore, new { htmlAttributes = new { type = "date", @id = "dtbefore", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.dtJoinBefore, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-2">
+                    <div class="form-group">
+                        @Html.Label("Old DO Acceptance")<br />
+                        @Html.Label("", ViewBag.AcceptDate as string, new { htmlAttributes = new { @readonly = "readonly", @type = "text", @class = "form-control", @id = "dis3" } })
+                        @*@Html.ValidationMessageFor(model => model.dtAcceptance, "", new { @class = "text-danger" })*@
+                    </div>
+                </div>
+                <div class="col-2">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.dtAcceptance)<span style="color:crimson">*</span>
+                        @Html.EditorFor(model => model.dtAcceptance, new { htmlAttributes = new { type = "date", @class = "form-control", @id = "accdate" } })
+                        @Html.ValidationMessageFor(model => model.dtAcceptance, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="row col-12">
+                <div class="col-12">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.txtContent, htmlAttributes: new { @class = "control-control" })
+                        @Html.TextAreaFor(model => model.txtContent, htmlAttributes: new { @class = "form-control", @rows = "9", @size = "1500" })
+                        @Html.ValidationMessageFor(model => model.txtContent, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-12" align="center">
+                <div class="form-group">
+                    <input type="submit" value="Update" class="btn btn-success" />
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <a href="@Url.Action("NewLetter", "Template")" class="btn btn-outline-danger">Cancel</a>
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/Scripts/jquery-ui.js"></script>
+}
+
+
+
+
+
+@*<div class="form-group">
+    @Html.LabelFor(model => model.vchName, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        @Html.EditorFor(model => model.vchName, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.vchName, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.txtContent, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        @Html.EditorFor(model => model.txtContent, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.txtContent, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.dtJoinBefore, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        @Html.EditorFor(model => model.dtJoinBefore, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.dtJoinBefore, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.dtAcceptance, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        @Html.EditorFor(model => model.dtAcceptance, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.dtAcceptance, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.dtApllicationdate, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        @Html.EditorFor(model => model.dtApllicationdate, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.dtApllicationdate, "", new { @class = "text-danger" })
+    </div>
+</div>
+<div class="form-group">
+    @Html.LabelFor(model => model.fk_deptId)<span style="color:red">*</span>
+    <div class="col-md-10">
+        @Html.DropDownListFor(model => model.fk_deptId, ViewBag.DeptList as SelectList, "Select department", htmlAttributes: new { @id = "selectedDpt", @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.fk_deptId, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.fk_positionId, "fk_positionId", htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        @Html.DropDownListFor(model => model.fk_positionId, ViewBag.PositionList as SelectList, "Select position", htmlAttributes: new { @class = "form-control", @id = "Position" })
+        @Html.ValidationMessageFor(model => model.fk_positionId, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="col-md-offset-2 col-md-10">
+        <input type="submit" value="Save" class="btn btn-default" />
+    </div>
+</div>
+        </div>
+}*@

@@ -1,0 +1,103 @@
+﻿@model IEnumerable<HRM.Models.tblOtherDocDetail>
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "ViewMultiple";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    }
+    <div class="card">
+        <div class="card-body" style="background-color:aliceblue">
+            <br />
+            <h3 class="" style="color:black;font-weight:bold" align="center">Multiple document view</h3>
+            @if (Model != null)
+            {
+                <div class="card-body">
+                    @if (TempData["Error"] != null)
+                    {
+                        <p align="center" class="alert alert-danger" id="empty">@TempData["Error"]</p>
+                    }
+                    @if (ViewBag.Error != null)
+                    {
+                        <p align="center" class="alert alert-danger" id="empty">@ViewBag.Error</p>
+                    }
+                    @if (TempData["Success"] != null)
+                    {
+                        <p align="center" class="alert alert-success" id="empty">@TempData["Success"]</p>
+                    }
+                    @if (ViewBag.Success != null)
+                    {
+                        <p align="center" class="alert alert-success" id="success">@ViewBag.Success</p>
+                    }
+                    <table class="table table-sm" style="font-size:90%">
+                        <thead class="bg-success text-white col-12">
+                            <tr style="color:black">
+                                <th>
+                                    Particular
+                                </th>
+                                <th>
+                                    Master Document
+                                </th>
+                                <th>
+                                    Upload DateTime
+                                </th>
+                                <th>
+                                    Action
+                                </th>
+
+                            </tr>
+                        </thead>
+                        <tbody class="border border-success">
+                            @if (Model != null)
+                            {
+                                foreach (var item in Model)
+                                {
+                                    <tr style="color:black">
+                                        <td>
+
+                                            @Html.DisplayFor(model => item.vchNameDisplay)
+
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(model => item.vchDocName)
+
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(model => item.dtcreated)
+                                        </td>
+                                        <td>
+                                            <a class="btn btn-success btn-sm" href="@Url.Content("~/Content/Uploads/OtherDocuments/" + @item.vchfilename)" target="_blank">&nbsp;&nbsp;View&nbsp;&nbsp;</a>
+                                            @{ 
+                                                string isAdmin = string.Empty;
+                                                if (Session["MainAdmin"] != null)
+                                                {
+                                                    isAdmin = Session["MainAdmin"].ToString();
+                                                }
+                                                if (isAdmin == "True")
+                                                {
+                                            @Html.ActionLink("Delete", "DeleteOtherDocDetail", new { id = item.intid, empid = item.fk_empAssid, fkdocid = item.fk_intOtherdocid }, htmlAttributes: new { @class = "btn btn-danger btn-sm" })
+                                            @*<a href="@Url.Content("~/Content/Uploads/" + @item.intid)" style="color:red" target="_blank">Delete</a>*@
+                                                    }
+                                                }
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <p class="alert alert-danger" id="empty" align="center">@TempData["Empty"]</p>
+            }
+        </div>
+    </div>
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+
+
+
+

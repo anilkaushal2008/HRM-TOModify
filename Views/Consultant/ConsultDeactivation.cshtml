@@ -1,0 +1,98 @@
+﻿@model HRM.Models.ConsultantDeActiveModel
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "ConsultDeactivation";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+        Html.EnableClientValidation(true);
+    }
+    Html.EnableClientValidation(true);
+    using (Html.BeginForm("ChangeStatus", "Consultant", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+<div class="form-horizontal">
+    @if (TempData["Error"] != null)
+    {
+        <p align="center" class="alert alert-danger" id="errormsg">@TempData["Error"]</p>
+    }
+    <br />
+    <h3 style="color:black;font-weight:800" class="col-10">Change Consultant Status View</h3>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.ConsultantId)
+    <div class="row">
+        <div class="col-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.EmpCode, htmlAttributes: new { @class = "control-label col-md-10" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.EmpCode, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-10" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.dol, htmlAttributes: new { @class = "required control-label col-md-10" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.dol, new { htmlAttributes = new { @class = "form-control", @type = "date" } })
+                    @Html.ValidationMessageFor(model => model.dol, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group">
+                @Html.Label("AadhaarNo (XXXX-XXXX-XXXX)", htmlAttributes: new { @class = "control-label col-md-10" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.AadharNo, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.AadharNo, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-12">
+            <div class="form-group">
+                <h5 class="control-label col-md-12" style="color:black">Enter Remarks<span style="color:red"> (max length 2000 characters)</span></h5>
+                <div class="col-md-10">
+                    @Html.TextAreaFor(model => model.remarks, htmlAttributes: new { @class = "form-control", @rows = "7", @size = "1500" })
+                    @Html.ValidationMessageFor(model => model.remarks, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <div class="row-12">
+        <div class="col">
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Submit" class="btn btn-block btn-danger" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    }
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+@section Scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/bin/Release/Publish/Scripts/jquery.validate.unobtrusive.min.js"></script>
+}
+
+

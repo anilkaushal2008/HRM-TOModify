@@ -1,0 +1,112 @@
+﻿@model IEnumerable<HRM.Models.tblAssesmentQuestDetails>
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "SingleAssesmentDetails";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    }
+<br />
+<div class="form">
+    <div class="col-12">
+        <div class="col-10">
+            <h3 class="card-title" style="color:black">Single employee assessment detail view</h3>
+        </div>
+
+        <div align="right">
+            <a href="@Url.Action("ViewCompletedAss", "Assesment")">
+                <div class="btn btn-primary">
+                    <h6 align="center" class="fas fa-hand-point-right">
+                        Return back
+                    </h6>
+                </div>
+            </a>
+        </div>
+        <hr />
+        <div class="table">
+            <div class="box">
+                <div class="row">
+                    <div class="col-md-4">
+                        Name :<Lable style="color:black">@ViewBag.EmpName</Lable>
+                    </div>
+                    <div class="col-md-4">
+                        Years Experience : <Lable style="color:black">@ViewBag.Exp</Lable>
+                    </div>
+                    <div class="col-md-4">
+                        Total Marks : <Lable style="color:black">@ViewBag.Total</Lable>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8">
+                        AssessmentBy : <Lable style="color:black">@ViewBag.AssBy</Lable>
+                    </div>
+                    <div class="col-md-4">
+                        Assessment Date : <Lable style="color:black">@ViewBag.Date</Lable>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        Position : <Lable style="color:black">@ViewBag.Possi</Lable>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        Special Remarks :<Lable style="color:black">@ViewBag.Remarks</Lable>
+                    </div>
+                </div>
+                <hr />
+                <table class="table table-sm">
+                    <thead class="bg-primary text-white">
+                        <tr>
+                            <th>
+                                Questions
+                            </th>
+                            <th>
+                                Marks
+                            </th>
+                            <th>
+                                AssesmentBy
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="border border-primary" id="tblbdy">
+                        @foreach (var item in Model)
+                        {
+                            <tr style="color:black">
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.tblAssQuestMas.vchQuestion)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.vchAnswer)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.tblUserMaster.vchUsername)
+                                </td>
+
+                                @*<td>
+                                        @Html.DisplayFor(modelItem => item.vchSpecialRemarks)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.intTotal)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.vchAssesmentBy)
+                                    </td>*@
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+ </div>
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+   @section scripts{
+        <script src="~/Scripts/jquery.validate.js"></script>
+        <script src="~/Scripts/jquery.validate.min.js"></script>
+        <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+        <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    }

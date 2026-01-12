@@ -1,0 +1,81 @@
+﻿@model HRM.Models.tblDesiSetting
+
+@{
+    ViewBag.Title = "EditSetting";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <br />
+    <div class="form-horizontal">
+        @if (TempData["Success"] != null)
+        {
+            <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+        }
+        <h4 class="col-md-10" style="color:black">Edit Designation Master Setting </h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.intid)
+
+
+        <div class="form-group">
+            @Html.Label("Selected designation", htmlAttributes: new { @class = "control-label col-md-8" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.fk_intdesiid, ViewBag.DesiList as SelectList, "Select designation", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.fk_intdesiid, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="row col-10">
+            <div class="col-md-6">
+                @Html.LabelFor(model => model.numExpMin, htmlAttributes: new { @class = "control-label col-md-8" })
+                @Html.EditorFor(model => model.numExpMin, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.numExpMin, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="col-md-6">
+                @Html.LabelFor(model => model.numExpMax, htmlAttributes: new { @class = "control-label col-md-8" })
+
+                @Html.EditorFor(model => model.numExpMax, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.numExpMax, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="row col-10">
+            <div class="col-md-6">
+                @Html.LabelFor(model => model.numSalMin, htmlAttributes: new { @class = "control-label col-md-8" })
+                @Html.EditorFor(model => model.numSalMin, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.numSalMin, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="col-md-6">
+                @Html.LabelFor(model => model.numSalMax, htmlAttributes: new { @class = "control-label col-md-8" })
+                @Html.EditorFor(model => model.numSalMax, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.numSalMax, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <br />
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Update" class="btn btn-primary" />
+                <div align="center">
+                    <a href="@Url.Action("ViewDesiSetting", "Master")">
+                        <div class="btn btn-primary">
+                            <h6 align="center" class="fas fa-hand-point-right">
+                                View all qualification
+                            </h6>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+}

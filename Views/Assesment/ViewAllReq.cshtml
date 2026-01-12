@@ -1,0 +1,138 @@
+﻿@model IEnumerable<HRM.Models.tblRequisition>
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "ViewAllReq";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    }
+    <link href="//cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <div class="card">
+        <div class="card-body">
+            <h3 class="card-title" align="center">All requisition view</h3>
+            <div align="right">
+                <a href="@Url.Action("NewRequisition", "Assesment")">
+                    <div class="btn btn-success">
+                        <h6 align="center" class="fas fa-hand-point-right">
+                            NewRequisition
+                        </h6>
+                    </div>
+                </a>
+            </div>
+            <br />
+            @if (TempData["Success"] != null)
+            {
+                <p class="alert alert-success" id="success" align="center">@TempData["Success"]</p>
+            }
+            @if (TempData["Error"] != null)
+            {
+                <p class="alert alert-danger" id="error" align="center">@TempData["Error"]</p>
+            }
+            @if (ViewBag.Error != null)
+            {
+                <p class="alert alert-danger" id="verror" align="center">@ViewBag.Error</p>
+            }
+            <table id="reqiAll" class="table table-sm" style="font-size:90%">
+                <thead class="bg-success text-white col-12">
+                    <tr>
+                        <th>
+                            Reuisition No.
+                        </th>
+                        <th>
+                            Request Type
+                        </th>
+                        <th>
+                            Position
+                        </th>
+
+                        <th>
+                            RequiredDate
+                        </th>
+                        <th>
+                            RequestDate
+                        </th>
+                        <th>
+                            RequestBy
+                        </th>
+                        <th>
+                            Status
+                        </th>
+                        
+                    </tr>
+                </thead>
+                <tbody class="border border-success">
+                    @if (TempData["Empty"] != null)
+                    {
+                        <p class="alert alert-danger" id="empty" align="center">@TempData["Empty"]</p>
+                    }
+                    else
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @item.vchRNumber.ToString()
+                                </td>
+                                <td>
+                                    @if (item.vchReqType == 1)
+                                    {
+                                        @Html.Label("", "New")
+                                    }
+                                    else
+                                    {
+                                        @Html.Label("", "Replacement")
+                                    }
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.tblPositionCategoryMas.vchPosCatName)
+                                </td>
+                                <td>
+                                    @item.dtRequiredDate.ToString("dd/MM/yyyy")
+                                </td>
+                                <td>
+                                    @item.dtRequest.ToString("dd/MM/yyyy")
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.vchRequestBy)
+                                </td>
+                                <td>
+                                    @if (item.bitStatusPending == true && item.bitStatusForward != true && item.bitStatusComplete != true)
+                                    {
+                                        <a class="badge badge-pill badge-primary text-white">Pending</a>
+                                    }
+                                    @if (item.bitStatusForward == true && item.bitStatusComplete != true)
+                                    {
+
+                                        <a class="badge badge-pill badge-warning text-white">Forwarded</a>
+                                    }
+                                    @if (item.bitStatusComplete == true)
+                                    {
+                                        <a class="badge badge-pill badge-success text-white">Completed&nbsp;&nbsp;</a>
+                                        @Html.ActionLink("Print", "PrintRequi", new { id = item.intid }, new { @class = "badge badge-pill badge-primary btn-sm", @target = "_blank" })
+                                    }
+                                </td>                               
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+else
+
+{
+    Html.RenderAction("_SessionError", "NewEmployeeLogin");
+}
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#reqiAll').DataTable();
+        });
+    </script>
+}
+

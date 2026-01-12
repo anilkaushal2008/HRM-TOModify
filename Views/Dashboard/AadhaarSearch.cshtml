@@ -1,0 +1,41 @@
+﻿@{ if (Session["descript"] != null)
+    {
+        {
+            ViewBag.Title = "AadhaarSearch";
+            Layout = "~/Views/Shared/_LayoutMain.cshtml";
+        }
+
+        using (Html.BeginForm("AadhaarSearch", "Dashboard", FormMethod.Post))
+        { <div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12">
+                @{Html.RenderAction("_PartialInputAadhaar", "Dashboard");}
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-12">
+                @{Html.RenderAction("_PartialAadharResult", "Dashboard");}
+            </div>
+        </div>
+    </div>
+</div>
+                            }
+
+
+                        }
+                        else
+                        {
+                            Html.RenderAction("_SessionError1", "Home");
+                        }
+                    }
+                      @section Scripts {
+                          <script src="~/Scripts/jquery.validate.js"></script>
+                          <script src="~/Scripts/jquery.validate.min.js"></script>
+                          <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+                          <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+                          <script src="~/Content/Select2/js/select2.js"></script>
+                          <script src="~/Content/Select2/js/select2.min.js"></script>
+                      }
+

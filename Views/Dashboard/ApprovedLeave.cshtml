@@ -1,0 +1,135 @@
+﻿@model IEnumerable<HRM.Models.LeaveViewModel>
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "ApprovedLeave";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    }
+
+    <link href="//cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <div class="card">
+        <div class="card-body">
+            <h3 class="card-title" align="center">Your Approved leave view</h3>           
+            <br />
+            @if (TempData["Success"] != null)
+            {
+                <p class="alert alert-success" id="success" align="center">@TempData["Success"]</p>
+            }
+            @if (TempData["Error"] != null)
+            {
+                <p class="alert alert-danger" id="error" align="center">@TempData["Error"]</p>
+            }
+            @if (ViewBag.Error != null)
+            {
+                <p class="alert alert-danger" id="verror" align="center">@ViewBag.Error</p>
+            }
+            <table id="approvedLeave" class="table table-sm table-responsive-lg" style="font-size:90%">
+                <thead class="bg-success text-white col-12">
+                    <tr>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            EmpCode
+                        </th>
+                        <th>
+                            Mobile
+                        </th>
+                        <th>
+                            DateFrom
+                        </th>
+                        <th>
+                            DateTo
+                        </th>
+                        <th>
+                            Status
+                        </th>
+                        <th>
+                            ApprovedDays
+                        </th>                      
+                        <th>
+                            Date
+                        </th>
+                        <th>
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="border border-success">
+                    @if (TempData["Empty"] != null)
+                    {
+                        <p class="alert alert-danger" id="empty" align="center">@TempData["Empty"]</p>
+                    }
+                    else
+                    {
+                        foreach (var item in Model)
+                        {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Master.tblEmpAssesmentMas.vchName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Master.tblEmpAssesmentMas.vchEmpFcode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Master.tblEmpAssesmentMas.vchMobile)
+                    </td>
+                    <td>
+                        @item.Master.dtStartFrom.ToString("dd/MM/yyyy")
+                    </td>
+                    <td>
+                        @item.Master.dtEndDate.ToString("dd/MM/yyyy")
+                    </td>
+                    <td>
+                        @{ string status = item.Detail.vchCurrentStatus.ToString();
+                            if (status == "Pending")
+                            {
+                                <a class="badge badge-pill badge-primary text-white">Pending</a>
+                            }
+                            if (item.Detail.BitIsPartialApproved == true)
+                            {
+                                <a class="badge badge-pill badge-warning text-white">Partial Approved</a>
+                            }
+                            if (item.Detail.bitISApproved == true && item.Detail.bitIsSameApproved == true)
+                            {
+                                <a class="badge badge-pill badge-success text-white">SameApproved</a>
+                            }
+                            if (item.Detail.bitISApproved == true && item.Detail.BitIsRejected == true)
+                            {
+                                <a class="badge badge-pill badge-danger text-white">Rejected</a>
+                            }
+                        }
+                    </td>                 
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Master.decdaysApproved)
+                    </td>
+                    <td>
+                        @item.Master.dtCreated.ToString("dd/MM/yyyy")
+                    </td>
+                    <td>
+                        <a class="btn btn-success btn-sm" href="@Url.Action("ApprovedLeaveDetail","Dashboard",new { id = item.Master.unID })"><i class="fa fa-hand-point-right"></i>Detail</a> @*@Html.ActionLink("", "", new { id = item.unID })*@
+                    </td>
+                </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+else
+{
+    Html.RenderAction("_SessionError", "NewEmployeeLogin");
+}
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#approvedLeave').DataTable();
+        });
+    </script>
+}

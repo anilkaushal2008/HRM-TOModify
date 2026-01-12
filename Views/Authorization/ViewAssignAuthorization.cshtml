@@ -1,0 +1,241 @@
+﻿@model IEnumerable<HRM.Models.tblEmpAssesmentMas>
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "ViewAssignAuthorization";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    }
+    <div class="card">
+        <div class="card-body">
+            <h3 class="card-title">Authoriser View</h3>
+            @if (TempData["Success"] != null)
+            {
+                <p class="alert alert-success" id="empty" align="center">@TempData["Success"]</p>
+            }
+            @if (TempData["Error"] != null)
+            {
+                <p class="alert alert-danger" id="empty" align="center">@TempData["Error"]</p>
+            }
+
+            <table class="table table-sm" style="font-size:90%">
+                <thead class="bg-success text-white col-12">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.vchName)
+                        </th>
+
+                        <th>
+                            @Html.DisplayNameFor(model => model.tblDeptMas.vchdeptname)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.tblDesignationMas.vchdesignation)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.intsalary)
+                        </th>
+                        <th>
+                            DOJ
+                        </th>
+                        @{if (Session["AllowAuthorization"] != null)
+                            {
+                                string Authorizer1 = Session["AllowAuthorization"].ToString();
+                                if (Authorizer1 == "True")
+                                {
+                                    <th>
+                                        Status
+                                    </th>
+                                    <th>
+                                        Actions
+                                    </th>
+                                }
+                                else
+                                {
+                                    if (Session["HrAdmin"].ToString() != null)
+                                    {
+                                        string ishr = Session["HrAdmin"].ToString();
+                                        if (ishr == "True")
+                                        {
+                                            <th>
+                                                Status
+                                            </th>
+                                            <th>
+                                                Actions
+                                            </th>
+                                        }
+                                    }
+                                    else if (Session["ISVPHR"].ToString() != null)
+                                    {
+                                        string isVpHR = Session["ISVPHR"].ToString();
+                                        if (isVpHR == "True")
+                                        {
+                                            <th>
+                                                Status
+                                            </th>
+                                            <th>
+                                                Actions
+                                            </th>
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                Html.RenderAction("_SessionError1", "Home");
+                            }
+                        }
+                    </tr>
+                </thead>
+                <tbody class="border border-success">
+                    @if (TempData["Empty"] != null)
+                    {
+                        <p class="alert alert-danger" id="empty" align="center">@TempData["Empty"]</p>
+                    }
+                    else
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.vchName)
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.tblDeptMas.vchdeptname)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.tblDesignationMas.vchdesignation)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.intsalary)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.dtDOJ)
+                                </td>
+                                <td>
+                                    @{if (Session["AllowAuthorization"] != null || Session["HrAdmin"] != null)
+                                        {
+                                            string Authorizer2 = Session["AllowAuthorization"].ToString();
+                                            string backstatus = item.bitAuthorBack.ToString();
+                                            string goauthor = item.bitgoauthor.ToString();                                            
+                                            if (Authorizer2 == "True")
+                                            {
+                                                if (backstatus == "True" && goauthor == "True")
+                                                {
+                                                    @Html.Label("Re-Considered", htmlAttributes: new { @style = "color:orange" })
+                                                }
+                                                else if (item.bitIsFwardVp==true && item.bitIsAprvdVp==false) /*(backstatus=="False" && goauthor=="True")*/
+                                                {
+                                                    @Html.Label("Forwarded", htmlAttributes: new { @style = "color:Blue" })
+                                                }
+                                                else
+                                                {
+                                                    @Html.Label("Assigned", htmlAttributes: new { @style = "color:red" })
+                                                }
+
+                                            }
+                                            else if (Session["HrAdmin"].ToString() != null)
+                                            {
+                                                string ishr = Session["HrAdmin"].ToString();
+                                                string isVpHR = Session["ISVPHR"].ToString();
+                                                string backstatus1 = item.bitAuthorBack.ToString();
+                                                string isgoauthor = item.bitgoauthor.ToString();
+                                                if (ishr == "True" && isVpHR != "True")
+                                                {
+                                                    //string backstatus = item.bitAuthorBack.ToString();
+                                                    string pendingauthor = item.bitauthorised.ToString();
+                                                    if (backstatus1 == "True" && isgoauthor == "True")
+                                                    {
+                                                        @Html.ActionLink("Re-Consider", "UpdateDocument", new { id = item.intid }, htmlAttributes: new { @style = "color:orange" })
+                                                    }
+                                                    else if (pendingauthor == "False" && backstatus1 == "False" && isgoauthor == "True")
+                                                    {
+                                                        @Html.Label("Authorization Pending", htmlAttributes: new { @style = "color:green" });
+                                                    }
+                                                }
+                                                if (isVpHR == "True" && ishr == "True")
+                                                {
+                                                    //string backstatus = item.bitAuthorBack.ToString();
+                                                    string pendingauthor = item.bitauthorised.ToString();
+                                                    if (isVpHR == "True" && item.bitIsFwardVp == true && item.bitIsAprvdVp==false)
+                                                    {
+                                                        @Html.Label("Assigned", htmlAttributes: new { @style = "color:red", @id="vpAssignLbl" });
+                                                    }
+                                                    else if (isVpHR == "True" && item.bitIsAprvdVp == true && item.bitIsAprvdVp==true)
+                                                    {
+                                                        @Html.Label("Authorization Pending", htmlAttributes: new { @style = "color:green" });
+                                                    }
+                                                    else
+                                                    {
+                                                        if (backstatus1 == "True" && isgoauthor == "True")
+                                                        {
+                                                            @Html.ActionLink("Re-Consider", "UpdateDocument", new { id = item.intid }, htmlAttributes: new { @style = "color:orange" })
+                                                        }
+                                                        else if (pendingauthor == "False" && backstatus1 == "False" && isgoauthor == "True")
+                                                        {
+                                                            @Html.Label("Authorization Pending", htmlAttributes: new { @style = "color:green" });
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                </td>
+                                <td>
+                                    @{if (Session["AllowAuthorization"] != null || Session["HrAdmin"] != null)
+                                        {
+                                            string isauthor = Session["AllowAuthorization"].ToString();
+                                            string isHrAdmin = Session["HrAdmin"].ToString();
+                                            string isVpHR = Session["ISVPHR"].ToString();
+                                            string isauthorback = item.bitAuthorBack.ToString();
+                                            string isgoauthor = item.bitgoauthor.ToString();
+                                            if (isauthor == "True")
+                                            {
+                                                if (isauthor == "True" && isauthorback == "False")
+                                                {
+                                                    @Html.ActionLink("View Detail", "ViewFullDetails", new { id = item.intid }, htmlAttributes: new { @class = "btn btn-success btn-sm" })
+                                                }
+                                                else if (isauthor == "True" && isauthorback == "True")
+                                                {
+                                                    @Html.ActionLink("View Detail", "ViewHrFullDetails", new { id = item.intid }, htmlAttributes: new { @class = "btn btn-success btn-sm" })
+                                                }
+                                                else if (isauthor == "True" && item.bitIsFwardVp == true && item.bitIsAprvdVp == false)
+                                                {
+                                                    @Html.ActionLink("View Detail", "ViewHrFullDetails", new { id = item.intid }, htmlAttributes: new { @class = "btn btn-success btn-sm" })
+                                                }
+                                            }
+                                            else if (isVpHR == "True")
+                                            {
+                                                if (item.bitIsFwardVp == true && item.bitIsAprvdVp == false)
+                                                {
+                                                    @Html.ActionLink("Details", "ViewVPFullDetails", new { id = item.intid }, htmlAttributes: new { @class = "btn btn-success btn-sm" })
+                                                }
+                                                else if (item.bitIsFwardVp == true && item.bitIsAprvdVp == true)
+                                                {
+                                                    @Html.ActionLink("View Detail", "ViewHrFullDetails", new { id = item.intid }, htmlAttributes: new { @class = "btn btn-success btn-sm" })
+                                                }
+                                                else
+                                                {
+                                                    @Html.ActionLink("View Detail", "ViewHrFullDetails", new { id = item.intid }, htmlAttributes: new { @class = "btn btn-success btn-sm" })
+                                                }
+                                            }
+                                            else
+                                            {
+                                                @Html.ActionLink("View Detail", "ViewHrFullDetails", new { id = item.intid })
+                                            }
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                                            }
+                                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+                                        }
+
+                                        else
+                                        {
+                                            Html.RenderAction("_SessionError1", "Home");
+                                        }

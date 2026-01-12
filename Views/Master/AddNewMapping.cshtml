@@ -1,0 +1,195 @@
+﻿@model HRM.Models.NewMapingViewModel
+@if (Session["descript"] != null)
+{
+{
+    ViewBag.Title = "AddNewMapping";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    Html.EnableClientValidation(true);
+}
+
+using (Html.BeginForm("AddNewMapping", "Master", FormMethod.Post))
+{
+                @Html.AntiForgeryToken()
+
+<br />
+
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 style="color:black" class="col-md-12">Position and designation mapping master</h4>
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.PositionName, htmlAttributes: new { @class = "control-label col-md-8" })
+                    <div class="col-md-12">
+                        @Html.DropDownListFor(model => model.PositionName, new SelectList(ViewBag.SelectPosi, "Text", "Value", Model.SelectedDesignation, "-Select position-"), htmlAttributes: new { @id = "sltPosition", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.PositionName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <hr />
+                @{ string newmap = Session["Pdview"].ToString();
+                    if (newmap == "True")
+                    {
+                        <div align="right">
+                            <a href="@Url.Action("ViewAllMap", "Master")">
+                                <div class="btn btn-primary">
+                                    <h6 align="center" class="fas fa-hand-point-right">
+                                        Click here to view all mapping
+                                    </h6>
+                                </div>
+                            </a>
+                        </div>
+                        <div align="center">
+                            <div class="checkbox">
+                                @*<label style="color:black">Select All</label>&nbsp;&nbsp;<input type="checkbox" id="checkall" checked="checked" />&nbsp;&nbsp;&nbsp;&nbsp;*@
+                                <label style="color:black">Uncheck/Check All</label>&nbsp;&nbsp;<input type="checkbox" id="uncheckall" />
+                            </div>
+                        </div>
+                    }
+                }
+                @*<div class="table">*@
+                <table class="table table-sm" id="pertable">
+                    <thead class="bg-primary text-white">
+                        <tr>
+                            <td>
+                                Designations
+                            </td>
+                            <td>
+                                Check/Uncheck
+                            </td>
+                            <td>
+                                Allow For Final Assessment
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody class="border" id="tablekibody">
+                        @for (int i = 0; i < Model.AllDesignation.Count(); i++)
+                        {
+                            <tr>
+                                <td>
+                                    @*@Html.Hidden(Model.AllPermission[i].Value)*@
+                                    @Html.Label(Model.AllDesignation[i].Text)
+                                </td>
+                                <td>
+
+                                    <div class="checkbox">
+                                        @*@Html.CheckBox(Model.AllPermission[i].Text,htmlAttributes:new { @checked = "@item.Value" })*@
+                                        <input type="checkbox" id="check_@Model.AllDesignation[i].Value" checked="" />
+                                        @Html.HiddenFor(model => model.AllDesignation)
+                                        @Html.HiddenFor(model => model.AllDesignation)
+                                    </div>
+
+                                </td>
+                                <td>
+                                    <fieldset class="radio">                                        
+                                            @*@Html.RadioButtonFor(model => model.bitIsAllowLastAss,"", htmlAttributes: new { @class = "radio",@id="LastAssAllow" })*@
+                                            <input type="radio" name="FAssesment" value="@Model.AllDesignation[i].Value"  />
+                                    </fieldset>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <div class="form-group" align="center">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Save Record" class="btn btn-block btn-primary" onclick="SaveNewMap()" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+                        }
+                    }
+            else
+            {
+                Html.RenderAction("_SessionError1", "Home");
+            }
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script type="text/javascript">
+        //check all and uncheck all
+        $('#uncheckall').click(function () {
+            if ($(this).is(':checked')) {
+                $('#pertable').find('input[type=checkbox]:checked').removeAttr('checked');
+            }
+            else {
+                $('#pertable').find('input[type=checkbox]').attr('checked', true);
+            }
+        });
+
+        //on sumbit post all value
+        var SaveNewMap = function () {
+            //var postxt = $("#sltPosition option:selected").text().toString();
+            var Posid = $("#sltPosition option:selected").val().toString();
+            //var RadioValue = $().val().toString();
+            //if (postxt != "-Select position-") {
+            var arryitem = [];
+            var aarynitem = [];
+            var commaseprateYfield = "";
+            var commasepratedNfield = "";
+            var Pid = "";
+            var FAID = "";
+            //var Ptxt = "";
+            var radioyes = $('input[name="FAssesment"]:checked').val();
+            var FAss = radioyes.toString();               
+                $("#tablekibody input[type=checkbox]").each(function (AddNewMapping, val) {
+                    var checkid = $(val).attr("Id");
+                    var arr = checkid.split('_');
+                    var currentcheckboxid = arr[1];
+                    var currentuncheckboxid = arr[1];
+                    var ischecked = $("#" + checkid).is(":checked", true);
+                    if (ischecked) {
+                        arryitem.push(currentcheckboxid);
+                    }
+                    var isunchecked = $("#" + checkid).is(":unchecked", true);
+                    if (isunchecked) {
+                        aarynitem.push(currentuncheckboxid);
+                    }
+                })
+
+                if (arryitem.length != 0) {
+                    commaseprateYfield = arryitem.toString();
+                    commasepratedNfield = aarynitem.toString();
+                    Pid = Posid.toString();
+                    FAID = FAss.toString();
+                    //Ptxt = postxt.toString();
+                    $.ajax({
+                        url: "/Master/SaveNewMap",
+                        type: "POST",
+                        data: {
+                            YesValiDesi: commaseprateYfield,
+                            NoValiDesi: commasepratedNfield,
+                            PositionId: Pid,
+                            LastAssessment: FAID
+                            //PositionText: Ptxt
+                        },
+                        success: function (result) {
+                            if (result.success == "1") {
+                                alert(result.output1);
+                                window.location = "/Master/ViewAllMap";
+                            }     
+                            else if (result.success == "3") {
+                                alert(result.output3);
+                            }
+                            else if (result.success == "4") {
+                                alert(result.output4);                               
+                            }
+                            else if (result.success == "2") {
+                                alert(result.output2);
+                                location.href = "/Home/_SessionError1"
+                            }
+                        }
+                    })
+                }
+                else {
+                    alert("Select atleast 1 designation");
+                    return false
+                }
+        }
+    </script>
+}
+

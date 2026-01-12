@@ -1,0 +1,125 @@
+﻿@model HRM.Models.ChangeProfile
+@{
+    ViewBag.Title = "EmpUserProfile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    @using (Html.BeginForm("EmpUserProfile", "NewEmployeeLogin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        <br />
+
+        <div class="row">
+            <div class="col-12">
+                @if (TempData["Success"] != null)
+                {
+                    <p align="center" class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+                }
+                @if (TempData["Error"] != null)
+                {
+                    <p align="center" class="alert alert-danger" id="errormsg">@TempData["Error"]</p>
+                }
+
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title">Upload profile picture</h3>
+                        <h6 class="card-subtitle">
+                        </h6>
+                        <hr />
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        @Html.HiddenFor(model => model.id)
+                        <div class="form-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        @Html.Label("File Name")
+                                        @Html.EditorFor(model => model.filename, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.filename, "", new { @class = "text-danger" })
+                                        @*@Html.DropDownListFor(model => model.docnamelist, (IEnumerable<SelectListItem>)ViewBag.SelectedQuali,"Select doc", htmlAttributes: new { @class = "form-control" })*@
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="ct-horizontal">
+                                        @Html.Label("Choose jpg file only")
+                                        @Html.TextBoxFor(model => model.filepath, "", new { @type = "file", @class = "form-control", @id = "profile" })
+                                        @Html.ValidationMessageFor(model => model.filepath, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <img id="ImagePreview" style="max-width: 100%;" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <input type="hidden" id="CroppedImageData" name="CroppedImageData" />
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+                            <div align="center">
+                                <input type="submit" value="Upload Photograph" class="btn btn-success" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    @section scripts
+    {
+        <script src="~/Scripts/jquery.validate.js"></script>
+        <script src="~/Scripts/jquery.validate.min.js"></script>
+        <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+        <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+        <script>
+            var cropper;
+
+            // Handle file input change event
+            document.getElementById('profile').addEventListener('change', function (e) {
+                var file = e.target.files[0];
+                if (file) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        document.getElementById('ImagePreview').src = e.target.result;
+
+                        // Initialize cropper
+                        if (cropper) {
+                            cropper.destroy();
+                        }
+                        cropper = new Cropper(document.getElementById('ImagePreview'), {
+                            aspectRatio: 1, // 1:1 aspect ratio for square crop
+                            viewMode: 1,
+                            ready: function () {
+                                // Set crop box to 54x54 pixels
+                                cropper.setCropBoxData({ width: 80, height: 80 });
+                            }
+                        });
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // On form submit, get cropped image data
+            document.querySelector('form').addEventListener('submit', function (e) {
+                if (cropper) {
+                    var croppedCanvas = cropper.getCroppedCanvas({
+                        width: 80,
+                        height: 80
+                    });
+                    document.getElementById('CroppedImageData').value = croppedCanvas.toDataURL();
+                }
+            });
+        </script>
+    }
+
+
+
+
+
+
+

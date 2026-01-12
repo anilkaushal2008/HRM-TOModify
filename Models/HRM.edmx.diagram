@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="fd499f59ec2b48c2bcd626bdebf454fb" Name="Diagram1" ZoomLevel="32">
+        <EntityTypeShape EntityType="HRMModel.tblAssesmentQuestDetails" Width="1.5" PointX="16.5" PointY="94.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblAssQuestMas" Width="1.5" PointX="14.25" PointY="78" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblCertificateCodeMas" Width="1.5" PointX="0.75" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblCity" Width="1.5" PointX="3" PointY="7" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblConsultantDocDetail" Width="1.5" PointX="16.5" PointY="84.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblConsultantLedgerDetail" Width="1.5" PointX="16.5" PointY="89.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblConsultantSlipDetail" Width="1.5" PointX="18.75" PointY="96.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblConversation" Width="1.5" PointX="13.5" PointY="87" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblCurrentExpDetail" Width="1.5" PointX="8.25" PointY="104.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblDeptMas" Width="1.5" PointX="0.75" PointY="100.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblDesignationMas" Width="1.5" PointX="3" PointY="108.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblDesiQualification" Width="1.5" PointX="5.25" PointY="107.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblDesiSetting" Width="1.5" PointX="5.25" PointY="112" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblDocDetails" Width="1.5" PointX="22.5" PointY="105.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblDocMas" Width="1.5" PointX="20.25" PointY="122.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblDoctorDocMas" Width="1.5" PointX="2.75" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblDoctorUploadDetail" Width="1.5" PointX="16.5" PointY="111.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblDocTypeMas" Width="1.5" PointX="10.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblEmpAssesmentDetails" Width="1.5" PointX="19.5" PointY="100.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblEmpAssesmentMas" Width="1.5" PointX="14.25" PointY="91.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblEmpCodeMas" Width="1.5" PointX="10.75" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblEmpDetails" Width="1.5" PointX="19.5" PointY="110.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblEMpExitDetail" Width="1.5" PointX="18.75" PointY="132.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblEmpExitMas" Width="1.5" PointX="16.5" PointY="131.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblEmpLoginUser" Width="1.5" PointX="16.5" PointY="136.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblEmpMas" Width="1.5" PointX="11.25" PointY="102.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblExitInterviewQuestMas" Width="1.5" PointX="16.5" PointY="127.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblExperienceDetail" Width="1.5" PointX="5.25" PointY="99.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblExperienceMas" Width="1.5" PointX="3" PointY="96.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblGroupMaster" Width="1.5" PointX="0.75" PointY="1.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblIntershipDetail" Width="1.5" PointX="8.25" PointY="112.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblIntershipMas" Width="1.5" PointX="6" PointY="117.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblJoiningRemarks" Width="1.5" PointX="13.5" PointY="83" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblKRADocDetail" Width="1.5" PointX="16.5" PointY="142.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblLeaveBalance" Width="1.5" PointX="4.75" PointY="11.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblLedgerSession" Width="1.5" PointX="6.75" PointY="11.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblLetterAppointDetail" Width="1.5" PointX="22.5" PointY="112" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblLetterAppointMas" Width="1.5" PointX="20.25" PointY="126.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblLetterNumberMas" Width="1.5" PointX="12.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblLetterOfferDetail" Width="1.5" PointX="8.25" PointY="96.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblLetterOfferMas" Width="1.5" PointX="6" PointY="93.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblManPowerDetail" Width="1.5" PointX="3" PointY="102.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblManPowerMas" Width="1.5" PointX="0.75" PointY="96.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblMonthMaster" Width="1.5" PointX="12.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblMouDetail" Width="1.5" PointX="16.5" PointY="164.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblOtherDocDetail" Width="1.5" PointX="10" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblOtherDocumentMas" Width="1.5" PointX="7.75" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblPayrollData" Width="1.5" PointX="12.75" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblPermissionMaster" Width="1.5" PointX="3" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblPosDesiMap" Width="1.5" PointX="11.25" PointY="114.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblPosDocMap" Width="1.5" PointX="27.5" PointY="98.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblPositionCategoryMas" Width="1.5" PointX="12" PointY="76" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblQualiDetails" Width="1.5" PointX="8" PointY="7" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblQualiMas" Width="1.5" PointX="5.75" PointY="7.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblQuraterMas" Width="1.5" PointX="14.25" PointY="129.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblRegistrationDetail" Width="1.5" PointX="16.5" PointY="170" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblRequisition" Width="1.5" PointX="14.25" PointY="65.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblRequisitionNumberMas" Width="1.5" PointX="8.75" PointY="13.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblSalaryIncrement" Width="1.5" PointX="16.5" PointY="175.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblSkillMarksAndPositionMappMas" Width="1.5" PointX="14.25" PointY="60.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblState" Width="1.5" PointX="0.75" PointY="7" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblTitleMas" Width="1.5" PointX="12" PointY="120" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblTransferDetail" Width="1.5" PointX="25.5" PointY="104.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblUserAuthorize" Width="1.5" PointX="10.75" PointY="13.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblUserLove" Width="1.5" PointX="13.5" PointY="124.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblUserMaster" Width="1.5" PointX="11.25" PointY="92.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblUserPermission" Width="1.5" PointX="5.25" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRMModel.tblVPForward" Width="1.5" PointX="12.75" PointY="178.875" IsExpanded="true" />
+        <AssociationConnector Association="HRMModel.FK_tblAssesmentQuestDetails_tblAssQuestMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblAssesmentQuestDetails_tblUserMaster" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblCity_tblState" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblConsultantDocDetail_tblEmpAssesmentMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblConsultantLedgerDetail_tblEmpAssesmentMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblConversation_tblUserMaster" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblCurrrentExpDetail_tblDeptMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblCurrrentExpDetail_tblDesignationMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblCurrrentExpDetail_tblEmpAssesmentMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblDesignationMas_tblDesignationMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblEmpAssesmentMas_tblDeptMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblEmpMas_tblDeptMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblExperienceDetail_tblDeptMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblIntershipDetail_tblDeptMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblLetterAppointDetail_tblDeptMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblLetterOfferDetail_tblDeptMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblManPowerDetail_tblDeptMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblTransferDetail_tblDeptMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblUserMaster_tblDeptMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblDesiQualification_tblDesignationMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblDesiSetting_tblDesiQualification" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblEmpAssesmentMas_tblDesignationMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblEmpMas_tblDesignationMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblExperienceDetail_tblDesignationMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblIntershipDetail_tblDesignationMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblLetterAppointDetail_tblDesignationMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblLetterOfferDetail_tblDesignationMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblPosDesiMap_tblDesignationMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblTransferDetail_tblDesignationMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblUserMaster_tblDesignationMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblDocDetails_tblDocMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblDocDetails_tblEmpAssesmentMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblPosDocMap_tblDocMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblDoctorUploadDetail_tblEmpAssesmentMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblEmpAssesmentDetails_tblEmpAssesmentMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblEmpAssesmentDetails_tblPositionCategoryMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblEmpAssesmentDetails_tblUserMaster" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblEmpAssesmentMas_tblEmpAssesmentMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblEmpAssesmentMas_tblPositionCategoryMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblEmpAssesmentMas_tblTitleMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblEmpDetails_tblEmpAssesmentMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblEmpExitMas_tblEmpAssesmentMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblEmpLoginUser_tblEmpAssesmentMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblKRADocDetail_tblEmpAssesmentMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblLetterAppointDetail_tblEmpAssesmentMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblMouDetail_tblEmpAssesmentMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblRegistrationDetail_tblEmpAssesmentMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblSalaryIncrement_tblEmpAssesmentMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblTransferDetail_tblEmpAssesmentMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblVPForward_tblEmpAssesmentMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblEmpDetails_tblTitleMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblEMpExitDetail_tblEmpExitMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblEMpExitDetail_tblExitInterviewQuestMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblEmpMas_tblTitleMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblExperienceDetail_tblExperienceMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblPermissionMaster_tblGroupMaster" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblUserPermission_tblGroupMaster" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblIntershipDetail_tblIntershipMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblJoiningRemarks_tblUserMaster" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblLetterAppointDetail_tblLetterAppointMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblLetterOfferDetail_tblLetterOfferMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblManPowerDetail_tblManPowerMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblOtherDocDetail_tblOtherDocumentMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblUserPermission_tblPermissionMaster" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblPosDesiMap_tblPositionCategoryMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblPosDocMap_tblPositionCategoryMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblRequisition_tblPositionCategoryMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblSkillMarksAndPositionMappMas_tblPositionCategoryMas" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK__tblQualiD__fk_in__24927208" ManuallyRouted="false" />
+        <AssociationConnector Association="HRMModel.FK_tblUserLove_tblUserLove" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="HRMModel.tblConsultantSlips" Width="1.5" PointX="16.5" PointY="103.75" />
+        <AssociationConnector Association="HRMModel.FK_tblConsultantSlipDetail_tblConsultantSlips" />
+        <AssociationConnector Association="HRMModel.FK_tblConsultantSlips_tblEmpAssesmentMas" />
+        <AssociationConnector Association="HRMModel.FK_tblConsultantSlips_tblQuraterMas" />
+        <EntityTypeShape EntityType="HRMModel.tblLeaveApplication" Width="1.5" PointX="28.5" PointY="105.25" />
+        <EntityTypeShape EntityType="HRMModel.tblLeaveApplicationDetail" Width="1.5" PointX="30.75" PointY="106.125" />
+        <AssociationConnector Association="HRMModel.FK_tblLeaveApplication_tblEmpAssesmentMas" />
+        <AssociationConnector Association="HRMModel.FK_tblLeaveApplicationDetail_tblLeaveApplication" />
+        <EntityTypeShape EntityType="HRMModel.tblLeaveType" Width="1.5" PointX="13.375" PointY="14" />
+        <AssociationConnector Association="HRMModel.FK_tblLeaveApplication_tblLeaveType" />
+        <EntityTypeShape EntityType="HRMModel.tblConsultantTDS" Width="1.5" PointX="16.5" PointY="116.125" />
+        <AssociationConnector Association="HRMModel.FK_tblConsultantTDS_tblEmpAssesmentMas" />
+        <AssociationConnector Association="HRMModel.FK_tblConsultantTDS_tblQuraterMas" />
+        <EntityTypeShape EntityType="HRMModel.TblDnbFeeStructure" Width="1.5" PointX="18.75" PointY="79.375" />
+        <EntityTypeShape EntityType="HRMModel.TblDnbStudent" Width="1.5" PointX="16.5" PointY="79.25" />
+        <AssociationConnector Association="HRMModel.FK_TblDnbFeeStructure_TblDnbStudent" />
+        <AssociationConnector Association="HRMModel.FK_TblDnbStudent_TblDnbStudent" />
+        <EntityTypeShape EntityType="HRMModel.TblDnbFeeSubmission" Width="1.5" PointX="21" PointY="79.125" />
+        <AssociationConnector Association="HRMModel.FK_TblDnbFeeSubmission_TblDnbFeeStructure" />
+        <EntityTypeShape EntityType="HRMModel.tblYearMaster" Width="1.5" PointX="15.375" PointY="0.75" />
+        </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

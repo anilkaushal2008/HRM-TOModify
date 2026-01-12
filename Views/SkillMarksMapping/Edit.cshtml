@@ -1,0 +1,79 @@
+﻿@model HRM.Models.tblSkillMarksAndPositionMappMas
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "Edit";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+        Html.EnableClientValidation(true);
+    }
+
+
+    using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <h4>Skill Marks Edit View</h4>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.intid)
+
+            <div class="form-group">
+                @Html.Label("Selected Position cannot be changed", htmlAttributes: new { @class = "control-label col-md-10" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.tblPositionCategoryMas.vchPosCatName, new { htmlattributes = new { @class = "form-control", @readonly = "true" } })
+                    @Html.HiddenFor(model => model.fk_PositionID)
+                    @*@Html.ValidationMessageFor(model => model.fk_PositionID, "", new { @class = "text-danger" })*@
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.intSkillMarksFm, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.intSkillMarksFm, new { htmlAttributes = new { @class = "form-control", @min = "90", @max = "120", @required = "required" } })
+                    @Html.ValidationMessageFor(model => model.intSkillMarksFm, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.intSkillMarksTo, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.intSkillMarksTo, new { htmlAttributes = new { @class = "form-control", @min = "90", @max = "120", @required = "required" } })
+                    @Html.ValidationMessageFor(model => model.intSkillMarksTo, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Update" class="btn btn-primary" />
+                    @{ string newmap = Session["Psnew"].ToString();
+                        if (newmap == "True")
+                        {
+                            <div align="right">
+                                <a href="@Url.Action("Index", "SkillMarksMapping")">
+                                    <div class="btn btn-primary">
+                                        <h6 align="center" class="fas fa-hand-point-right">
+                                            View all mapping
+                                        </h6>
+                                    </div>
+                                </a>
+                            </div>
+                            }
+                        }
+                        </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+}
+
+

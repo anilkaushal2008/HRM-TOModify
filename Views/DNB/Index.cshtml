@@ -1,0 +1,439 @@
+﻿@model IEnumerable<HRM.Models.sp_GetDnbFeeReport_Result>
+@{
+    ViewBag.Title = "DNB Fee Report Dashboard";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+
+    // --- Razor Data Preparation ---
+    // Safely calculate Total Payable Amount
+    decimal totalCollected = ViewBag.TotalCollected ?? 0m;
+    decimal pendingAmount = ViewBag.PendingAmount ?? 0m;
+    decimal totalPayableAmount = totalCollected + pendingAmount;
+
+    // Safely get counts for chart
+    int verifiedCount = ViewBag.VerifiedCount ?? 0;
+    int pendingCount = ViewBag.PendingCount ?? 0;
+    int rejectedCount = ViewBag.RejectedCount ?? 0;
+
+    // Total Records for a useful summary metric
+    int totalRecords = Model.Count();
+}
+
+<!-- 🎨 Refined Styling for a Compact, Modern Look -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css" />
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.bootstrap5.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+<style>
+    :root {
+        --color-primary: #4A4A9A;
+        --color-collected: #1E88E5;
+        --color-pending: #FFB300;
+        --color-rejected: #E53935;
+        --color-payable: #27AE60;
+    }
+
+    body {
+        font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f4f7f9;
+    }
+
+    .dashboard-panel {
+        border-radius: 1rem;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        padding: 1rem 1.25rem;
+        background: #ffffff;
+        height: 100%;
+    }
+
+    .dashboard-card {
+        border-radius: 0.75rem;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        padding: 1rem;
+        color: #fff;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        cursor: default;
+    }
+
+        .dashboard-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
+        }
+
+    .card-icon {
+        font-size: 2rem;
+        opacity: 0.85;
+        margin-left: 0.5rem;
+    }
+
+    .summary-title {
+        font-size: 0.8rem;
+        font-weight: 500;
+        opacity: 0.9;
+        margin-bottom: 0.1rem;
+        text-transform: uppercase;
+    }
+
+    .summary-value {
+        font-size: 1.75rem;
+        font-weight: 700;
+        line-height: 1.1;
+    }
+
+    .bg-collected {
+        background-color: var(--color-collected) !important;
+    }
+
+    .bg-pending {
+        background-color: var(--color-pending) !important;
+        color: #333 !important;
+    }
+
+    .bg-payable {
+        background-color: var(--color-payable) !important;
+    }
+
+    .bg-rejected {
+        background-color: var(--color-rejected) !important;
+    }
+
+    #reportTable thead {
+        background-color: var(--color-primary);
+        color: #fff;
+    }
+
+    #reportTable th {
+        border-bottom: 2px solid #3d3d7a !important;
+        font-weight: 600;
+    }
+
+    .badge-pill {
+        border-radius: 50px !important;
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 0.3rem 0.6rem;
+        min-width: 70px;
+    }
+
+    .card-title-line {
+        border-bottom: 1px solid #e0e0e0;
+        padding-bottom: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .chart-container {
+        height: 250px;
+        width: 100%;
+        margin-top: 1rem;
+    }
+
+    .dataTables_wrapper .dt-buttons {
+        margin-bottom: 1rem;
+    }
+
+        .dataTables_wrapper .dt-buttons .btn {
+            font-size: 0.8rem;
+            padding: 0.35rem 0.6rem;
+            margin-right: 0.25rem;
+            border-radius: 0.5rem;
+        }
+
+    @@media (max-width: 992px) {
+        .summary-value {
+            font-size: 1.5rem;
+        }
+
+        .dashboard-card {
+            padding: 0.75rem;
+        }
+
+        .card-icon {
+            font-size: 1.5rem;
+        }
+
+        .chart-container {
+            height: 200px;
+        }
+    }
+</style>
+
+<div class="container-fluid mt-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+        <h4 class="fw-bold text-dark mb-2 mb-sm-0" style="color:black;font-weight:bolder;font-size:large">
+            <i class="bi bi-speedometer2 me-2" style="color: var(--color-primary);"></i> @ViewBag.Title
+        </h4>
+
+        <form id="yearFilterForm" method="get" class="d-flex align-items-center gap-2">
+            <label for="year" class="fw-semibold mb-0 text-muted d-none d-sm-block">Filter Year:</label>
+            <select id="year" name="year" class="form-select form-select-sm" style="width: 120px;" onchange="this.form.submit()">
+                @foreach (var y in ViewBag.Years as List<int>)
+                {
+                    <option value="@y" @(y == ViewBag.SelectedYear ? "selected" : "")>@y</option>
+                }
+            </select>
+        </form>
+    </div>
+
+    <div class="row g-3 mb-4 align-items-stretch">
+        <div class="col-lg-7">
+            <div class="dashboard-panel">
+                <h6 class="fw-bold text-secondary card-title-line">Financial Summary (@totalRecords Transactions)</h6>
+                <div class="row g-3">
+                    <div class="col-md-6 col-6">
+                        <div class="dashboard-card bg-collected">
+                            <div>
+                                <div class="summary-title">Collected</div>
+                                <div class="summary-value">₹ @totalCollected.ToString("N0")</div>
+                            </div>
+                            <i class="bi bi-cash card-icon"></i>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-6">
+                        <div class="dashboard-card bg-pending text-dark">
+                            <div>
+                                <div class="summary-title">Pending</div>
+                                <div class="summary-value">₹ @pendingAmount.ToString("N0")</div>
+                            </div>
+                            <i class="bi bi-hourglass-split card-icon"></i>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-6">
+                        <div class="dashboard-card bg-payable">
+                            <div>
+                                <div class="summary-title">Total Payable</div>
+                                <div class="summary-value">₹ @totalPayableAmount.ToString("N0")</div>
+                            </div>
+                            <i class="bi bi-piggy-bank card-icon"></i>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-6">
+                        <div class="dashboard-card bg-rejected">
+                            <div>
+                                <div class="summary-title">Rejected Count</div>
+                                <div class="summary-value">@rejectedCount</div>
+                            </div>
+                            <i class="bi bi-x-octagon card-icon"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="dashboard-panel d-block">
+                <h6 class="fw-bold text-secondary card-title-line">Verification Status</h6>
+                <div class="chart-container">
+                    <canvas id="statusChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm rounded-4 mb-5">
+        <div class="card-body p-4">
+            <h6 class="fw-bold mb-3 text-secondary">
+                <i class="bi bi-table me-2" style="color: var(--color-primary);"></i> Transaction Details
+            </h6>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped align-middle hover" id="reportTable" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Emp ID</th>
+                            <th>Name</th>
+                            <th>Payable To</th>
+                            <th class="text-end">Amount (₹)</th>
+                            <th>Due Date</th>
+                            <th>Status</th>
+                            <th>Verified By</th>
+                            <th>Verification Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (!Model.Any())
+                        {
+                            <tr>
+                                <td colspan="8" class="text-center text-muted py-5">
+                                    <i class="bi bi-inbox display-6 d-block mb-3"></i>
+                                    No transaction records found for the year **@ViewBag.SelectedYear**.
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            foreach (var r in Model)
+                            {
+                                string badgeClass;
+                                if (r.VerificationStatus == "Verified")
+                                { badgeClass = "badge-success"; }
+                                else if (r.VerificationStatus == "Rejected")
+                                { badgeClass = "badge-danger"; }
+                                else
+                                { badgeClass = "badge-warning"; }
+
+                                <tr>
+                                    <td>@(r?.DnbStudentId.ToString() ?? "-")</td>
+                                    <td>@(r?.vchName ?? "-")</td>
+                                    <td>@(r?.PayableTo ?? "-")</td>
+                                    <td class="text-end fw-bold text-dark">@(r?.Amount.ToString("N0") ?? "-")</td>
+                                    <td>@(r?.DueDate.ToShortDateString() ?? "-")</td>
+                                    <td>
+                                        @{if (r.VerificationStatus != null)
+                                            {
+                                                <span class="badge badge-pill @badgeClass">@r.VerificationStatus</span>
+                                            }
+                                            else if ((r.VerificationStatus == null) && (r.DueDate > DateTime.Today))
+                                            {
+                                                <span class="badge badge-pill badge-cyan">Upcoming</span>
+                                            }
+                                            else if ((r.VerificationStatus == null) && (r.DueDate == DateTime.Today))
+                                            {
+                                                <span class="badge badge-pill badge-warning">Today Due</span>
+                                            }
+                                            else if ((r.VerificationStatus == null) && (r.DueDate < DateTime.Today))
+                                            {
+                                                <span class="badge badge-pill badge-danger">OverDue</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge badge-pill @badgeClass">@r.VerificationStatus</span>
+                                            }
+                                        }
+                                    </td>
+                                    <td>@(r?.VerifiedBy ?? "-")</td>
+                                    <td>@(r.VerificationDate?.ToString("dd/MM/yyyy") ?? "-")</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- ✅ DataTables Core -->
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+
+<!-- ✅ Buttons Extension -->
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.bootstrap5.min.js"></script>
+
+<!-- ✅ Export Dependencies -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.colVis.min.js"></script>
+
+<!-- ✅ Opetional button Dependencies -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css" />
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.bootstrap5.min.css" />
+
+<!-- Chart.js and Data Labels Plugin -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+
+<script>
+    window.dnbSummaryData = {
+        verifiedCount: @verifiedCount,
+        pendingCount: @pendingCount,
+        rejectedCount: @rejectedCount
+    };
+
+    const PRIMARY_COLOR = '#4A4A9A';
+    const PENDING_COLOR = '#FFB300';
+    const REJECTED_COLOR = '#E53935';
+
+    $(document).ready(function () {
+        var table = $('#reportTable').DataTable({
+            responsive: true,
+            lengthChange: true,
+            ordering: true,
+            pageLength: 10,
+            dom: '<"row mb-3"<"col-md-6"B><"col-md-6"f>>rt<"row mt-3"<"col-md-6"i><"col-md-6"p>>',
+            buttons: [
+                { extend: 'copy', className: 'btn btn-outline-secondary btn-sm', text: '<i class="bi bi-clipboard"></i> Copy' },
+                { extend: 'csv', className: 'btn btn-outline-primary btn-sm', text: '<i class="bi bi-filetype-csv"></i> CSV' },
+                { extend: 'excel', className: 'btn btn-outline-success btn-sm', text: '<i class="bi bi-file-earmark-excel"></i> Excel' },
+                { extend: 'pdf', className: 'btn btn-outline-danger btn-sm', text: '<i class="bi bi-file-earmark-pdf"></i> PDF' },
+                { extend: 'print', className: 'btn btn-outline-dark btn-sm', text: '<i class="bi bi-printer"></i> Print' },
+                { extend: 'colvis', className: 'btn btn-outline-info btn-sm', text: '<i class="bi bi-columns-gap"></i> Columns' }
+            ],
+            columnDefs: [{ type: 'num-fmt', targets: 3 }]
+        });
+
+        table.buttons().container().appendTo('#reportTable_wrapper .col-md-6:eq(0)');
+    });
+
+    const ctx = document.getElementById('statusChart');
+    Chart.register(ChartDataLabels);
+
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Verified', 'Pending', 'Rejected'],
+            datasets: [{
+                data: [
+                    window.dnbSummaryData.verifiedCount,
+                    window.dnbSummaryData.pendingCount,
+                    window.dnbSummaryData.rejectedCount
+                ],
+                backgroundColor: [PRIMARY_COLOR, PENDING_COLOR, REJECTED_COLOR],
+                borderColor: ['#fff', '#fff', '#fff'],
+                borderWidth: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        color: '#212529',
+                        font: { size: 12, weight: '600' }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const label = context.label || '';
+                            const value = context.parsed;
+                            const dataArray = context.dataset.data;
+                            const total = dataArray.reduce((a, b) => a + b, 0);
+                            const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                            return ` ${label}: ${value} (${percentage}%)`;
+                        }
+                    }
+                },
+                datalabels: {
+                    color: (context) => {
+                        const label = context.chart.data.labels[context.dataIndex];
+                        return label === 'Pending' ? '#333' : '#fff';
+                    },
+                    textAlign: 'center',
+                    font: {
+                        weight: 'bold',
+                        size: 13
+                    },
+                    formatter: (value, context) => {
+                        return value > 0 ? value : '';
+                    }
+                }
+            }
+        }
+    });
+
+   
+</script>

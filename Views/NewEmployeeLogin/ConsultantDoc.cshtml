@@ -1,0 +1,42 @@
+﻿@*@model HRM.Models.tblDocDetails*@
+@{ Layout = "";}
+@if (Session["UserId"] != null)
+{
+    <div class="card">
+        <h3 class="col-10" style="color: black; font-weight: bold; color: Highlight">Documents</h3>
+        <div class="card-body">
+            <table class="table table-sm col-12">
+                <thead>
+                    <tr style="color:black">
+                        <th>
+                            Document Name
+                        </th>
+                        <th>
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (ViewBag.ConsultantDoc != null)
+                    {
+                        foreach (var comp in ViewBag.ConsultantDoc as IEnumerable<SelectListItem>)
+                        {
+                            <tr style="color:black">
+                                <td>
+                                    @Html.Label(comp.Text)
+                                </td>
+                                <td>
+                                    <a href="@Url.Content("~/Content/Uploads/" + comp.Value)" target="_blank">View Document</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>     
+        </div>
+    </div>
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}

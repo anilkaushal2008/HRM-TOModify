@@ -1,0 +1,90 @@
+﻿@model IEnumerable<HRM.Models.tblQualiMas>
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "ViewAllQualificationMas";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    }
+
+    <p>
+        @*@Html.ActionLink("Create New", "Create")*@
+    </p>
+        <div class="card">
+            <div class="card-body">
+                @if (TempData["Success"] != null)
+                {
+                    <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+                }
+                <h3 class="card-title">All Qualifaction Master View</h3>
+                @{ string Quali = Session["QualiDocMas"].ToString();
+                    if (Quali == "True")
+                    {
+                        <div align="right">
+                            <a href="@Url.Action("QualificationMas", "Master")">
+                                <div class="btn btn-primary">
+                                    <h6 align="center" class="fas fa-hand-point-right"></h6>
+                                    <h6 align="center" class="fas fa-plus">
+                                        New qualifaction/doc
+                                    </h6>
+                                </div>
+                            </a>
+                        </div>
+                    }
+                }
+                <div class="table">
+                    <table class="table table-sm col-12">
+                        <thead class="bg-primary text-white col-12">
+                            <tr>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.vchqname)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.vchcreatedby)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.dtcreated)
+                                </th>
+                                @{ string Quali1 = Session["EditQualiDocMas"].ToString();
+                                    if (Quali1 == "True")
+                                    {
+                                        <th>Action</th>
+                                    }
+                                }
+                            </tr>
+                        </thead>
+
+                        <tbody class="border border-primary">
+
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.vchqname)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.vchcreatedby)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.dtcreated)
+                                    </td>
+                                    @{ string Quali2 = Session["EditQualiDocMas"].ToString();
+                                        if (Quali2 == "True")
+                                        {
+                                            <td>
+                                                @Html.ActionLink("Edit", "editquali", new { id = item.intqualiid })
+                                            </td>
+                                        }
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}

@@ -1,0 +1,6 @@
+﻿@model HRM.Models.MasQualificationViewModel
+    @if(Model.Qualifications!=null)
+    {
+        @Html.ListBoxFor(model=>model.SelectedQualifications,Model.Qualifications,htmlAttributes:new { multiple="multiple", @class="form-control"})
+        @Html.ValidationMessageFor(model => model.SelectedQualifications, "", new {@class="text-danger" })
+    }

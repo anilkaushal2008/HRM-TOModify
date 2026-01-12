@@ -1,0 +1,99 @@
+﻿@model HRM.Models.DocCompulsoryModel
+
+@{
+    ViewBag.Title = "UpCompDoc";
+    Layout = "~/Views/Shared/_layout_EmpUserlogin.cshtml";
+    Html.EnableClientValidation(true);
+}
+@using (Html.BeginForm("UpCompDoc","NewEmployeeLogin",FormMethod.Post, new { enctype = "multipart/form-data" }))
+
+{
+
+ @Html.AntiForgeryToken()
+    <br />
+
+    <div class="row">
+        <div class="col-12">
+            @if (TempData["Success"] != null)
+            {
+                <p align="center" class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+            }
+            @if (TempData["Error"] != null)
+            {
+                <p align="center" class="alert alert-danger" id="errormsg">@TempData["Error"]</p>
+            }         
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title">New Employee Uploads Compulsory Documents</h3>
+                        <div align="right">
+                            <a href="@Url.Action("ViewCompDoc", "NewEmployeeLogin",routeValues:new { @id = Model.empid })">
+                                <div class="btn btn-success">
+                                    <h6 align="center" class="fas fa-hand-point-right">
+                                        View all document
+                                    </h6>
+                                </div>
+                            </a>
+                        </div>
+                        <h6 class="card-subtitle">
+                        </h6>
+                        <hr />
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="form-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.Label("Selected Mobile number")
+                                    @Html.Label("emptcode", (string)ViewBag.Mobile, htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.Label("Selected Emp Name")
+                                    @Html.Label("emptcode", (string)ViewBag.Empname, htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.DropDownListFor(model => model.compdocname, new SelectList(Model.compdoc, "Value", "Text"), "Select Document", htmlAttributes: new { @class = "form-control", @id = "selectedDocName" })
+                                    @Html.Hidden("hdempid", (string)ViewBag.EmpID)
+                                    @Html.ValidationMessageFor(model => model.compdocument, "", new { @class = "text-danger" })
+                                    @*@Html.DropDownListFor(model => model.docnamelist, (IEnumerable<SelectListItem>)ViewBag.SelectedQuali,"Select doc", htmlAttributes: new { @class = "form-control" })*@
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="ct-horizontal">
+                                    @Html.TextBoxFor(model => model.compdocument, "", new { @type = "file", @class = "form-control", @id = "compDocFile" })
+                                    @Html.ValidationMessageFor(model => model.compdocname, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                        <div align="center" class="form-group">
+                            <h5 class="card-title">Is final submission<span style="color:red">*</span></h5>
+                            <fieldset class="radio">
+                                <label class="radio">
+                                    Yes
+                                    @Html.RadioButtonFor(Model => Model.BitIsCompleted, "true", htmlAttributes: new { id = "chkyes", @class = "radio1" })
+                                </label>
+                                <label class="radio">
+                                    No
+                                    @Html.RadioButtonFor(Model => Model.BitIsCompleted, "false", htmlAttributes: new { id = "chkno", @class = "radio1" })
+                                </label>
+                                @Html.ValidationMessageFor(model => model.BitIsCompleted, "", new { @class = "text-danger" })
+                            </fieldset>
+                        </div>
+                        <hr />
+                        <div align="center">
+                            <input type="submit" value="Upload document" class="btn btn-success" />
+                        </div>
+                    </div>
+                </div>
+             </div>
+        </div>
+    </div>
+ }
+
+

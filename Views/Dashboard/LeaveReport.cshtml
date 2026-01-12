@@ -1,0 +1,164 @@
+﻿@model List<HRM.Models.spLeaveReport_Result>
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "LeaveReport";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+        //Html.EnableClientValidation(true);
+    }
+
+    using (Html.BeginForm("LeaveReport", "Dashboard", FormMethod.Post))
+    {
+        <br />
+        <link href="//cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" rel="stylesheet" />       
+        <div class="cardcard-custom-shadow" style="background-color:aliceblue;" >
+            <div class="card-body">
+                <h3 class="card-title" align="center">Leave Report View</h3>
+                <hr />
+                <div class="col-lg-12">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">                               
+                                @Html.TextBox("dtraneguser", "", htmlAttributes: new { @id = "dtrange", @class = "form-control", @required = "required", @placeholder = "Select date range" })                                
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">                             
+                                <input type="submit" value="Submit" id="btnsubmit" class="btn btn-success" />
+                            </div>
+                        </div>
+                    </div>
+                    @if (TempData["Empty"] != null)
+                    {
+                        <p class="alert alert-danger" id="errorMessage" align="center">@TempData["Empty"]</p>
+                    }
+
+                    @if (Model != null)
+                    {
+                        <div class="card">
+                            @if (TempData["Success"] != null)
+                            {
+                                <p class="alert alert-success" id="successMessage" align="center">@TempData["Success"]</p>
+                            }
+                            @if (TempData["Selecteddate"] != null)
+                            {
+                                <p class="alert alert-success" id="errorMessage" align="center">@TempData["Leavedate"]</p>
+                            }
+                            <div align="right">
+                                <a href=@Url.Action("LeaveExport", "Dashboard") class="btn btn-success">Export to excel</a>
+                            </div>
+                            <table id="active" class="table table-sm" style="font-size:90%">
+                                <thead class="bg-success text-white col-12">
+                                    <tr>
+                                        <th>
+                                            EmpCode
+                                        </th>
+                                        <th>
+                                            Name
+                                        </th>
+                                        <th>
+                                            Department
+                                        </th>
+                                        <th>
+                                            DateFrom
+                                        </th>
+                                        <th>
+                                            ToDate
+                                        </th>
+                                        <th>
+                                            LeaveType
+                                        </th>
+                                        <th>
+                                            Status
+                                        </th>
+                                        <th>
+                                            Total
+                                        </th>
+                                        <th>
+                                            Reason
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="border border-success">
+                                    @if (TempData["Empty"] != null)
+                                    {
+                                        <p class="alert alert-danger" id="successMessage">@TempData["Empty"]</p>
+                                    }
+                                    @if (Model.Count() != 0)
+                                    {
+                                        foreach (var item in Model)
+                                        {
+                                <tr style="color:black">
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.vchEmpFcode)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.vchName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.vchdeptname)
+                                    </td>
+                                    <td>
+                                        @item.dtStartFrom.ToString("dd/MM/yyyy")
+                                    </td>
+                                    <td>
+                                        @item.dtEndDate.ToString("dd/MM/yyyy")
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.leaveType)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.vchStatus)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.takenLeave)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.vchReason)
+                                    </td>
+                                </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                    }
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#active').DataTable();
+        });
+        $(function () {
+
+            $("[id$=dtrange]").daterangepicker({
+                format: 'DD/MM/YYYY',
+                minDate: '01-01-2025',
+                maxDate: '31-12-2025'
+                //minDate: '2019-05-01',
+                //maxDate: '2030-03-31'
+            }),
+                function (start, end) {
+                    $("[id$ = dtraneguser]").html(start.format('DD/MM/YYYY') + '-' + end.format('DD/MM/YYYY'));
+                }
+        });
+    </script>
+}
+
+
+
+

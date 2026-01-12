@@ -1,0 +1,356 @@
+﻿@model HRM.Models.tblLeaveApplicationDetail
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="row">
+        <div class="col-12" style="font-size:90%;color:black">
+            <div class="card" style="background-color:aliceblue">
+                <div class="card-body col-12">
+                    <div class="card-title" align="center">
+                        <h3 class="card-title">Leave approval action view</h3>
+                    </div>
+                    @if (TempData["Error"] != null)
+                    {
+                        <p align="center" class="alert alert-danger" id="empty">@TempData["Error"]</p>
+                    }
+                    @if (ViewBag.Error != null)
+                    {
+                        <p align="center" class="alert alert-danger" id="empty">@ViewBag.Error</p>
+                    }
+                    @if (TempData["Success"] != null)
+                    {
+                        <p align="center" class="alert alert-success" id="empty">@TempData["Success"]</p>
+                    }
+                    @if (ViewBag.Success != null)
+                    {
+                        <p align="center" class="alert alert-success" id="success">@ViewBag.Success</p>
+                    }
+                    <h6 class="card-subtitle"></h6>
+                    <hr />
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(model => model.UN_ID)
+                    @Html.HiddenFor(model => model.fk_AppID)
+                    @Html.HiddenFor(model => model.fk_AssignUserid)
+                    <div class="">
+                        <h4 class="card-title">Leave request details</h4><br />
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                @Html.Label("Type", htmlAttributes: new { @class = "control-label col-md-8" })
+                                <div class="col-md-12">
+                                    @Html.TextBoxFor(m => m.tblLeaveApplication.tblLeaveType.leaveType, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                @Html.Label("Status", htmlAttributes: new { @class = "control-label col-md-8" })
+                                <div class="col-md-12">
+                                    @Html.EditorFor(model => model.vchCurrentStatus, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                @Html.Label("Days", htmlAttributes: new { @class = "control-label col-md-8" })
+                                <div class="col-md-12">
+                                    @Html.EditorFor(model => model.tblLeaveApplication.decdaysRequest, new { htmlAttributes = new { @class = "form-control", @id = "requestdays", @readonly = "readonly" } })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                @Html.Label("Date from", htmlAttributes: new { @class = "control-label col-md-8" })
+                                <div class="col-md-12">
+                                    <label id="dtfrom" class="form-control">@ViewBag.dtFrom</label>
+
+                                    @*@Html.EditorFor(model => model.tblLeaveApplication.dtStartFrom, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @id = "dtfrom" } })
+                        @Html.ValidationMessageFor(model => model.tblLeaveApplication.dtStartFrom, "", new { @class = "text-danger" })*@
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                @Html.Label("End date", htmlAttributes: new { @class = "control-label col-md-8" })
+                                <div class="col-md-12">
+                                    <label id="dtfrom" class="form-control">@ViewBag.dtTo</label>
+                                    @*@Html.EditorFor(model => model.tblLeaveApplication.dtEndDate, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })*@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                @Html.Label("Remarks", htmlAttributes: new { @class = "control-label col-md-8" })
+                                <div class="col-md-12">
+                                    @Html.EditorFor(model => model.tblLeaveApplication.vchReason, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @if (ViewBag.LeaveCounter != null)
+                    {
+                        var leavecheck = ViewBag.LeaveCounter as IEnumerable<dynamic>;
+                        if (leavecheck != null)
+                        {
+                            <hr />
+                            <h4 style="color:black;font-weight:bold" align="center">Employee leave history</h4>
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            Leave Type
+                                        </th>&nbsp;&nbsp;&nbsp;&nbsp;
+
+                                        <th>
+                                            Consumed count
+                                        </th>
+                                        <th>
+                                           Approval Status
+                                      </th>
+                                    </tr>
+                                </thead>
+                                @foreach (var item in leavecheck)
+                                {
+                                    <tbody class="border-primary">
+                                    <td>
+                                        @item.LeaveType
+                                    </td>
+                                    <td>
+                                        @item.ConsumedCount
+                                    </td>
+                                    <td>
+                                        @if (item.IsHalfYearReached == true)
+                                        {
+                                            <span class="badge bg-warning text-dark">Limit Reached</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-success text-white">Can approve</span>
+                                        }
+                                    </td>
+                                    </tbody>
+                                }
+                            </table>
+                        }
+                    }
+                    <hr />
+                    <div class="row" align="center">
+                        <fieldset class="radio col-12">
+                            <div class="col-4">
+                                <label class="radio">
+                                    <span style="color:black;font-weight:800">SameApproved?</span>
+                                    @Html.RadioButtonFor(Model => Model.vchGetApprovalType, "Same", htmlAttributes: new { id = "same", @class = "radio1" })
+                                </label>
+                            </div>
+                            <div class="col-4">
+                                <label class="radio">
+                                    <span style="color:black;font-weight:800">
+                                        Partially?
+                                    </span>
+                                    @Html.RadioButtonFor(Model => Model.vchGetApprovalType, "Partial", htmlAttributes: new { id = "partial", @class = "radio2" })
+                                </label>
+                            </div>
+                            <div class="col-4">
+                                <label class="radio">
+                                    <span style="color:black;font-weight:800">
+                                        Rejected?
+                                    </span>
+                                    @Html.RadioButtonFor(Model => Model.vchGetApprovalType, "Rejected", htmlAttributes: new { id = "rejected", @class = "radio3" })
+                                </label>
+                                @Html.ValidationMessageFor(model => model.vchGetApprovalType, "", new { @class = "text-danger" })
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+                            <div class="row" id="partialaction" hidden="hidden">
+                                <div class="row col-12">
+                                    <div class="col-12">
+                                        <hr />
+                                        <div class="form-group">
+                                            <div class="col-md-10">
+                                                <h4 style="color:black;font-weight:bold">Partial approval option</h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row col">
+                                    <div class="col-4">
+                                        <div class="form-group">
+                                            @Html.Label("Select adjustment type", htmlAttributes: new { @class = "control-label col-md-8" })
+                                            <div class="col-md-10">
+                                                @Html.DropDownListFor(model => model.tblLeaveApplication.fk_LeaveType, new SelectList(ViewBag.Types, "Text", "Value"), htmlAttributes: new { @id = "ltype", @class = "form-control" })
+                                                @*@Html.ValidationMessageFor(model => model.fk_LeaveType, "", new { @class = "text-danger" })*@
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="form-group">
+                                            @Html.Label("New date range", htmlAttributes: new { @class = "control-label col-6" })
+                                            <div class="col-md-10">
+                                                @Html.TextBoxFor(m => m.dtApprovedRange, "", htmlAttributes: new { @type = "text", @id = "dtrange", name = "dtraneguser", @class = "form-control" })<br />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="form-group">
+                                            @Html.Label("Total days", htmlAttributes: new { @class = "control-label col-6" })
+                                            <div class="col-md-10">
+                                                @Html.EditorFor(model => model.decApprvedDays, new { htmlAttributes = new { @class = "form-control", @id = "totaldays", @readonly = "readonly" } })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @*<div class="row col-12">
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            @Html.Label("Remarks (max 1000 Character)", htmlAttributes: new { @class = "control-label col-8" })
+                                            <div class="col-md-12">
+                                                @Html.TextAreaFor(model => model.vchApproveRemarks, new { @class = "form-control", @rows = "5" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                </div>*@
+                            </div>
+
+                            <div class="row" id="remarks" hidden="hidden">
+                                <div class="row col-12">
+                                    <div class="col-12">
+                                        <hr />
+                                        <div class="form-group">
+                                            <div class="col-md-10">
+                                                <h4 style="color:black;font-weight:bold">Remarks</h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        @Html.Label("Remarks (max 1000 Character)", htmlAttributes: new { @class = "control-label col-8" })
+                                        <div class="col-md-12">
+                                            @Html.TextAreaFor(model => model.vchApproveRemarks, new { @class = "form-control", @rows = "4", @cols = "12" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div align="center">
+                                <input type="submit" id="postbtn" value="Save" class="btn btn-primary" /> &nbsp;&nbsp;
+                                <a class="btn btn-outline-danger" href="@Url.Action("AssignedLeave","Dashboard")">Cancel</a>
+                            </div>
+                            <br />
+                            <br />
+                        </div>
+                    </div>
+                </div>
+}
+@section Scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <script type="text/javascript">
+        $("#partial").click(function () {
+            if ($("#partial").is(":checked")) {
+                $("#partialaction").prop("hidden", false);
+                $("#remarks").prop("hidden", false);               
+            }
+        })
+ $("#same").click(function () {
+     if ($("#same").is(":checked")) {
+         $("#partialaction").prop("hidden", true);
+         $("#remarks").prop("hidden", false);
+     }
+ })
+        $("#rejected").click(function () {
+            if ($("#rejected").is(":checked")) {
+             $("#partialaction").prop("hidden", true);
+                $("#remarks").prop("hidden", false);
+         }
+        })
+        $('#postbtn').click('submit', function (e) {
+            if ($("#partial").is(":checked")) {
+                var checkdays = $('#totaldays').val();
+                if (checkdays == 0) {
+                    e.preventDefault();
+                    alert("Total request days should not be 0");
+                }
+            }
+        });
+    
+     
+
+        $(function () {
+            var aajkidate = new Date();
+            var year = aajkidate.getFullYear();
+            // $document.ready(function () {
+            var mindate = (aajkidate.getDate() + 1);
+            var day = String(aajkidate.getDate()).padStart(2, '0');
+            //var day = mindate.getDate();
+            var month = ("0" + (aajkidate.getMonth() + 1)).slice(-2);
+            var year = aajkidate.getFullYear();
+            var newMidDate = formatDate(aajkidate);
+            var checkDate = $('#dtfrom').text(); //newMidDate;
+            var edate = '31/12/' + year;
+            $('input[id="dtrange"]').daterangepicker({
+                locale: {
+                    format: 'DD/MM/YYYY'
+                },
+                startDate: checkDate,
+                endDate: edate,
+                minDate: checkDate,
+                maxDate: edate
+                //,open: 'right'
+            },
+                function (start, end, label) {
+                    //console.log("A new date selection was made: " + start.format('DD/MM/YYYY') + ' to ' + end.format('DD/MM/YYYY'));
+                    var dayDifference = (end.diff(start, 'days') + 1);
+                    //$("#totaldays").val(dayDifference);
+                }
+            );
+        });
+
+        $('#dtrange').on('apply.daterangepicker', function (ev, picker) {
+            var start = picker.startDate;
+            var end = picker.endDate;
+            var diffDays = end.diff(start, 'days') + 1; //Add 1 to include both start and end dates
+            // Display the result
+            var halfDay = 0.5;
+            var setZeroDiff = 0;
+            //check if leave type is half day
+            var getType = $("#ltype").find("option:selected").text();
+            if (getType == "Half day") {
+                if (diffDays > 1) {
+                    alert("Half day aplicable on same date, select same date and try again!")
+                    $('#totaldays').val(setZeroDiff);
+                }
+                else {
+                    $('#totaldays').val(halfDay);
+                }
+            }
+            else {
+                $('#totaldays').val(diffDays);
+            }
+        });
+        //Function to format the date as dd/mm/yyyy
+        function formatDate(mindate) {
+            let day = String(mindate.getDate()).padStart(2, '0');
+            let month = String(mindate.getMonth() + 1).padStart(2, '0'); //Months are zero-based
+            let year = mindate.getFullYear();
+            return day + '/' + month + '/' + year;
+        }
+
+    </script>
+}
+
+

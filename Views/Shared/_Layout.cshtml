@@ -1,0 +1,334 @@
+﻿@using System.Web
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>@ViewBag.Title | Indus Group</title>
+
+    <link rel="icon" type="image/png" sizes="16x16" href="@Url.Content("~/Content/assets/images/logo1.png")">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/dist/css/style.min.css")" rel="stylesheet" />
+
+    <style>
+        :root {
+            --bg-body: #f8fafc;
+            --bg-sidebar: #ffffff;
+            --bg-card: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --accent: #4f46e5;
+            --border: #e2e8f0;
+            --nav-height: 70px;
+            --sidebar-width: 260px;
+        }
+
+        [data-theme="dark"] {
+            --bg-body: #0f172a;
+            --bg-sidebar: #1e293b;
+            --bg-card: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #818cf8;
+            --border: #334155;
+        }
+
+        /* --- GLOBAL SCROLLBAR STYLING --- */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-body) !important;
+            color: var(--text-main);
+            margin: 0;
+            zoom: 0.9;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+
+        /* Custom Scrollbar for Chrome, Safari and Edge */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-body);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+            border: 2px solid var(--bg-body);
+        }
+
+            ::-webkit-scrollbar-thumb:hover {
+                background: var(--text-muted);
+            }
+
+        [data-theme="dark"] ::-webkit-scrollbar-thumb {
+            background: #475569;
+            border: 2px solid var(--bg-body);
+        }
+
+        .main-wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--bg-sidebar);
+            border-right: 1px solid var(--border);
+            position: fixed;
+            height: 100vh;
+            z-index: 1001;
+            transition: 0.3s ease;
+            /* SCROLLBAR ENABLED FOR SIDEBAR */
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        /* SCROLLABLE CONTENT AREA */
+        .page-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            padding-top: var(--nav-height);
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* NAVBAR - FIXED TOP */
+        .navbar-custom {
+            height: var(--nav-height);
+            background: var(--bg-sidebar);
+            border-bottom: 1px solid var(--border);
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: var(--sidebar-width);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            padding: 0 30px;
+            justify-content: space-between;
+            backdrop-filter: blur(10px);
+            background: rgba(var(--bg-sidebar), 0.8);
+        }
+
+        /* NAVIGATION MENU */
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            margin: 4px 15px;
+            border-radius: 12px;
+            color: var(--text-muted);
+            text-decoration: none !important;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+
+            .menu-item:hover, .menu-item.active {
+                background: rgba(79, 70, 229, 0.1);
+                color: var(--accent);
+            }
+
+            .menu-item i {
+                margin-right: 12px;
+                width: 20px;
+                text-align: center;
+            }
+
+        .nav-label {
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            opacity: 0.6;
+            letter-spacing: 1.2px;
+            padding: 25px 30px 10px;
+            display: block;
+        }
+
+        .theme-toggle {
+            cursor: pointer;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.05);
+            color: var(--text-muted);
+        }
+
+        footer {
+            margin-top: auto;
+            border-top: 1px solid var(--border);
+            background: var(--bg-sidebar);
+        }
+
+        @@media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .page-content, .navbar-custom {
+                margin-left: 0;
+                left: 0;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    @{
+        bool isConsultant = Session["IsConsultant"]?.ToString() == "True";
+        var logoutLink = Url.Action("EMployee", "NewEmployeeLogin");
+    }
+
+    <div class="main-wrapper">
+        <!-- FIXED SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+            <div class="p-4 mb-3 d-flex align-items-center">
+                <img src="@Url.Content("~/Content/assets/images/logo1.png")" width="35" alt="Logo">
+                <span class="ml-3 font-weight-bold" style="font-size: 1.2rem; color: var(--text-main)">INDUS GROUP</span>
+            </div>
+            <nav>
+                <span class="nav-label">Core Navigation</span>
+                <a href="@Url.Action("EmpDashboard", "NewEmployeeLogin")" class="menu-item @(ViewContext.RouteData.Values["action"].ToString() == "EmpDashboard" ? "active" : "")">
+                    <i class="fas fa-th-large"></i> Dashboard
+                </a>
+
+                <span class="nav-label">Self Service</span>
+                <a href="@Url.Action("ApplyLeave", "Leave")" class="menu-item @(ViewContext.RouteData.Values["action"].ToString() == "ApplyLeave" ? "active" : "")">
+                    <i class="fas fa-paper-plane"></i> Apply Leave
+                </a>
+                <a href="@Url.Action("AllLeave", "Leave")" class="menu-item @(ViewContext.RouteData.Values["action"].ToString() == "AllLeave" ? "active" : "")">
+                    <i class="fas fa-history"></i> Leave History
+                </a>
+
+                @if (isConsultant)
+                {
+                    <span class="nav-label">Consultant Hub</span>
+                    <a href="@Url.Action("IndexSlips", "NewEmployeeLogin")" class="menu-item @(ViewContext.RouteData.Values["action"].ToString() == "IndexSlips" ? "active" : "")"><i class="fas fa-file-invoice-dollar"></i> Salary Slips</a>
+                    <a href="@Url.Action("IndexKRA", "NewEmployeeLogin")" class="menu-item @(ViewContext.RouteData.Values["action"].ToString() == "IndexKRA" ? "active" : "")"><i class="fas fa-chart-line"></i> Performance</a>
+                    <a href="@Url.Action("IndexTDS", "NewEmployeeLogin")" class="menu-item @(ViewContext.RouteData.Values["action"].ToString() == "IndexTDS" ? "active" : "")"><i class="fas fa-shield-alt"></i> TDS Statement</a>
+                    <a href="@Url.Action("LedgerIndex", "NewEmployeeLogin")" class="menu-item @(ViewContext.RouteData.Values["action"].ToString() == "LedgerIndex" ? "active" : "")"><i class="fas fa-book"></i> Fee Ledger</a>
+                }
+            </nav>
+        </aside>
+
+        <!-- MAIN CONTENT AREA -->
+        <div class="page-content">
+            <!-- FIXED NAVBAR -->
+            <header class="navbar-custom">
+                <div class="d-flex align-items-center">
+                    <button class="btn d-lg-none p-0 mr-3 text-muted" onclick="document.getElementById('sidebar').classList.toggle('open')">
+                        <i class="fas fa-bars fa-lg"></i>
+                    </button>
+                    <h4 class="mb-0 font-weight-bold">@ViewBag.Title</h4>
+                </div>
+
+                <div class="d-flex align-items-center">
+                    <div class="theme-toggle mr-4" onclick="toggleTheme()"><i id="theme-icon" class="fas fa-moon"></i></div>
+
+                    <a href="@logoutLink" class="btn btn-outline-danger btn-sm rounded-pill px-4 mr-3 d-none d-md-flex align-items-center font-weight-bold shadow-sm">
+                        <i class="fas fa-power-off mr-2"></i> Logout
+                    </a>
+
+                    <div class="dropdown">
+                        <a href="#" class="d-flex align-items-center dropdown-toggle text-decoration-none" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <div class="text-right mr-3 d-none d-sm-block">
+                                <p class="mb-0 font-weight-bold small text-dark">@Session["Ename"]</p>
+                                <small class="text-muted">@Session["BranchName"]</small>
+                            </div>
+
+                            <div class="profile-pic-wrapper">
+                                @if (Session["UserProfilePic"] != null)
+                                {
+                                    <span style="display:none">File: @Session["UserProfilePic"].ToString()</span>
+
+                                    <img src="@Url.Content("~/Content/Uploads/EmpUserProfile/" + Session["UserProfilePic"].ToString())"
+                                         class="rounded-circle shadow-sm profile-img-nav"
+                                         alt="User Profile"
+                                         onerror="console.error('Image failed to load at: ' + this.src); this.src='@Url.Content("~/Content/assets/images/logo1.png")';">
+                                }
+                                else
+                                {
+                                    <div class="rounded-circle shadow-sm profile-img-nav d-flex align-items-center justify-content-center bg-light">
+                                        <i class="fas fa-user text-muted"></i>
+                                    </div>
+                                }
+                            </div>
+                        </a>
+
+                        <div class="dropdown-menu dropdown-menu-right popup-dropdown border-0 shadow-lg mt-3" aria-labelledby="userDropdown">
+                            <div class="dropdown-header-box p-3 border-bottom mb-2">
+                                <h6 class="mb-0 font-weight-bold">@Session["Ename"]</h6>
+                                <p class="mb-0 small text-muted">@Session["BranchName"]</p>
+                            </div>
+
+                            <a class="dropdown-item py-2 px-3 rounded-pill mx-2 my-1" href="@Url.Action("ProfileDetail", "NewEmployeeLogin", new { id = Session["empid"] })">
+                                <i class="fas fa-user-circle mr-2 text-primary"></i> My Profile
+                            </a>
+                            <a class="dropdown-item py-2 px-3 rounded-pill mx-2 my-1" href="@Url.Action("EmpUserProfile", "NewEmployeeLogin")">
+                                <i class="fas fa-camera mr-2 text-info"></i> Update Photo
+                            </a>
+
+                            <div class="dropdown-divider"></div>
+
+                            <a class="dropdown-item py-2 px-3 text-danger font-weight-bold rounded-pill mx-2 my-1" href="@logoutLink">
+                                <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- VIEW CONTENT -->
+            <div class="container-fluid p-4">
+                @RenderBody()
+            </div>
+
+            <!-- STICKY FOOTER -->
+            <footer class="p-4 text-center opacity-40 small mt-5">
+                &copy; @DateTime.Now.Year Indus Group. Designed by Indus Software Services.
+            </footer>
+        </div>
+    </div>
+
+    <script src="~/Content/assets/libs/jquery/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="~/Content/assets/libs/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    @RenderSection("Scripts", required: false)
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const icon = document.getElementById('theme-icon');
+            const isDark = html.getAttribute('data-theme') === 'dark';
+            const newTheme = isDark ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('user-theme-pref', newTheme);
+            icon.className = isDark ? 'fas fa-moon' : 'fas fa-sun';
+        }
+
+        $(document).ready(function () {
+            const savedTheme = localStorage.getItem('user-theme-pref') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            if (savedTheme === 'dark') $('#theme-icon').attr('class', 'fas fa-sun');
+        });
+    </script>
+</body>
+</html>

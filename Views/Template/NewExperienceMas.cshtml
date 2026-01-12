@@ -1,0 +1,113 @@
+﻿@model HRM.Models.tblExperienceMas
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "NewExperienceMas";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    }
+
+    using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body col-12">
+                        @if (TempData["Success"] != null)
+                        {
+                            <p align="center" class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+                        }
+                        @if (TempData["Error"] != null)
+                        {
+                            <p align="center" class="alert alert-danger" id="errorMessage">@TempData["Error"]</p>
+                        }
+                        <div align="right">
+                            <a href="@Url.Action("IndexExperienceMas", "Template")"
+                               class="btn btn-primary"><i class="fa fa-hand-point-right">&nbsp; View All Template</i></a>
+                        </div>
+                        <h3 class="card-title">New Experience Letter Master</h3>
+                        <h6 class="card-subtitle">
+                        </h6>
+                        <hr />
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="form-group">
+                            @Html.Label("Template Name", htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-12">
+                                @Html.EditorFor(model => model.vchName, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.vchName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Mas Type", htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-12">
+                                @Html.DropDownListFor(model => model.vchType, ViewBag.Mastype as SelectList, "Select for master", htmlAttributes: new { @id = "selectMtype", @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.vchType, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Gender", htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-12">
+                                @Html.DropDownListFor(model => model.vchForGender, ViewBag.GenderList as SelectList, "Select gender", htmlAttributes: new { @id = "selectedgender", @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.vchForGender, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Letter Code", htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-12">
+                                @Html.EditorFor(model => model.vchLetterCode, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.vchLetterCode, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Template heading", htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-12">
+                                @Html.EditorFor(model => model.vchHeading, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.vchHeading, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Template Content", htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-12">
+                                @*@Html.TextAreaFor(model => model.txtLetterContent, htmlAttributes: new { @class = "form-control", @rows = "60", @size = "2500" })*@
+                                @Html.TextAreaFor(model => model.txtContent, htmlAttributes: new { @class = "form-control", @id = "txteditor", @rows = "30", @size = "2500" })
+                                @Html.ValidationMessageFor(model => model.txtContent, "", new { @class = "text-danger" })
+                            </div>
+                        </div>                       
+                    </div>
+                    <div class="form-group" align="center">
+                        <div class="col-md-offset-2 col-md-12">
+                            <input type="submit" value="Create" class="btn btn-outline-primary" /> &nbsp;&nbsp;&nbsp;&nbsp;
+                            <a href="@Url.Action("IndexExperienceLetter", "Template")"
+                               class="btn btn-outline-danger">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    }
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+
+@*query for if permanent address is same as contact address(on check box click)*@
+@section scripts
+{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/Scripts/jquery-ui.js"></script>
+    <script src="~/Content/CheckEditor/build/ckeditor.js"></script>
+    <script type="text/javascript">
+        ClassicEditor
+            .create(document.querySelector('#txteditor'))
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
+}
+

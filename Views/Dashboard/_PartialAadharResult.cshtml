@@ -1,0 +1,308 @@
+﻿@model IEnumerable<HRM.Models.tblEmpAssesmentMas>
+    @{ Layout = "";}
+@if (Model != null)
+{
+    <div class="col">
+        <div class="card">
+            <h3 class="card-title">Aadhaar card employments detail view</h3>
+           @if (ViewBag.Error != null)
+            {
+            <p class="alert alert-danger" id="error" align="center">@ViewBag.Error</p>
+            }
+            @if (TempData["Success"] != null)
+            {
+            <p class="alert alert-success" id="empty" align="center">@TempData["Success"]</p>
+            }
+            <div class="table" style="font-size:90%">
+                <table class="table table-sm table-striped">
+                    <thead class="bg-primary text-white col-12">
+                        <tr>
+                            <th>
+                                AadharNo
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.vchName)
+                            </th>
+
+                            <th>
+                                @Html.DisplayNameFor(model => model.vchMobile)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.tblDeptMas.vchdeptname)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.tblDesignationMas.vchdesignation)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.decExperience)
+                            </th>                           
+                            <th>
+                                EmpCode
+                            </th>
+                            <th>
+                                DOJ
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.intsalary)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.dtDOL)
+                            </th>
+                            <th>
+                                Status
+                            </th>
+                            <th>
+                                EmpType
+                            </th>
+                            <th>
+                                Flag
+                            </th>
+                            <th>
+                            Branch
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="border border-primary" style="font-size:80%">
+                        @foreach (var item in Model)
+                        {
+                        <tr>
+                            @{ if (item.BitIsFlaggingEmp == true)
+                                {
+                                    if (item.BitIsGreenFlagging == true)
+                                    {
+                                        <td style="color:green">
+                                            @Html.DisplayFor(modelItem => item.vchAadharNo)
+                                        </td>
+                                    }
+                                    else if (item.BitIsOrangeFlagging == true)
+                                    {
+                                        <td style="color:orange">
+                                            @Html.DisplayFor(modelItem => item.vchAadharNo)
+                                        </td>
+                                    }
+                                    else if (item.BitIsRedFlagging == true)
+                                    {
+                                        <td style="color:red">
+                                            @Html.DisplayFor(modelItem => item.vchAadharNo)
+                                        </td>
+                                    }
+                                }
+                                else
+                                {
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.vchAadharNo)
+                                    </td>
+                                }
+                            }
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.vchName)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.vchMobile)
+                            </td>
+                            <td>
+                                @{ if (item.fk_intdeptid != null)
+                                    {
+                                        @Html.DisplayFor(modelItem => item.tblDeptMas.vchdeptname)
+                                    }
+                                    else
+                                    {
+                                        @Html.Label("N/A");
+                                    }
+                                }
+                            </td>
+                            <td>
+                                @{ if (item.fk_intdesiid != null)
+                                    {
+                                        @Html.DisplayFor(modelItem => item.tblDesignationMas.vchdesignation)}
+                                    else
+                                    {
+                                        @Html.Label("N/A");
+                                    }
+                                }
+                            </td>
+                            <td>
+                                @{ if (item.decExperience != null)
+                                    {
+                                        @Html.DisplayFor(modelItem => item.decExperience)
+                                    }
+                                    else
+                                    {
+                                        @Html.Label("N/A");
+                                    }
+                                }
+                            </td>
+                            <td>
+                                @{ if (item.vchEmpFcode != null)
+                                    {
+                                        @Html.DisplayFor(modelItem => item.vchEmpFcode)
+                                    }
+                                    else
+                                    {
+                                        @Html.Label("N/A");
+                                    }
+                                }
+                            </td>
+                            <td>
+                                @{ if (item.dtDOJ != null)
+                                    {
+                                        @Html.DisplayFor(modelItem => item.dtDOJ)
+                                    }
+                                    else
+                                    {
+                                        @Html.Label("N/A");
+                                    }
+                                }
+                            </td>
+                            <td>
+                                @{ if (item.intsalary != null)
+                                    {
+                                        @Html.DisplayFor(modelItem => item.intsalary)
+                                    }
+                                    else
+                                    {
+                                        @Html.Label("N/A");
+                                    }
+                                }
+                            </td>
+                            <td>
+                                @{ if (item.dtDOL != null)
+                                    {
+                                        @Html.DisplayFor(modelItem => item.dtDOL)
+                                    }
+                                    else
+                                    {
+                                        @Html.Label("N/A");
+                                    }
+                                }
+                            </td>
+                            <td>
+                                @{
+                                    if (item.bitIsLeft == true)
+                                    {
+                                        @Html.Label("Left");
+                                    }
+                                    else if (item.bitIsTerminated == true)
+                                    {
+                                        @Html.Label("Terminated",htmlAttributes:new { @style = "color:red" });
+                                    }
+                                    else if (item.bittempstatusactive == true)
+                                    {
+                                        @Html.Label("Active");
+                                    }
+                                    else
+                                    {
+                                        @Html.Label("N/A");
+                                    }
+                                }
+                            </td>
+
+                            <td>
+                                @{
+                                    if (item.bitIsCorporateemp == true)
+                                    {
+                                        @Html.Label("CO.Emp");
+                                    }
+                                    else if (item.bitIsUnitEmp == true)
+                                    {
+                                        @Html.Label("Unit Emp");
+                                    }
+                                    else
+                                    {
+                                        @Html.Label("N/A");
+                                    }
+                                }
+                            </td>
+
+                            <td>
+                                @{
+                                    if (item.BitIsFlaggingEmp == true)
+                                    {
+                                        if (item.BitIsGreenFlagging == true)
+                                        {
+                                            @Html.Label("Green", htmlAttributes: new { @style = "color:green" })
+                                        }
+                                        if (item.BitIsOrangeFlagging == true)
+                                        {
+                                            @Html.Label("Orange", htmlAttributes: new { @style = "color:orange" })
+                                        }
+                                        if (item.BitIsRedFlagging == true)
+                                        {
+                                            @Html.Label("Red", htmlAttributes: new { @style = "color:red" })
+                                        }
+                                    }
+                                    else
+                                    {
+                                        @Html.Label("N/A");
+                                    }
+                                }
+                            </td>
+                            <td>
+                                @if (item.intcode == 2)
+                                {
+                                    <label>IH Hygiea</label>
+                                }
+                                @if (item.intcode == 3)
+                                {
+                                    <label>ISSH</label>
+                                }
+                                @if (item.intcode == 4)
+                                {
+                                    <label>IH 3B2</label>
+                                }
+                                @if (item.intcode == 14)
+                                {
+                                    <label>IHH DB</label>
+                                }
+                                @if (item.intcode == 15)
+                                {
+                                    <label>IFSH</label>
+                                }
+                                @if (item.intcode == 16)
+                                {
+                                    <label>KS HOMECARE</label>
+                                }
+                                @if (item.intcode == 21)
+                                {
+                                    <label>MH AMBALA</label>
+                                }
+                                @if (item.intcode == 22)
+                                {
+                                    <label>Healthsure</label>
+                                }
+                                @if (item.intcode == 23)
+                                {
+                                    <label>My Hospital</label>
+                                }
+                                @if (item.intcode == 24)
+                                {
+                                    <label>KS Pharma</label>
+                                }
+                                @if (item.intcode == 25)
+                                {
+                                    <label>Velmed</label>
+                                }
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        </div> 
+}
+else
+{
+
+}
+
+
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+}
+

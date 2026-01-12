@@ -1,0 +1,59 @@
+﻿@model HRM.Models.tblLetterOfferMas
+
+@{
+    ViewBag.Title = "OfferView";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<div class="col-lg-12">
+    <div class="card">
+        <div class="card-body">
+            <h3 class="card-title">Offer Master Letter Detail</h3>
+            <div>
+                <hr />
+                <dl class="dl-horizontal col-10" style="color:black">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.vchName)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.vchName)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.vchMasHeading)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.vchMasHeading)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.txtMasContent)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.txtMasContent)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.vchForGender)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.vchForGender)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.dtCreated)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.dtCreated)
+                    </dd>
+
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>

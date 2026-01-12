@@ -1,0 +1,122 @@
+﻿@using System.Web;
+@using System.Web.Optimization;
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "OfficialDetails";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+        Html.EnableClientValidation(true);
+    }
+
+    using (Html.BeginForm("OfficialDetails", "AddNewEmp", FormMethod.Post))
+    {
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    @if (TempData["Success"] != null)
+                    {
+                        <p align="center" class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+                    }
+                    @if (TempData["Error"] != null)
+                    {
+                        <p align="center" class="alert alert-danger" id="errormsg">@TempData["Error"]</p>
+                    }
+                    <div class="card-body">
+                        <h3 class="card-title">Add Official Details</h3>
+                        <h6 class="card-subtitle">
+                        </h6>
+                        <div class="button-box">
+                            <button type="button" class="btn btn-primary btn-outline" data-toggle="tooltip"
+                                    data-placement="left" title="Add Official Details">
+                                Official Details
+                            </button>
+                            <a href="@Url.Action("ViewCompletedUploads", "Assesment")">
+                                <div class="btn btn-success">
+                                    <h6 align="center" class="fas fa-hand-point-right">
+                                        Back to view all completed uploads
+                                    </h6>
+                                </div>
+                            </a>
+                        </div>
+                        <br />
+                        @{ Html.RenderAction("partialaddofficial", "AddNewEmp");}
+
+                        <div align="center">
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <input type="submit" value="Save" class="btn btn-success" id="postdata" />
+                                    <button type="reset" class="btn btn-dark">Reset</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script> 
+    <script src="~/Content/assets/extra-libs/taskboard/js/jquery-ui.min.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            //$("#dateRemarks").attr("hidden", true);
+            $("#getdate").datepicker({
+                dateFormat: 'dd/MM/yy',
+                onSelect: function (value, ui) {
+                    var createdDate = $("#CreatedDate").text().toString();
+                    var parsedate = $.datepicker.parseDate("dd/mm/yy", createdDate);
+                    var dtfinalCreated = new Date(parsedate);
+                    var newdt = new Date($(this).val());
+                    if (newdt < dtfinalCreated) {
+                        alert("Selected date should not be less than created date!");
+                        $("getdate").val = newdt;
+                    }
+                    else if (newdt >= dtfinalCreated) {
+                        alert("Acceptable date");
+                        $("getdate").val = newdt;
+                    }
+                },
+                changeMonth: true,
+                changeYear: true
+                //yearRange: '1960:2030'
+            })
+        });
+            //function for select department designationmas according to dept name
+       // $("#dptm").change(function () {
+        $(document).ready(function () {
+            var deptid = parseInt($('#dptm').text());
+            if (!isNaN(deptid)) {
+                var selecteddesi = $('#designation');
+                selecteddesi.empty();
+                selecteddesi.append($("<option></option>").val('').html('Please wait ...'));
+                $.ajax({
+                    url: '@Url.Action("DesiListSelect", "Authorization")',
+                    type: 'GET',
+                    dataType: 'json',
+                    data: { dept_id: deptid },
+                    success: function (result) {
+                        selecteddesi.empty(); // Clear the please wait
+                        selecteddesi.append($("<option></option>").val('').html('Select designation'));
+                        $.each(result, function (i, desi) {
+                            selecteddesi.append($("<option></option>").val(desi.id).html(desi.designation));
+                        });
+                    },
+                    error: function () {
+                        alert('Error!');
+                    }
+                });
+            }
+        });
+    </script>
+}
+

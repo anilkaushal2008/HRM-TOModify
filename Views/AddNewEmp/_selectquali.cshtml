@@ -1,0 +1,9 @@
+﻿@model HRM.Models.tblQualiMas
+
+@if (ViewBag.quali != null)
+{
+    @Html.LabelFor(model => model.vchqname)
+    @Html.DropDownListFor(model => model.intqid , ViewBag.quali as SelectList, "Select qualification", htmlAttributes: new { @class = "form-control" })
+    @Html.ValidationMessageFor(model => model.vchname, "", new { @class = "text-danger" })
+}
+

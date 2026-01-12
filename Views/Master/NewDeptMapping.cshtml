@@ -1,0 +1,155 @@
+﻿@model HRM.Models.DeptMappingModel
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "NewDeptMapping";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    }
+    using (Html.BeginForm("NewDeptMapping", "Master", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <br />
+        <h4 class="col-10" style="color:black;font-weight:500">Department Manpower Mapping/Udpate View</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div align="center" style="color:black">
+            @Html.Label("Select Branch for mapping", htmlAttributes: new { @class = "control-lable col-md-8", @style = "align:left" })
+            <div class="form-group col-10">
+                @Html.DropDownListFor(model => model.intCode, new SelectList(ViewBag.AllBranch, "Text", "Value"), htmlAttributes: new { @id = "branch", @class = "form-control" })
+            </div>
+        </div>
+
+        <table id="mapping" class="table table-sm col-10" style="color:black" align="center">
+            <thead class="bg-primary text-white col-12">
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            @Html.Label("Department", htmlAttributes: new { @class = "control-label col-md-4", @disabled = "disabled" })
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            @Html.Label("ManPower Counter", htmlAttributes: new { @class = "control-label col-md-4", @disabled = "disabled" })
+                        </div>
+                    </td>
+                </tr>
+            </thead>
+            <tbody class="border border-primary" id="tblbody">
+                @foreach (var item in ViewBag.DeptList as IEnumerable<SelectListItem>)
+                {
+                    <tr>
+                        <td>
+                            <div class="col-md-10">
+                                @Html.Label(@item.Text)
+
+                            </div>
+                        </td>
+                        <td>
+                            <div class="col-md-10">
+                                <input type="hidden" id="fkdept" class="departmentid" value="@item.Value" />
+                                <input type="text" id="dptcounter" class="textbox" />
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div align="center">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="button" value="Save" id="btnsubmit" class="btn btn-primary btn-block" />
+            </div>
+        </div>
+    }
+    <br />
+    <hr />
+    if (ViewBag.MappedBranch.Count != 0)
+    {
+<h4 class="col-10" style="color:black;font-weight:500">Existing Branches Mapping</h4>
+        <table id="existingMap" class="table table-sm col-10" style="font-size:90%;color:black" align="center">
+            <thead class="bg-primary text-white col-12">
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            @Html.Label("Branch", htmlAttributes: new { @class = "control-label col-md-4", @disabled = "disabled" })
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            Action
+                        </div>
+                    </td>
+                </tr>
+            </thead>
+            <tbody class="border border-primary" id="tblbody">
+                @foreach (var item in ViewBag.MappedBranch as IEnumerable<HRM.Models.tblManPowerMas>)
+                {
+                    <tr>
+                        <td>
+                            <div class="col-md-10">
+                                @Html.Label(@item.vchBranchName)
+
+                            </div>
+                        </td>
+                        <td>
+                            <div class="col-md-10">
+                                <a class="btn btn-primary btn-sm" style="color:white" href="@Url.Action("ManPowerView","Master",new { id = Convert.ToInt32(item.fk_Branch) })">View</a>
+                                 &nbsp;&nbsp;
+                                <a class="btn btn-success btn-sm" style="color:white" href="@Url.Action("UpdateMapping","Master",new { id = item.intid, fkid = item.fk_Branch })">Update</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script type="text/javascript">
+        //on sumbit post all value
+        $("#btnsubmit").click(function (e) {
+            e.preventDefault();
+            var branchCode = $("#branch").val().toString();
+            var branchName = $("#branch option:selected").text();
+            if (branchCode != "" && branchCode != 0) {
+                var DeptMappingModel = [];
+                $('#mapping tbody tr').each(function () {
+                    var departmentId = $(this).find('.departmentid').val();
+                    var boxValue = $(this).find('.textbox').val();
+                    DeptMappingModel.push({
+                        FkDeptId: departmentId,
+                        textBoxValues: boxValue,
+                        intcode: branchCode,
+                        branchName: branchName
+                    });
+                });
+                $.ajax({
+                    url: '@Url.Action("SaveMapping", "Master")', // Replace with your action and controller names
+                    type: 'POST',
+                    data: JSON.stringify(DeptMappingModel),
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (response) {
+                        alert("Mapping saved successfully!");
+                        window.location = "/Master/NewDeptMapping";
+                    },
+                    error: function (xhr, status, error) {
+                        console.log("Error: " + error);
+                    }
+                });
+            }
+            else {
+                alert("Select branch!");
+                return false;
+            }
+        })
+    </script>
+}

@@ -1,0 +1,175 @@
+﻿@model IEnumerable<HRM.Models.tblEmpAssesmentMas>
+@if (Session["FinalUpdate"] != null)
+{
+    {
+        ViewBag.Title = "ViewAuthorisedEmp";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    }
+    <div class="card">
+        <div class="card-body">
+            @if (TempData["SelectedDate"] != null)
+            {
+                <p class="alert alert-success" id="empty" align="center">@TempData["SelectedDate"]</p>
+            }
+
+            @if (TempData["Success"] != null)
+            {
+                <p class="alert alert-success" id="empty" align="center">@TempData["Success"]</p>
+            }
+            @if (TempData["NullDate"] != null)
+            {
+                <p class="alert alert-danger" id="empty" align="center">@TempData["NullDate"]</p>
+            }           
+            <h3 class="card-title">All authorised employee view</h3>
+            <!--<div class="row col-10">
+                <label class="control-label" for="inputSuccess"><i class="fas fa-calendar"></i> Select DateRange&nbsp;&nbsp; </label><br />
+                <div class="form-group">-->
+                    @*@Html.TextBox("dtraneguser", "", new { htmlattributes = new { @id = "dtrange", @class = "form-control", @required = "required", @placeholder = "Select date range" } })*@
+                    <!--<input type="text" id="dtraneguser" clientidmode="Static" autoComplete="off" class="form-control" required="required" />-->
+                    @*<input type="text" id="txtDRage" class="form-control" required  inputtype="text" autoComplete="off" placeholder="Select date range" />*@
+                <!--</div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <a href class="btn btn-sm btn-success">Submit Daterang</a>-->
+                        @*<input type="submit" value="Submit DateRange" id="btnsubmit" class="btn btn-sm btn-success" />*@
+                    <!--</div>
+                </div>
+            </div>-->
+            <div class="table" style="font-size:90%">
+                <table class="table table-sm col-12">
+                    <thead class="bg-success text-white col-12">
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.vchName)
+                            </th>
+                            <th>
+                                Emp TCode
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.tblDeptMas.vchdeptname)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.tblDesignationMas.vchdesignation)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.dtDOJ)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.intsalary)
+                            </th>
+                            <th>Final Action</th>
+                            @{
+                                string ishr1 = string.Empty;
+                                string isauthorizer1 = string.Empty;
+                                if (Session["HrAdmin"] != null)
+                                {
+                                    ishr1 = Session["HrAdmin"].ToString();
+                                }
+                                if (Session["AllowAuthorization"] != null)
+                                {
+                                    isauthorizer1 = Session["AllowAuthorization"].ToString();
+                                }
+                                if (ishr1 == "True" && (isauthorizer1 != "True" || isauthorizer1 == ""))
+                                {
+                                    <th>
+                                        Special Action
+                                    </th>
+                                }
+                            }
+
+                        </tr>
+                    </thead>
+                    <tbody class="border border-success">
+                        @if (TempData["Empty"] != null)
+                        {
+                            <p class="alert alert-danger" id="empty" align="center">@TempData["Empty"]</p>
+                        }
+                        else
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.vchName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.vchEmpTcode)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.tblDeptMas.vchdeptname)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.tblDesignationMas.vchdesignation)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.dtDOJ)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.intsalary)
+                                    </td>
+
+                                    <td>
+                                        @Html.ActionLink("FullView", "ViewHrFullDetails", new { id = item.intid }, htmlAttributes:new { @class = "btn btn-success btn-sm" }) &nbsp;&nbsp;&nbsp;
+                                        @{
+                                            if (Session["FinalUpdate"] != null)
+                                            {
+                                                string update = Session["FinalUpdate"].ToString();
+                                                if (update == "True")
+                                                {
+                                                    @Html.ActionLink("FinalUpdate", "FinalUpdateHr", new { id = item.intid }, htmlAttributes: new { @class = "btn btn-primary btn-sm" })
+                                                }
+                                            }
+                                            string ishr = string.Empty;
+                                            string isauthorizer = string.Empty;
+                                            if (Session["HrAdmin"] != null)
+                                            {
+                                                ishr = Session["HrAdmin"].ToString();
+                                            }
+                                            if (Session["AllowAuthorization"] != null)
+                                            {
+                                                isauthorizer = Session["AllowAuthorization"].ToString();
+                                            }
+                                            if (ishr == "True" && (isauthorizer != "True" || isauthorizer == ""))
+                                            {
+                                            <td>
+                                                @Html.ActionLink("CancelCandidate", "CancelCandidate", new { id = item.intid })
+                                            </td>
+                                        }
+
+                                        }
+
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>   
+    <script type="text/javascript">
+        $(function () {
+
+            $("[id$=dtraneguser]").daterangepicker({
+                format:'DD/MM/YYYY',
+                minDate:'01-05-2019',
+                maxDate:'31-03-2030'
+                //minDate: '2019-05-01',
+                //maxDate: '2030-03-31'
+            }),
+                function (start, end) {
+                    $("[id$ = dtraneguser]").html(start.format('DD/MM/YYYY') + '-' + end.format('DD/MM/YYYY'));
+                }
+        });
+    </script>
+}

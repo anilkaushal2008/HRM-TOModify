@@ -1,0 +1,8 @@
+﻿@model HRM.Models.tblDeptMas
+
+@if (ViewBag.deptlist != null)
+{
+    @Html.LabelFor(model => model.vchdeptname) <span style="color:crimson">*</span>
+    @Html.DropDownListFor(model => model.vchdeptname, ViewBag.DeptList as SelectList, "Select Department", htmlAttributes: new { @class = "form-control" })
+    @Html.ValidationMessageFor(model => model.vchdeptname, "", new { @class = "text-danger" })
+}

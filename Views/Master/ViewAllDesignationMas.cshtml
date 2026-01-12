@@ -1,0 +1,153 @@
+﻿@model IEnumerable<HRM.Models.tblDesignationMas>
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "ViewAllDesignationMas";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    }
+
+
+    <p>
+        @*@Html.ActionLink("Create New", "Create")*@
+    </p>
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                @if (TempData["Success"] != null)
+                {
+                    <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+                }
+                <h3 class="card-title">All Designation Master View</h3>
+                    <div align="right">
+                        @{ string Desi = Session["DesignationMas"].ToString();
+                            if (Desi == "True")
+                            {
+                                <a href="@Url.Action("DesignationMas", "Master")">
+                                    <div class="btn btn-primary">
+                                        <h6 align="center" class="fas fa-hand-point-right"></h6>
+                                        <h6 align="center" class="fas fa-plus">
+                                            New designation
+                                        </h6>
+                                    </div>
+                                </a>
+                            }
+                        }
+                    </div>
+             
+                <div class="table">
+                    <table class="table table-sm table-striped col-12" style="color:black">
+                        <thead class="bg-primary text-white col-12">
+                            <tr>
+                                <th>
+                                    Department
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.vchdesignation)
+                                </th>
+                                <th>
+                                    Status
+                                </th>
+                                @{ string Desi1 = Session["EditDesignationMas"].ToString();
+                                    if (Desi == "True")
+                                    {
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.vchcreatedby)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.dtcreated)
+                                        </th>
+
+                                        <th>Action</th>
+                                    }
+                                }
+                            </tr>
+
+                        </thead>
+                        @if (TempData["Empty"] != null)
+                        {
+                            <p class="alert alert-danger" id="successMessage">@TempData["Empty"]</p>
+                        }
+                        else
+                        {
+                    <tbody class="border border-primary">
+                        @foreach (var item in Model)
+                        {
+
+
+                            if(item.tblDeptMas.bitIsActive == true)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.tblDeptMas.vchdeptname)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.vchdesignation)
+                                    </td>
+                                    <td>
+                                        Active
+                                    </td>
+                                    @{ string Desi2 = Session["EditDesignationMas"].ToString();
+                                        if (Desi2 == "True")
+                                        {
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.vchcreatedby)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.dtcreated)
+                                            </td>
+
+                                            <td>
+                                                @Html.ActionLink("Edit", "EditDesignation", new { id = item.intid, deptid = item.intdeptid })
+                                            </td>
+                                        }
+                                    }
+                                </tr>
+                            }
+                            else
+                            {
+                                <tr style="color:red">
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.tblDeptMas.vchdeptname)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.vchdesignation)
+                                    </td>
+                                    <td>
+                                        In-Active
+                                    </td>
+                                    @{ string Desi2 = Session["EditDesignationMas"].ToString();
+                                        if (Desi2 == "True")
+                                        {
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.vchcreatedby)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.dtcreated)
+                                            </td>
+
+                                            <td>
+                                                @Html.ActionLink("Edit", "EditDesignation", new { id = item.intid, deptid = item.intdeptid })
+                                            </td>
+                                        }
+                                    }
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                        }
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    Html.RenderAction("_SessionError1", "Home");
+}
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+}

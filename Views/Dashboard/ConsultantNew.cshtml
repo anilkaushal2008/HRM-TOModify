@@ -1,0 +1,172 @@
+﻿@model IEnumerable<HRM.Models.tblLeaveApplication>
+@if (Session["descript"] != null)
+{
+    {
+        ViewBag.Title = "ConsultantNew";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    }
+    using (Html.BeginForm("","",FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <link href="//cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" rel="stylesheet" />
+        <div class="card">
+            <div class="card-body">
+                <div align="right">                   
+                    <a href="@Url.Action("ConsultantApproved", "Dashboard")" class="btn btn-success btn-sm fas fa-hand-point-right">
+                       Consultant Approved History
+                    </a>
+                </div>
+                <h3 class="card-title" align="center">Consultant pending leave approval view</h3>
+                @if (TempData["Success"] != null)
+                {
+                    <p class="alert alert-success" id="success" align="center">@TempData["Success"]</p>
+                }
+                @if (TempData["Error"] != null)
+                {
+                    <p class="alert alert-danger" id="error" align="center">@TempData["Error"]</p>
+                }
+                @if (ViewBag.Error != null)
+                {
+                    <p class="alert alert-danger" id="verror" align="center">@ViewBag.Error</p>
+                }
+                <table id="Consultantassigned" class="table table-sm table-responsive-lg" style="font-size:90%">
+                    <thead class="bg-success text-white col-12">
+                        <tr>
+                            <th>
+                                Name
+                            </th>
+                            <th>
+                                EmpCode
+                            </th>
+                            <th>
+                                LeaveType
+                            </th>
+                            <th>
+                                DateFrom
+                            </th>
+                            <th>
+                                ToDate
+                            </th>
+                            <th>
+                                Request Days
+                            </th>
+                            <th>
+                                Status
+                            </th>
+                            <th>
+                                Action
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="border border-success">
+                        @if (TempData["Empty"] != null)
+                        {
+                            <p class="alert alert-danger" id="empty" align="center">@TempData["Empty"]</p>
+                        }
+                        else
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.tblEmpAssesmentMas.vchName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.tblEmpAssesmentMas.vchEmpFcode)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.tblLeaveType.leaveType)
+                                    </td>
+                                    <td>
+                                        @item.dtStartFrom.ToString("dd/MM/yyyy")
+                                    </td>
+                                    <td>
+                                        @item.dtEndDate.ToString("dd/MM/yyyy")
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.decdaysRequest)
+                                    </td>
+                                    <td>
+                                        @{ if (item.bitIsRejected == true)
+                                            {
+                                                <a class="badge badge-pill badge-danger text-white">Rejected</a>
+                                            }
+                                            else if (item.bitIsPartialApproved == true)
+                                            {
+                                                <a class="badge badge-pill badge-warning text-white">@item.vchStatus</a>
+                                            }
+                                            else
+                                            {
+                                                <a class="badge badge-pill badge-success text-white">@item.vchStatus</a>
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+                                        @*<a class="btn btn-success btn-sm fa fa-hand-point-right" href="@Url.Action("ConsultantDeatil", "Dashboard", new { id = item.unID })">&nbsp;Approve?</a>*@
+                                        @*<button type="button" class="btn btn-info btn-sm" onclick="openLeavePopup(@item.unID)">
+                                                Quick Approve
+                                            </button>*@
+                                        <a href="#" class="btn btn-info btn-sm quick-approve" data-id="@item.unID">
+                                            Quick Approve
+                                        </a>
+                                    </td>
+                                </tr>
+                                                }
+                                            }
+                    </tbody>
+                </table>
+                <div id="leaveModalContainer"></div>
+            </div>
+        </div>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                Html.RenderAction("_SessionError", "NewEmployeeLogin");
+                                            }
+
+                                            @section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#Consultantassigned').DataTable();
+        });
+
+        $(document).on('click', '.quick-approve', function (e) {
+            e.preventDefault(); // prevent page jump
+            var id = $(this).data('id'); // get the data-id
+            openLeavePopup(id); // call your function
+        });
+     function openLeavePopup(leaveId) {
+        $.get('@Url.Action("ConsultantLeaveDeatil", "Dashboard")', { id: leaveId }, function (data) {
+            $('#leaveModalContainer').html(data);
+            $('#leaveDetailsModal').modal('show');
+        });
+        }
+
+        $("#partial").click(function () {
+            if ($("#partial").is(":checked")) {
+                $("#partialaction").prop("hidden", false);
+                $("#remarks").prop("hidden", false);
+            }
+        });
+        $("#same").click(function () {
+            if ($("#same").is(":checked")) {
+                $("#partialaction").prop("hidden", true);
+                $("#remarks").prop("hidden", false);
+            }
+        });
+        $("#rejected").click(function () {
+            if ($("#rejected").is(":checked")) {
+                $("#partialaction").prop("hidden", true);
+                $("#remarks").prop("hidden", false);
+            }
+        });
+
+    </script>
+}
