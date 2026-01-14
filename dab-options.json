@@ -4,7 +4,7 @@
    "DatabaseType": 3,
    "MergeDacpacs": false,
    "Optional": false,
-   "ProjectPath": "D:\\HRM-master\\HRM-master",
+   "ProjectPath": "D:\\HRM-Modification",
    "Tables": [
       {
          "Name": "[dbo].[tblAssesmentQuestDetails]",
@@ -12,10 +12,6 @@
       },
       {
          "Name": "[dbo].[tblAssQuestMas]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[tblBranchShiftMas]",
          "ObjectType": 0
       },
       {
@@ -52,14 +48,6 @@
       },
       {
          "Name": "[dbo].[tblCurrentExpDetail]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[tblDeletedData]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[tblDeleteRows]",
          "ObjectType": 0
       },
       {

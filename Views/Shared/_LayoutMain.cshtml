@@ -3,416 +3,1761 @@
 @using System.Web.UI.WebControls
 @using System.Web.Mvc
 <!DOCTYPE html>
-<html lang="en" class="light">
+<html>
 <head>
+    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width" />
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>HRMS Dashboard</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Favicon icon -->
+    @{ var code = Session["id"].ToString();
+        if (code == "22")
+        {
+            <link rel="icon" type="image/png" sizes="16x16" href=@Url.Content("~/Content/assets/images/VTHLogo16x16pxcl.jpg")>
+        }
+        else
+        {
+            <link rel="icon" type="image/png" sizes="16x16" href=@Url.Content("~/Content/assets/images/logo1.png")>
+        }
+    }
 
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        primary: { 50: '#f0f9ff', 100: '#e0f2fe', 600: '#0284c7', 700: '#0369a1', 800: '#075985' },
-                        midnight: {
-                            50: '#f8fafc',
-                            800: '#1e293b',
-                            900: '#0f172a',
-                            950: '#020617'
-                        }
-                    }
-                }
+    <title>Dashboard</title>
+    <!--Samaple css for edittexteditor-->
+    <!-- Custom CSS -->
+    <link href=@Url.Content("~/Content/assets/extra-libs/c3/c3.min.css") rel="stylesheet">
+    <link href=@Url.Content("~/Content/assets/libs/chartist/dist/chartist.min.css") rel="stylesheet">
+    <link href=@Url.Content("~/Content/assets/extra-libs/jvector/jquery-jvectormap-2.0.2.css") rel="stylesheet" />
+    <!-- Custom CSS -->
+    <link href=@Url.Content("~/Content/dist/css/style.min.css") rel="stylesheet" />
+    @*bootstrap daterange picker*@
+    <link href=@Url.Content("~/Content/daterangepicker/daterangepicker-bs3.css") rel="stylesheet" />
+    <link href=@Url.Content("~/Content/css/daterangepicker.css") rel="stylesheet" />
+    @*bootstrap gridview*@
+    <link href=@Url.Content("~/Content/assets/libs/bootstrap/dist/css/bootstrap-grid.min.css") rel="stylesheet" />
+    <link href=@Url.Content("~/Content/assets/libs/bootstrap/dist/css/bootstrap-grid.css") rel="stylesheet" />
+    <link href=@Url.Content("~/Content/jquery.jqGrid/ui.jqgrid.css") rel="stylesheet" />
+    <link href=@Url.Content("~/Content/assets/extra-libs/taskboard/css/jquery-ui.min.css") rel="stylesheet" />
+    <link href=@Url.Content("~/Content/themes/base/jquery-ui.css") rel="stylesheet" />
+    @*Data table*@
+    <link href=@Url.Content("~/Content/datatables/css/dataTables.bootstrap4.min.css") rel="stylesheet" />
+    <link href=@Url.Content("~/Content/Select2/css/select2.css") rel="stylesheet" />
+    <link href=@Url.Content("~/Content/Select2/css/select2.min.css") rel="stylesheet" />
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    <![endif]-->
+    @*<script type="text/javascript">
+        setInterval("settime()", 10000);
+            function settime() {
+                var dateTime = new Date();
+                var date = dateTime.getDate();
+                var month = dateTime.getMonth() + 1;
+                var year = dateTime.getFullYear();
+                var hour = dateTime.getHours();
+                var minute = dateTime.getMinutes();
+                var second = dateTime.getSeconds();
+                if (month < 10)
+                    month = "0" + month;
+                if (date < 10)
+                    date = "0" + date;
+                if (minute < 10)
+                    minute = "0" + minute;
+
+                if (second < 10)
+                    second = "0" + second;
+
+                var time12 = "" + date + "/" + month + "/" + year + " " + hour + ":" + minute + ":" + second;
+                //document.getElementById("ghadi").textContent = time12.toString();
+                $("#ghadi").text(time12.toString());
+                //document.getElementById("#ghadi").text() = time12.toString();
+               // $("#ghadi").text() = time12.toString();
+
             }
+        </script>*@
+    <script>
+        function setZoom(percentage) {
+            document.body.style.zoom = percentage + '%';
         }
     </script>
-
-    <!-- Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    <!-- Legacy Styles -->
-    <link href=@Url.Content("~/Content/assets/extra-libs/c3/c3.min.css") rel="stylesheet">
-    <link href=@Url.Content("~/Content/dist/css/style.min.css") rel="stylesheet" />
-
-    <style type="text/css">
-        body {
-            font-size: 16px;
-        }
-
-        .sidebar-submenu {
-            display: none;
-        }
-
-            .sidebar-submenu.show {
-                display: block;
-            }
-
-        .transition-transform {
-            transition: transform 0.2s ease;
-        }
-
-        .rotate-90 {
-            transform: rotate(90deg);
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 10px;
-        }
-
-        .dark ::-webkit-scrollbar-thumb {
-            background: #334155;
-        }
-
-        /* Header Dropdown Styling */
-        .header-dropdown {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            z-index: 100;
-        }
-
-        .group:hover .header-dropdown {
-            display: block;
+    <style>
+        .required::before {
+            content: '*';
+            color: red;
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900 dark:bg-midnight-950 dark:text-slate-200 transition-colors duration-200">
-
-    <div id="main-wrapper" class="flex min-h-screen">
-
-        <!-- SIDEBAR -->
-        <aside id="sidebar" class="w-72 bg-white dark:bg-midnight-900 border-r border-slate-200 dark:border-midnight-800 transition-all fixed h-full z-50 md:relative overflow-y-auto">
-            <div class="h-16 flex items-center justify-between px-6 border-b border-slate-100 dark:border-midnight-800">
-                <a href="@Url.Action("Index", "Dashboard")" class="flex items-center space-x-2">
-                    @{ var code = Session["id"]?.ToString(); }
-                    @if (code == "22")
-                    {<img src="~/Content/assets/images/Logovth.jpg" class="h-10" /> }
-                    else
-                    { <img src="~/Content/assets/images/logo1.png" class="h-8" />}
-                    <span class="font-bold text-xl tracking-tight text-primary-600 dark:text-primary-400">Portal</span>
-                </a>
-                <button onclick="toggleSidebar()" class="md:hidden text-slate-500">
-                    <i data-lucide="x"></i>
-                </button>
+<body>
+    <!-- ============================================================== -->
+    <!-- Preloader - style you can find in spinners.css -->
+    <!-- ============================================================== -->
+    @*<div class="preloader">
+            <div class="lds-ripple">
+                <div class="lds-pos"></div>
+                <div class="lds-pos"></div>
             </div>
-
-            <div class="px-4 py-6 space-y-2">
-                <a href="@Url.Action("Index", "Dashboard")" class="flex items-center space-x-3 p-3 rounded-xl bg-primary-50 dark:bg-primary-900/10 text-primary-600 dark:text-primary-400 font-bold">
-                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
-                    <span>Dashboard Overview</span>
-                </a>
-
-                <a href="@Url.Action("AadhaarSearch", "DashBoard")" class="flex items-center space-x-3 p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-midnight-800/50 text-slate-600 dark:text-slate-400 transition-all">
-                    <i data-lucide="search" class="w-5 h-5 text-primary-500"></i>
-                    <span class="font-medium">Aadhaar Search</span>
-                </a>
-
-                <div class="pt-6 pb-2 px-3 text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Departments</div>
-
-                <!-- Requisition Corner -->
-                @{ if (Session["Requisition"] != null && Session["Requisition"].ToString() == "True")
-                    {
-                        <div class="sidebar-item">
-                            <button onclick="toggleSubmenu('req-corner')" class="w-full flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-midnight-800/50 transition-all text-slate-700 dark:text-slate-300">
-                                <div class="flex items-center space-x-3"><i data-lucide="clipboard-list" class="w-5 h-5 text-blue-500"></i><span class="font-medium">Requisition Corner</span></div>
-                                <i data-lucide="chevron-right" class="w-4 h-4 transition-transform" id="req-corner-icon"></i>
-                            </button>
-                            <div id="req-corner" class="sidebar-submenu pl-9 space-y-1 mt-1">
-                                <a href="@Url.Action("NewRequisition", "Assesment")" class="block py-2 text-sm text-slate-500 hover:text-primary-600">New Requisition</a>
-                                <a href="@Url.Action("ViewAllReq", "Assesment")" class="block py-2 text-sm text-slate-500 hover:text-primary-600">View All Requisition</a>
-                            </div>
-                        </div>
-                    }}
-
-                <!-- Assessment Corner -->
-                @{ if (Session["AssNew"] != null || Session["AssAssignedView"] != null || Session["AssStatus"] != null || Session["AllowDocUpload"] != null || Session["PendingDocView"] != null || Session["AssCompletedView"] != null)
-                    {
-                        <div class="sidebar-item">
-                            <button onclick="toggleSubmenu('ass-corner')" class="w-full flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-midnight-800/50 transition-all text-slate-700 dark:text-slate-300">
-                                <div class="flex items-center space-x-3"><i data-lucide="file-check" class="w-5 h-5 text-purple-500"></i><span class="font-medium">Assessment Corner</span></div>
-                                <i data-lucide="chevron-right" class="w-4 h-4 transition-transform" id="ass-corner-icon"></i>
-                            </button>
-                            <div id="ass-corner" class="sidebar-submenu pl-9 space-y-1 mt-1">
-                                @if (Session["AssNew"]?.ToString() == "True")
-                                {<a href="@Url.Action("AssignNewAssement", "Assesment")" class="block py-2 text-sm text-slate-500 hover:text-primary-600">New Assessment</a>}
-                                @if (Session["AssAssignedView"]?.ToString() == "True")
-                                {<a href="@Url.Action("ViewAssignedAss", "Assesment")" class="block py-2 text-sm text-slate-500 hover:text-primary-600">Assigned Assessment</a>}
-                                @if (Session["AssStatus"]?.ToString() == "True")
-                                {<a href="@Url.Action("ViewAllAssStatus", "Assesment")" class="block py-2 text-sm text-slate-500 hover:text-primary-600">Assessments Status</a>}
-                                @if (Session["AllowDocUpload"]?.ToString() == "True")
-                                {<a href="@Url.Action("AllComAss", "Assesment")" class="block py-2 text-sm text-slate-500 hover:text-primary-600">Allow Upload</a>}
-                            </div>
-                        </div>
-                    }}
-
-                <!-- HR Corner -->
-                @{ if (Session["ViewActiveEmp"] != null || Session["DeactiveEmp"] != null || Session["ViewLeftEmp"] != null || Session["HrAdmin"] != null)
-                    {
-                        <div class="sidebar-item">
-                            <button onclick="toggleSubmenu('hr-corner')" class="w-full flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-midnight-800/50 transition-all text-slate-700 dark:text-slate-300">
-                                <div class="flex items-center space-x-3"><i data-lucide="users" class="w-5 h-5 text-indigo-500"></i><span class="font-medium">HR Corner</span></div>
-                                <i data-lucide="chevron-right" class="w-4 h-4 transition-transform" id="hr-corner-icon"></i>
-                            </button>
-                            <div id="hr-corner" class="sidebar-submenu pl-9 space-y-1 mt-1">
-                                @if (Session["ViewActiveEmp"]?.ToString() == "True")
-                                {<a href="@Url.Action("ActiveView", "DashBoard")" class="block py-2 text-sm text-slate-500 hover:text-primary-600">Active Employees</a>}
-                                @if (Session["DeactiveEmp"]?.ToString() == "True")
-                                {<a href="@Url.Action("EmployeeDeactive", "Dashboard")" class="block py-2 text-sm text-slate-500 hover:text-primary-600">Change Status</a>}
-                                @if (Session["ViewLeftEmp"]?.ToString() == "True")
-                                {<a href="@Url.Action("LeftView", "Dashboard")" class="block py-2 text-sm text-slate-500 hover:text-primary-600">Left Employees</a>}
-                                @if (Session["HrAdmin"]?.ToString() == "True")
-                                {<a href="@Url.Action("GenCodeExisting", "Authorization")" class="block py-2 text-sm text-slate-500 hover:text-primary-600">Generate Emp Code</a>}
-                            </div>
-                        </div>
-                    }}
-
-                <!-- Leave Management -->
-                @{ if (Session["MainAdmin"] != null || Session["HrAdmin"] != null || Session["DeptHOD"] != null)
-                    {
-                        <div class="sidebar-item">
-                            <button onclick="toggleSubmenu('leave-corner')" class="w-full flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-midnight-800/50 transition-all text-slate-700 dark:text-slate-300">
-                                <div class="flex items-center space-x-3"><i data-lucide="calendar" class="w-5 h-5 text-orange-500"></i><span class="font-medium">Leave Corner</span></div>
-                                <i data-lucide="chevron-right" class="w-4 h-4 transition-transform" id="leave-corner-icon"></i>
-                            </button>
-                            <div id="leave-corner" class="sidebar-submenu pl-9 space-y-1 mt-1">
-                                @if (Session["MainAdmin"]?.ToString() == "True")
-                                {<a href="@Url.Action("TypeIndex", "Leave")" class="block py-2 text-sm text-slate-500 hover:text-primary-600">Leave Master</a>}
-                                <a href="@Url.Action("ApprovedLeave", "Dashboard")" class="block py-2 text-sm text-slate-500 hover:text-primary-600">Approved Leaves</a>
-                                <a href="@Url.Action("LeaveStatus", "Dashboard")" class="block py-2 text-sm text-slate-500 hover:text-primary-600">Leave Status</a>
-                            </div>
-                        </div>
-                    }}
-
-                <!-- DNB Corner -->
-                @{ if (Session["DNBCORNER"] != null && Session["DNBCORNER"].ToString() == "True")
-                    {
-                        <div class="sidebar-item">
-                            <button onclick="toggleSubmenu('dnb-corner')" class="w-full flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-midnight-800/50 transition-all text-slate-700 dark:text-slate-300">
-                                <div class="flex items-center space-x-3"><i data-lucide="graduation-cap" class="w-5 h-5 text-emerald-500"></i><span class="font-medium">DNB Corner</span></div>
-                                <i data-lucide="chevron-right" class="w-4 h-4 transition-transform" id="dnb-corner-icon"></i>
-                            </button>
-                            <div id="dnb-corner" class="sidebar-submenu pl-9 space-y-1 mt-1">
-                                @if (Session["FEE-STRUCTURE"]?.ToString() == "True")
-                                {<a href="@Url.Action("DNbEmpList", "DNB")" class="block py-2 text-sm text-slate-500 hover:text-primary-600">Fee Structure</a>}
-                                @if (Session["FEE-VERIFICATION"]?.ToString() == "True")
-                                {<a href="@Url.Action("FeeVerification", "DNB")" class="block py-2 text-sm text-slate-500 hover:text-primary-600">Verification</a>}
-                            </div>
-                        </div>
-                    }}
-
-                <div class="pt-10 border-t border-slate-100 dark:border-midnight-800 mt-10">
-                    <a href="@Url.Action("Index", "Home")" class="flex items-center space-x-3 p-3 rounded-xl text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 font-bold text-sm">
-                        <i data-lucide="log-out" class="w-5 h-5"></i>
-                        <span>Logout System</span>
+        </div>*@
+    <!-- ============================================================== -->
+    <!-- Main wrapper - style you can find in pages.scss -->
+    <!-- ============================================================== -->
+    <div id="main-wrapper" data-theme="light" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+         data-sidebar-position="fixed" data-header-position="fixed" data-boxed-layout="full">
+        <!-- ============================================================== -->
+        <!-- Topbar header - style you can find in pages.scss -->
+        <!-- ============================================================== -->
+        <header class="topbar" data-navbarbg="skin6">
+            <nav class="navbar top-navbar navbar-expand-md">
+                <div class="navbar-header" data-logobg="skin6">
+                    <!-- This is for the sidebar toggle which is visible on mobile only -->
+                    <a class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)">
+                        <i class="ti-menu ti-close"></i>
+                    </a>
+                    <!-- ============================================================== -->
+                    <!-- Logo -->
+                    <!-- ============================================================== -->
+                    <div class="navbar-brand">
+                        <!-- Logo icon -->
+                        <a href="@Url.Action("Index", "Dashboard")">
+                            <b class="logo-icon">
+                                <!-- Dark Logo icon -->
+                                @if (code == "22")
+                                {
+                                    <img src="~/Content/assets/images/Logovth.jpg" alt="homepage" class="dark-logo" height="130" width="220" />
+                                }
+                                else
+                                {
+                                    <img src="~/Content/assets/images/logo1.png" alt="homepage" class="dark-logo" />
+                                }
+                            </b>
+                            <!--End Logo icon -->
+                            <!-- Logo text -->
+                            <span class="logo-text">
+                                @if (code == "22")
+                                {
+                                }
+                                else
+                                {
+                                    <!-- dark Logo text -->
+                                    <img src="~/Content/assets/images/logotext1.png" alt="homepage" class="dark-logo" />
+                                }
+                                <!-- Light Logo text -->
+                                <img src="~/Content/assets/images/logo-light-text.png" class="light-logo" alt="homepage" />
+                            </span>
+                        </a>
+                    </div>
+                    <!-- ============================================================== -->
+                    <!-- End Logo -->
+                    <!-- ============================================================== -->
+                    <!-- ============================================================== -->
+                    <!-- Toggle which is visible on mobile only -->
+                    <!-- ============================================================== -->
+                    <a class="topbartoggler d-block d-md-none waves-effect waves-light" href="javascript:void(0)"
+                       data-toggle="collapse" data-target="#navbarSupportedContent"
+                       aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="ti-more"></i>
                     </a>
                 </div>
-            </div>
-        </aside>
-
-        <!-- CONTENT AREA -->
-        <main class="flex-grow flex flex-col min-w-0 bg-slate-50 dark:bg-midnight-950 transition-all overflow-hidden">
-
-            <!-- HEADER -->
-            <header class="h-16 bg-white dark:bg-midnight-900 border-b border-slate-200 dark:border-midnight-800 flex items-center justify-between px-6 sticky top-0 z-40">
-                <div class="flex items-center space-x-6">
-                    <button onclick="toggleSidebar()" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-midnight-800 text-slate-600 dark:text-slate-400">
-                        <i data-lucide="menu" class="w-6 h-6"></i>
-                    </button>
-
-                    <!-- TOP NAVIGATION MASTERS -->
-                    <nav class="hidden lg:flex items-center space-x-1">
-                        <!-- Employee Master Setup -->
-                        @{ if (Session["NameTitle"] != null || Session["DepartmentMas"] != null || Session["DesignationMas"] != null || Session["PosView"] != null || Session["QualiDocMas"] != null || Session["Docview"] != null)
-                            {
-                                <div class="relative group">
-                                    <button class="flex items-center space-x-1 px-4 py-2 rounded-lg text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-midnight-800">
-                                        <span>Employee Master</span>
-                                        <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400"></i>
-                                    </button>
-                                    <div class="header-dropdown w-64 bg-white dark:bg-midnight-900 border border-slate-200 dark:border-midnight-800 rounded-xl shadow-2xl py-2 mt-1">
-                                        @if (Session["NameTitle"]?.ToString() == "True")
-                                        {<a href="@Url.Action("ViewAllTitleMas", "Master")" class="block px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-midnight-800">Name Title Master</a>}
-                                        @if (Session["DepartmentMas"]?.ToString() == "True")
+                <!-- ============================================================== -->
+                <!-- End Logo -->
+                <!-- ============================================================== -->
+                <div class="navbar-collapse collapse" id="navbarSupportedContent">
+                    <!-- ============================================================== -->
+                    <!-- toggle and nav items -->
+                    <!-- ============================================================== -->
+                    <ul class="navbar-nav float-left mr-auto ml-3 pl-1">
+                        <!-- ============================================================== -->
+                        <!-- create new -->
+                        <!-- ============================================================== -->
+                        @*Emplyee master drop down menu*@
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-arrow-down"> </i> Employee Master Setup
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                @{ if (Session["NameTitle"] != null)
+                                    {
+                                        string TitleMas = Session["NameTitle"].ToString();
+                                        if (TitleMas == "True")
                                         {
-                                            <a href="@Url.Action("ViewAllDept", "Master")" class="block px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-midnight-800">Department Master</a>
-                                            <a href="@Url.Action("NewDeptMapping", "Master")" class="block px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-midnight-800">Department Mapping</a>
+                                            <a class="dropdown-item" href="@Url.Action("ViewAllTitleMas", "Master")">Name Title Master</a>
                                         }
-                                        @if (Session["DesignationMas"]?.ToString() == "True")
-                                        {<a href="@Url.Action("ViewAllDesignationMas", "Master")" class="block px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-midnight-800">Designation Master</a>}
-                                        @if (Session["PosView"]?.ToString() == "True")
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
+
+                                @{ if (Session["DepartmentMas"] != null)
+                                    {
+                                        string Dept = Session["DepartmentMas"].ToString();
+                                        if (Dept == "True")
                                         {
-                                            <a href="@Url.Action("ViewDesiQuali", "Master")" class="block px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-midnight-800">Designation Qual</a>
-                                            <a href="@Url.Action("ViewPosCategory", "Master")" class="block px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-midnight-800">Position Category</a>
+                                            <a class="dropdown-item" href="@Url.Action("ViewAllDept", "Master")">Department Master</a>
                                         }
-                                    </div>
-                                </div>
-                            }}
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
+                                @{ if (Session["DepartmentMas"] != null)
+                                    {
+                                        string Dept1 = Session["DepartmentMas"].ToString();
+                                        if (Dept1 == "True")
+                                        {
+                                            <a class="dropdown-item" href="@Url.Action("NewDeptMapping", "Master")">Department Mapping</a>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
+                                @{ if (Session["DesignationMas"] != null)
+                                    {
+                                        string Desi = Session["DesignationMas"].ToString();
+                                        if (Desi == "True")
+                                        {
+                                            <a class="dropdown-item" href="@Url.Action("ViewAllDesignationMas", "Master")">Designation Master</a>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
+                                @{ if (Session["PosView"] != null)
+                                    {
+                                        string PossiMas = Session["PosView"].ToString();
+                                        if (PossiMas == "True")
+                                        {
+                                            <a class="dropdown-item" href="@Url.Action("ViewDesiQuali", "Master")">Designation qualification Master</a>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
+                                @{ if (Session["Pdview"] != null)
+                                    {
+                                        string Pdview = Session["PosView"].ToString();
+                                        if (Pdview == "True")
+                                        {
+                                            <a class="dropdown-item" href="@Url.Action("ViewDesiSetting", "Master")">Designation setting Master</a>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
+                                @{ if (Session["QualiDocMas"] != null)
+                                    {
+                                        string Quali = Session["QualiDocMas"].ToString();
+                                        if (Quali == "True")
+                                        {
+                                            <a class="dropdown-item" href="@Url.Action("ViewAllQualificationMas", "Master")">Qualification Master</a>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
+                                @{ if (Session["Docview"] != null)
+                                    {
+                                        string Docview = Session["Docview"].ToString();
+                                        if (Docview == "True")
+                                        {
+                                            <a class="dropdown-item" href="@Url.Action("ViewAllDoc", "Master")">Document Master</a>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
+                                @{ if (Session["PosView"] != null)
+                                    {
+                                        string Pos = Session["PosView"].ToString();
+                                        if (Pos == "True")
+                                        {
+                                            <a class="dropdown-item" href="@Url.Action("ViewPosCategory", "Master")">Position category Master</a>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
+                                @{ if (Session["Pdview"] != null)
+                                    {
+                                        string Pdview = Session["Pdview"].ToString();
+                                        if (Pdview == "True")
+                                        {
+                                            <a class="dropdown-item" href="@Url.Action("ViewAllMap", "Master")">Position Designation Mapping Master</a>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
 
-                        <!-- User Master Setup -->
-                        @{ if (Session["GpMaster"] != null || Session["ViewGpMaster"] != null || Session["AssignUserPerMas"] != null || Session["ViewAllEmpUser"] != null)
-                            {
-                                <div class="relative group">
-                                    <button class="flex items-center space-x-1 px-4 py-2 rounded-lg text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-midnight-800">
-                                        <span>User Master</span>
-                                        <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400"></i>
-                                    </button>
-                                    <div class="header-dropdown w-64 bg-white dark:bg-midnight-900 border border-slate-200 dark:border-midnight-800 rounded-xl shadow-2xl py-2 mt-1">
-                                        @if (Session["GpMaster"]?.ToString() == "True")
-                                        {<a href="@Url.Action("CreateNewGp", "Group")" class="block px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-midnight-800">Create Group Master</a>}
-                                        @if (Session["AssignUserPerMas"]?.ToString() == "True")
-                                        {<a href="@Url.Action("AssignNewUserPermission", "UserPermission")" class="block px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-midnight-800">Assign User Permission</a>}
-                                        @if (Session["ViewAllEmpUser"]?.ToString() == "True")
-                                        {<a href="@Url.Action("EmpUserView", "UserPermission")" class="block px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-midnight-800">View All Employee Users</a>}
-                                    </div>
-                                </div>
-                            }}
+                                @{ if (Session["Psview"] != null)
+                                    {
+                                        string psv = Session["Psview"].ToString();
+                                        if (psv == "True")
+                                        {
+                                            <a class="dropdown-item" href="@Url.Action("Index", "SkillMarksMapping")">Position Skill Marks Mapping Master</a>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
+                                @{ if (Session["Pdocview"] != null)
+                                    {
+                                        string pdview = Session["Pdocview"].ToString();
+                                        if (pdview == "True")
+                                        {
+                                            <a class="dropdown-item" href="@Url.Action("ViewAllDocMap", "Master")">Position & Document Mapping Master</a>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
+                                @{ if (Session["Pdocview"] != null)
+                                    {
+                                        string pdview = Session["Pdocview"].ToString();
+                                        if (pdview == "True")
+                                        {
+                                            <a class="dropdown-item" href="@Url.Action("ViewOtherDoc", "Master")">Other Document Master</a>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
 
-                        <!-- Assessment Master -->
-                        @{ if (Session["Asqview"] != null || Session["AssNew"] != null)
-                            {
-                                <div class="relative group">
-                                    <button class="flex items-center space-x-1 px-4 py-2 rounded-lg text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-midnight-800">
-                                        <span>Assessment Master</span>
-                                        <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400"></i>
-                                    </button>
-                                    <div class="header-dropdown w-64 bg-white dark:bg-midnight-900 border border-slate-200 dark:border-midnight-800 rounded-xl shadow-2xl py-2 mt-1">
-                                        @if (Session["Asqview"]?.ToString() == "True")
-                                        {<a href="@Url.Action("ViewAllQuest", "Assesment")" class="block px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-midnight-800">View All Questions</a>}
-                                        @if (Session["AssNew"]?.ToString() == "True")
-                                        {<a href="@Url.Action("AssignNewAssement", "Assesment")" class="block px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-midnight-800">Assign New Master</a>}
-                                    </div>
-                                </div>
-                            }}
-                    </nav>
+
+                            </div>
+                        </li>
+                        @*user master drop down menu*@
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-arrow-down"> </i> User Master Setup
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <div class="dropdown-divider"></div>
+                                @{if (Session["GpMaster"] != null)
+                                    {
+                                        string CreateGp = Session["GpMaster"].ToString();
+                                        if (CreateGp == "True")
+                                        {
+                                            <a class="dropdown-item" href="@Url.Action("CreateNewGp", "Group")">Create Group Master</a>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
+                                @{ if (Session["ViewGpMaster"] != null)
+                                    {
+                                        string ViewAllGp = Session["ViewGpMaster"].ToString();
+                                        if (ViewAllGp == "True")
+                                        {
+                                            <a class="dropdown-item" href="@Url.Action("ViewAllGroup", "Group")">View Group Master</a>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
+                                <div class="dropdown-divider"></div>
+                                @{ if (Session["CreatePerMas"] != null)
+                                    {
+                                        string CreatePMaster = Session["CreatePerMas"].ToString();
+                                        if (CreatePMaster == "True")
+                                        {
+                                            <a class="dropdown-item" href="@Url.Action("CreatePMaster", "PermissionMaster")">Create Permission Master</a>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
+                                @{ if (Session["ViewPerMas"] != null)
+                                    {
+                                        string ViewAllPMaster = Session["ViewPerMas"].ToString();
+                                        if (ViewAllPMaster == "True")
+                                        {
+                                            <a class="dropdown-item" href="@Url.Action("ViewAllPMaster", "PermissionMaster")">View Permission Master</a>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
+                                <div class="dropdown-divider"></div>
+                                @{ if (Session["AssignUserPerMas"] != null)
+                                    {
+                                        string AssignPer = Session["AssignUserPerMas"].ToString();
+                                        if (AssignPer == "True")
+                                        {
+                                            <a class="dropdown-item" href="@Url.Action("AssignNewUserPermission", "UserPermission")">Assign User Permission</a>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
+                                @{ if (Session["ViewUserPerMas"] != null)
+                                    {
+                                        string ViewUsrPer = Session["ViewUserPerMas"].ToString();
+                                        if (ViewUsrPer == "True")
+                                        {
+                                            <a class="dropdown-item" href="@Url.Action("ViewAllUserPermissionEmp", "UserPermission")">View All User Permission</a>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
+                                <div class="dropdown-divider"></div>
+                                @{
+                                    if (Session["ViewAllEmpUser"] != null)
+                                    {
+                                        string ViewUsrPer = Session["ViewAllEmpUser"].ToString();
+                                        if (ViewUsrPer == "True")
+                                        {
+                                            <a class="dropdown-item" href="@Url.Action("EmpUserView", "UserPermission")">View All employee users</a>
+                                        }
+                                    }
+
+                                }
+                                <div class="dropdown-divider"></div>
+                                @{
+                                    if (Session["ViewAllEmpUser"] != null)
+                                    {
+                                        string ViewUsrPer = Session["ViewAllEmpUser"].ToString();
+                                        if (ViewUsrPer == "True")
+                                        {
+                                            <a class="dropdown-item" href="@Url.Action("ConsultantUserView", "UserPermission")">View All consultant users</a>
+                                        }
+                                    }
+                                }
+                            </div>
+                        </li>
+                        @*Assesment Master Drop down Menu*@
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-arrow-down"> </i> Employee assesment Master Setup
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                @{ if (Session["Asqview"] != null)
+                                    {
+                                        string Assview = Session["Asqview"].ToString();
+                                        if (Assview == "True")
+                                        {
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="@Url.Action("ViewAllQuest", "Assesment")">View All Question master</a>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
+                                @{ if (Session["AssNew"] != null)
+                                    {
+                                        string Assnew = Session["AssNew"].ToString();
+                                        if (Assnew == "True")
+                                        {
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="@Url.Action("AssignNewAssement", "Assesment")">Assign new assesment master</a>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
+                            </div>
+                        </li>
+                    </ul>
+
+                    <!-- ============================================================== -->
+                    <!-- Right side toggle and nav items -->
+                    <!-- ============================================================== -->
+                    <ul class="navbar-nav float-right">
+                        <!-- ============================================================== -->
+                        <!-- ============================================================== -->
+                        <!-- User profile and search -->
+                        <!-- ============================================================== -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown"
+                               aria-haspopup="true" aria-expanded="false">
+                                <span class="ml-2 d-none d-lg-inline-block">
+                                    @{if (Session["Compname"] != null)
+                                        {
+                                            <label style="color:black"><span> @Session["Compname"].ToString()</span></label>
+                                        }
+                                    }
+                                </span>
+                                &nbsp;&nbsp;
+                                @if (Session["ProfilePic"] != null)
+                                {
+                                    <img src="~/Content/Uploads/EmpUserProfile/@Session["ProfilePic"].ToString()" alt="" class="rounded-circle" width="40" />
+                                }
+                                @*<h3 class="rounded-circle" @Html.Label("userimage") width="40"></h3>*@
+                                @*@{HttpSessionState session = HttpContext.Current.Session;
+                                    DateTime? sstart=session[Session.Keys.]}*@
+                                <span class="ml-2 d-none d-lg-inline-block">
+                                    @{if (Session["descript"] != null)
+                                        {
+                                            <span>Hello,</span> <span class="text-dlh5ark">@Html.Label(@Session["descript"].ToString())</span> <i data-feather="chevron-down" class="svg-icon"></i>
+                                        }
+                                        else
+                                        {
+                                            Html.RenderAction("_SessionError1", "Home");
+                                        }
+                                    }
+                                </span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right user-dd animated flipInY">
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="@Url.Action("ChangeProfile", "Home")">
+                                    <i class="EditButton mr-2 ml-1 fa fa-edit"></i>
+                                    Change Profile Picture
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="@Url.Action("ChangePassword", "Home")">
+                                    <i class="EditButton mr-2 ml-1 fa fa-edit"></i>
+                                    Change Password
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="@Url.Action("Index", "Home")">
+                                    <i data-feather="power"
+                                       class="svg-icon mr-2 ml-1"></i>
+                                    Logout
+                                </a>
+                                <div class="dropdown-divider"></div>
+                            </div>
+                        </li>
+                        <!-- ============================================================== -->
+                        <!-- User profile and search -->
+                        <!-- ============================================================== -->
+                    </ul>
                 </div>
+            </nav>
+        </header>
+        <!-- ============================================================== -->
+        <!-- End Topbar header -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+        <aside class="left-sidebar" data-sidebarbg="skin6">
+            <!-- Sidebar scroll-->
+            <div class="scroll-sidebar" data-sidebarbg="skin6">
+                <!-- Sidebar navigation-->
+                <nav class="sidebar-nav" style="color:black">
+                    <ul id="sidebarnav">
+                        <li class="sidebar-item">
+                            <a class="sidebar-link sidebar-link" href="@Url.Action("Index", "Dashboard")"
+                               aria-expanded="false">
+                                <i data-feather="home" class="feather-icon"></i><span class="hide-menu">Dashboard</span>
+                            </a>
+                        </li>
 
-                <div class="flex items-center space-x-5">
-                    <!-- Theme Toggle -->
-                    <button id="theme-toggle" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-midnight-800 text-slate-600 dark:text-slate-400 transition-colors">
-                        <i data-lucide="sun" id="sun-icon" class="w-5 h-5 hidden"></i>
-                        <i data-lucide="moon" id="moon-icon" class="w-5 h-5"></i>
-                    </button>
 
-                    <!-- Profile Section -->
-                    <div class="relative group cursor-pointer flex items-center space-x-3 pl-4 border-l border-slate-200 dark:border-midnight-800">
-                        <div class="text-right hidden sm:block">
-                            <p class="text-xs text-slate-400 font-bold uppercase tracking-tighter">Welcome,</p>
-                            <p class="text-sm font-extrabold text-slate-800 dark:text-slate-100">@Session["descript"]</p>
-                        </div>
-                        <div class="w-10 h-10 rounded-full border-2 border-white dark:border-midnight-800 bg-slate-200 dark:bg-midnight-800 overflow-hidden shadow-lg">
-                            @if (Session["ProfilePic"] != null)
+                        <li class="list-divider"></li>
+                        @*Change session Start Meu*@
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="@Url.Action("AadhaarSearch", "DashBoard")">
+                                <i class="fa fa-search">
+                                    <span class="hide-menu" style="color:black;font-size:larger;font-weight:900;font-style:oblique">SearchAadhaarNo</span>
+                                </i>
+                            </a>
+                        </li>
+
+                        <li class="list-divider"></li>
+                        @{if (Session["MainAdmin"] != null || Session["ChangeBranch"] != null)
                             {
-                                <img src="~/Content/Uploads/EmpUserProfile/@Session["ProfilePic"].ToString()" class="w-full h-full object-cover" />
+                                //int id;
+                                string IsAdmin = Session["MainAdmin"].ToString();
+                                string ChangeBranch = Session["ChangeBranch"].ToString();
+                                if (IsAdmin == "True" || ChangeBranch == "True")
+                                {
+                                    <li class="sidebar-item">
+                                        <a class="sidebar-link has-arrow" href="javascript:void(0)"
+                                           aria-expanded="false">
+                                            <i class="fas fa-road"></i><span class="hide-menu">Change Branch</span>
+                                        </a>
+                                        <ul aria-expanded="false" class="collapse  first-level base-level-line">
+
+                                            <li class="sidebar-item">
+                                                <a href="@Url.Action("ChangeSession", "Home", new { id = 15 })" class="sidebar-link">
+                                                    <span class="hide-menu">
+                                                        IFSH
+                                                    </span>
+                                                </a>
+                                            </li>
+                                            <li class="sidebar-item">
+                                                <a href="@Url.Action("ChangeSession", "Home", new { id = 3 })" class="sidebar-link">
+                                                    <span class="hide-menu">
+                                                        IISH Phase-1
+                                                    </span>
+                                                </a>
+                                            </li>
+                                            <li class="sidebar-item">
+                                                <a href="@Url.Action("ChangeSession", "Home", new { id = 4 })" class="sidebar-link">
+                                                    <span class="hide-menu">
+                                                        Indus Hospital
+                                                    </span>
+                                                </a>
+                                            </li>
+                                            <li class="sidebar-item">
+                                                <a href="@Url.Action("ChangeSession", "Home", new { id = 14 })" class="sidebar-link">
+                                                    <span class="hide-menu">
+                                                        IIH Derabassi
+                                                    </span>
+                                                </a>
+                                            </li>
+                                            <li class="sidebar-item">
+                                                <a href="@Url.Action("ChangeSession", "Home", new { id = 2 })" class="sidebar-link">
+                                                    <span class="hide-menu">
+                                                        Indus Hygiea
+                                                    </span>
+                                                </a>
+                                            </li>
+                                            <li class="sidebar-item">
+                                                <a href="@Url.Action("ChangeSession", "Home", new { id = 16 })" class="sidebar-link">
+                                                    <span class="hide-menu">
+                                                        KS HomeCare
+                                                    </span>
+                                                </a>
+                                            </li>
+                                            <li class="sidebar-item">
+                                                <a href="@Url.Action("ChangeSession", "Home", new { id = 21 })" class="sidebar-link">
+                                                    <span class="hide-menu">
+                                                        Mehndiratta
+                                                    </span>
+                                                </a>
+                                            </li>
+                                            <li class="sidebar-item">
+                                                <a href="@Url.Action("ChangeSession", "Home", new { id = 22 })" class="sidebar-link">
+                                                    <span class="hide-menu">
+                                                        VellMed Tricity
+                                                    </span>
+                                                </a>
+                                            </li>
+                                            <li class="sidebar-item">
+                                                <a href="@Url.Action("ChangeSession", "Home", new { id = 23 })" class="sidebar-link">
+                                                    <span class="hide-menu">
+                                                        MyHospital
+                                                    </span>
+                                                </a>
+                                            </li>
+                                            <li class="sidebar-item">
+                                                <a href="@Url.Action("ChangeSession", "Home", new { id = 24 })" class="sidebar-link">
+                                                    <span class="hide-menu">
+                                                        KS Pharma
+                                                    </span>
+                                                </a>
+                                            </li>
+                                            <li class="sidebar-item">
+                                                <a href="@Url.Action("ChangeSession", "Home", new { id = 25 })" class="sidebar-link">
+                                                    <span class="hide-menu">
+                                                        Velmed
+                                                    </span>
+                                                </a>
+                                            </li>
+                                            <li class="sidebar-item">
+                                                <a href="@Url.Action("ChangeSession", "Home", new { id = 26 })" class="sidebar-link">
+                                                    <span class="hide-menu">
+                                                        Panchkula
+                                                    </span>
+                                                </a>
+                                            </li>
+
+                                        </ul>
+                                    </li>
+                                    <li class="list-divider"></li>
+                                }
                             }
                             else
                             {
-                                <div class="w-full h-full flex items-center justify-center text-slate-400"><i data-lucide="user"></i></div>
+                                Html.RenderAction("_SessionError1", "Home");
                             }
-                        </div>
+                        }
+                        @{if ((Session["Requisition"] != null))
+                            {
+                                string NewAss = Session["Requisition"].ToString();
+                                if (NewAss == "True")
+                                {
+                                    <li class="sidebar-item">
+                                        <a class="sidebar-link has-arrow" href="javascript:void(0)"
+                                           aria-expanded="false">
+                                            <i class="fas fa-retweet"></i><span class="hide-menu">Requisition Corner</span>
+                                        </a>
+                                        <ul aria-expanded="false" class="collapse  first-level base-level-line">
+                                            <li class="sidebar-item">
+                                                <a href="@Url.Action("NewRequisition", "Assesment")" class="sidebar-link">
+                                                    <span class="hide-menu">
+                                                        New Requisition
+                                                    </span>
+                                                </a>
+                                            </li>
 
-                        <!-- Profile Dropdown -->
-                        <div class="absolute right-0 top-full mt-2 w-60 bg-white dark:bg-midnight-900 border border-slate-200 dark:border-midnight-800 rounded-2xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 py-3 z-50">
-                            <div class="px-5 py-2 border-b border-slate-50 dark:border-midnight-800 mb-2">
-                                <p class="text-[10px] font-bold text-primary-600 uppercase tracking-widest">Account Settings</p>
-                            </div>
-                            <a href="@Url.Action("ChangeProfile", "Home")" class="flex items-center px-5 py-2.5 text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-midnight-800">
-                                <i data-lucide="user" class="w-4 h-4 mr-4 text-slate-400"></i> Edit Profile
-                            </a>
-                            <a href="@Url.Action("ChangePassword", "Home")" class="flex items-center px-5 py-2.5 text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-midnight-800">
-                                <i data-lucide="key" class="w-4 h-4 mr-4 text-slate-400"></i> Change Password
-                            </a>
-                            <div class="my-2 border-t border-slate-50 dark:border-midnight-800"></div>
-                            <a href="@Url.Action("Index", "Home")" class="flex items-center px-5 py-2.5 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 font-bold">
-                                <i data-lucide="log-out" class="w-4 h-4 mr-4"></i> Sign Out
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </header>
 
-            <!-- BODY CONTAINER -->
-            <div class="p-8 overflow-y-auto" style="height: calc(100vh - 4rem);">
-                <div class="max-w-[1600px] mx-auto">
-                    @RenderBody()
-                </div>
+                                            <li class="sidebar-item">
+                                                <a href="@Url.Action("ViewAllReq", "Assesment")" class="sidebar-link">
+                                                    <span class="hide-menu">
+                                                        View ALL Requisition
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                }
+                            }
+                        }
+                        <li class="list-divider"></li>
+
+                        <li class="sidebar-item">
+                            <a class="sidebar-link has-arrow" href="javascript:void(0)"
+                               aria-expanded="false">
+                                <i class="fas fa-list-alt"></i><span class="hide-menu">Assessment Corner</span>
+                            </a>
+                            <ul aria-expanded="false" class="collapse  first-level base-level-line">
+                                @{if (Session["AssNew"] != null)
+                                    {
+                                        string NewAss = Session["AssNew"].ToString();
+                                        if (NewAss == "True")
+                                        {
+                                            <li class="sidebar-item">
+                                                <a href="@Url.Action("AssignNewAssement", "Assesment")" class="sidebar-link">
+                                                    <span class="hide-menu">
+                                                        New assesment
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
+                                @{if (Session["AssAssignedView"] != null)
+                                    {
+                                        string Assigned = Session["AssAssignedView"].ToString();
+                                        if (Assigned == "True")
+                                        {
+                                            <li class="sidebar-item">
+                                                <a href="@Url.Action("ViewAssignedAss", "Assesment")" class="sidebar-link">
+                                                    <span class="hide-menu">
+                                                        Assigned assesment
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
+
+                                @{if (Session["AssStatus"] != null)
+                                    {
+                                        string AssS = Session["AssStatus"].ToString();
+                                        if (AssS == "True")
+                                        {
+                                            <li class="sidebar-item">
+                                                <a href="@Url.Action("ViewAllAssStatus", "Assesment")" class="sidebar-link">
+                                                    <span class="hide-menu">
+                                                        Assesments Status
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
+                                @{if (Session["AssStatus"] != null)
+                                    {
+                                        string ViewDeactive = Session["AssStatus"].ToString();
+                                        if (ViewDeactive == "True")
+                                        {
+                                            <li class="sidebar-item">
+                                                <a href="@Url.Action("ViewAllDectiveAss", "Assesment")" class="sidebar-link">
+                                                    <span class="hide-menu">
+                                                        Deactivated
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
+                                @{if (Session["AllowDocUpload"] != null)
+                                    {
+                                        string AllowUpload = Session["AllowDocUpload"].ToString();
+                                        if (AllowUpload == "True")
+                                        {
+                                            <li class="sidebar-item">
+                                                <a href="@Url.Action("AllComAss", "Assesment")" class="sidebar-link">
+                                                    <span class="hide-menu">
+                                                        Allow upload
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
+
+                                @{if (Session["PendingDocView"] != null)
+                                    {
+                                        string PdocV = Session["PendingDocView"].ToString();
+                                        if (PdocV == "True")
+                                        {
+                                            <li class="sidebar-item">
+                                                <a href="@Url.Action("ViewAlluplodaed", "Assesment")" class="sidebar-link">
+                                                    <span class="hide-menu">
+                                                        Pending Uploads
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
+
+                                @{if (Session["AssCompletedView"] != null)
+                                    {
+                                        string CompV = Session["AssCompletedView"].ToString();
+                                        if (CompV == "True")
+                                        {
+
+                                            <li class="sidebar-item">
+                                                <a href="@Url.Action("ViewCompletedUploads", "Assesment")" class="sidebar-link">
+                                                    <span class="hide-menu">
+                                                        Completed Uploads
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
+                            </ul>
+                        </li>
+                        <li class="list-divider"></li>
+                        @*HR Start Menu*@
+                        <li class="sidebar-item">
+                            <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
+                                <i class="fas fa-user"></i><span class="hide-menu">For New Employee</span>
+                            </a>
+                            <ul aria-expanded="false" class="collapse first-level base-level-line">
+
+                                @{if (Session["ViewNewlyEmp"] != null)
+                                    {
+                                        string View = Session["ViewNewlyEmp"].ToString();
+                                        if (View == "True")
+                                        {
+                                            <li class="sidebar-item">
+                                                <a href="@Url.Action("ViewAllEmp", "AddNewEmp")" class="sidebar-link">
+                                                    <span class="hide-menu">
+                                                        View Newly Emp.
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
+                                @{if (Session["AssignAuthor"] != null)
+                                    {
+                                        string Assign = Session["AssignAuthor"].ToString();
+                                        if (Assign == "True")
+                                        {
+                                            <li class="sidebar-item">
+                                                <a href="@Url.Action("NewAuthorization", "Authorization")" class="sidebar-link">
+                                                    <span class="hide-menu">
+                                                        Assign authorization
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
+                                @{if (Session["AuthorizedView"] != null)
+                                    {
+                                        string Authorized = Session["AuthorizedView"].ToString();
+                                        if (Authorized == "True")
+                                        {
+                                            <li class="sidebar-item">
+                                                <a href="@Url.Action("ViewAuthorisedEmp", "Authorization")" class="sidebar-link">
+                                                    <span class="hide-menu">
+                                                        View Authorized Emp.
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
+                            </ul>
+                            @*end Of New Employee Section*@
+
+                            @*Authoriser Start Menu*@
+                            @*<li class="nav-small-cap"><span class="hide-menu">Application</span></li>*@
+                        <li class="list-divider"></li>
+
+                        <li class="sidebar-item">
+                            <a class="sidebar-link has-arrow" href="javascript:void(0)"
+                               aria-expanded="false">
+                                <i class="fas fa-couch"></i><span class="hide-menu">Authorizer Corner</span>
+                            </a>
+                            <ul aria-expanded="false" class="collapse  first-level base-level-line">
+                                @{if (Session["PendingAuthor"] != null)
+                                    {
+                                        string Authorizer = Session["PendingAuthor"].ToString();
+                                        if (Authorizer == "True")
+                                        {
+                                            <li class="sidebar-item">
+                                                <a href="@Url.Action("ViewAssignAuthorization", "Authorization")" class="sidebar-link">
+                                                    <span class="hide-menu">
+                                                        Pending Authorization.
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
+                            </ul>
+                        <li class="list-divider"></li>
+
+                        <li class="sidebar-item">
+                            <a class="sidebar-link has-arrow" href="javascript:void(0)"
+                               aria-expanded="false">
+                                <i class="fas fa-arrow-circle-down"></i><span class="hide-menu">HR Corner</span>
+                            </a>
+                            <ul aria-expanded="false" class="collapse  first-level base-level-line">
+                                @{if (Session["ViewActiveEmp"] != null)
+                                    {
+                                        string ViewActive = Session["ViewActiveEmp"].ToString();
+                                        if (ViewActive == "True")
+                                        {
+                                            <li class="sidebar-item">
+                                                <a href="@Url.Action("ActiveView", "DashBoard")" class="sidebar-link">
+                                                    <span class="hide-menu">
+                                                        View All Active Emp.
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
+                                @{if (Session["DeactiveEmp"] != null)
+                                    {
+                                        string DeactiveEmp = Session["DeactiveEmp"].ToString();
+                                        if (DeactiveEmp == "True")
+                                        {
+                                            <li class="sidebar-item">
+                                                <a href="@Url.Action("EmployeeDeactive", "Dashboard")" class="sidebar-link">
+                                                    <span class="hide-menu">
+                                                        Change Emp. Status
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
+                                @{if (Session["ViewLeftEmp"] != null)
+                                    {
+                                        string ViewLeft = Session["ViewLeftEmp"].ToString();
+                                        if (ViewLeft == "True")
+                                        {
+                                            <li class="sidebar-item">
+                                                <a href="@Url.Action("LeftView", "Dashboard")" class="sidebar-link">
+                                                    <span class="hide-menu">
+                                                        View Left Emp.
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
+                                @{if (Session["HrAdmin"] != null)
+                                    {
+                                        string HRadmin = Session["HrAdmin"].ToString();
+                                        if (HRadmin == "True")
+                                        {
+                                            <li class="sidebar-item">
+                                                <a href="@Url.Action("GenCodeExisting", "Authorization")" class="sidebar-link">
+                                                    <span class="hide-menu">
+                                                        Generate Emp Code.
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
+                                @{if (Session["HrAdmin"] != null)
+                                    {
+                                        string HRadmin = Session["HrAdmin"].ToString();
+                                        if (HRadmin == "True")
+                                        {
+                                            <li class="sidebar-item">
+                                                <a href="@Url.Action("PayrollEmployee", "Authorization")" class="sidebar-link">
+                                                    <span class="hide-menu">
+                                                        Payroll emp. list
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
+
+                                @{if (Session["HrAdmin"] != null)
+                                    {
+                                        string HRadmin = Session["HrAdmin"].ToString();
+                                        if (HRadmin == "True")
+                                        {
+                                            <li class="sidebar-item">
+                                                <a href="@Url.Action("IndexPayroll", "Authorization")" class="sidebar-link">
+                                                    <span class="hide-menu">
+                                                        By Pass Entry
+                                                    </span>
+                                                </a>
+                                            </li>
+
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
+                                @{if (Session["HrAdmin"] != null)
+                                    {
+                                        string HRadmin = Session["HrAdmin"].ToString();
+                                        if (HRadmin == "True")
+                                        {
+                                            <li class="sidebar-item">
+                                                <a href="@Url.Action("ViewByPassUpload", "Authorization")" class="sidebar-link">
+                                                    <span class="hide-menu">
+                                                        ByPass Upload
+                                                    </span>
+                                                </a>
+                                            </li>
+
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
+                                @{if (Session["HrAdmin"] != null)
+                                    {
+                                        string HRadmin = Session["HrAdmin"].ToString();
+                                        if (HRadmin == "True")
+                                        {
+                                            <li class="sidebar-item">
+                                                <a href="@Url.Action("AllByPassCodeEmp", "Authorization")" class="sidebar-link">
+                                                    <span class="hide-menu">
+                                                        ByPassUploaded
+                                                    </span>
+                                                </a>
+                                            </li>
+
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
+                                @{if (Session["HrAdmin"] != null)
+                                    {
+                                        string HRadmin = Session["HrAdmin"].ToString();
+                                        if (HRadmin == "True")
+                                        {
+                                            <li class="sidebar-item">
+                                                <a href="@Url.Action("ManPowerView", "Master",new { id = 0 })" class="sidebar-link">
+                                                    <span class="hide-menu">
+                                                        ManPower Detail
+                                                    </span>
+                                                </a>
+                                            </li>
+                                            <li class="sidebar-item">
+                                                <a href="@Url.Action("ViewAllDesignationMas", "Master")" class="sidebar-link">
+                                                    <span class="hide-menu">
+                                                        Department & Designation View
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
+                            </ul>
+                        </li>
+                        <li class="list-divider"></li>
+
+                        <li class="sidebar-item">
+                            <a class="sidebar-link has-arrow" href="javascript:void(0)"
+                               aria-expanded="false">
+                                <i class="fas fa-list"></i><span class="hide-menu">Certificate Corner</span>
+                            </a>
+                            <ul aria-expanded="false" class="collapse  first-level base-level-line">
+                                @*Start for offer master*@
+                                @{if (Session["MainAdmin"] != null)
+                                    {
+                                        string Madmin = Session["MainAdmin"].ToString();
+                                        if (Madmin == "True")
+                                        {
+                                            <li class="sidebar-item">
+                                                <a href="@Url.Action("IndexOfferMas", "Template")" class="sidebar-link">
+                                                    <span class="hide-menu">
+                                                        Offer Master
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
+                                @* For Experience Masters *@
+                                @{if (Session["MainAdmin"] != null)
+                                    {
+                                        string Madmin = Session["MainAdmin"].ToString();
+                                        if (Madmin == "True")
+                                        {
+                                            <li class="sidebar-item">
+                                                <a href="@Url.Action("IndexExperienceMas", "Template")" class="sidebar-link">
+                                                    <span class="hide-menu">
+                                                        Experience Master
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
+                                @*For internship master*@
+                                @{if (Session["MainAdmin"] != null)
+                                    {
+                                        string Madmin = Session["MainAdmin"].ToString();
+                                        if (Madmin == "True")
+                                        {
+                                            <li class="sidebar-item">
+                                                <a href="@Url.Action("IndexInterShip", "Template")" class="sidebar-link">
+                                                    <span class="hide-menu">
+                                                        Intership  Master
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
+                                @*For appointment Master*@
+                                @{if (Session["MainAdmin"] != null)
+                                    {
+                                        string Madmin = Session["MainAdmin"].ToString();
+                                        if (Madmin == "True")
+                                        {
+                                            <li class="sidebar-item">
+                                                <a href="@Url.Action("IndexAppointMas", "Template")" class="sidebar-link">
+                                                    <span class="hide-menu">
+                                                        Appointment  Master
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
+
+                                @* For new employee Offer Letter*@
+                                @{if (Session["MainAdmin"] != null || Session["HrAdmin"] != null)
+                                    {
+                                        string HRadmin = Session["HrAdmin"].ToString();
+                                        string MainAdmin = Session["MainAdmin"].ToString();
+                                        if (HRadmin == "True" || MainAdmin == "True")
+                                        {
+                                            <li class="sidebar-item">
+                                                <a href="@Url.Action("IndexEmpOfferLetter", "Template")" class="sidebar-link">
+                                                    <span class="hide-menu">
+                                                        Offer Letter
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
+                                @* For employee experience certificate *@
+                                @{if (Session["MainAdmin"] != null || Session["HrAdmin"] != null)
+                                    {
+                                        string HRadmin = Session["HrAdmin"].ToString();
+                                        string MainAdmin = Session["MainAdmin"].ToString();
+                                        if (HRadmin == "True" || MainAdmin == "True")
+                                        {
+                                            <li class="sidebar-item">
+                                                <a href="@Url.Action("ViewCurrentEmp", "Template")" class="sidebar-link">
+                                                    <span class="hide-menu">
+                                                        Current Experience
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
+                                @* For employee experience certificate *@
+                                @{if (Session["MainAdmin"] != null || Session["HrAdmin"] != null)
+                                    {
+                                        string HRadmin = Session["HrAdmin"].ToString();
+                                        string MainAdmin = Session["MainAdmin"].ToString();
+                                        if (HRadmin == "True" || MainAdmin == "True")
+                                        {
+                                            <li class="sidebar-item">
+                                                <a href="@Url.Action("ViewEmpExpAll", "Template")" class="sidebar-link">
+                                                    <span class="hide-menu">
+                                                        Experience Letter
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
+                                @* For employee intership certificate *@
+                                @{if (Session["MainAdmin"] != null || Session["HrAdmin"] != null)
+                                    {
+                                        string HRadmin = Session["HrAdmin"].ToString();
+                                        string MainAdmin = Session["MainAdmin"].ToString();
+                                        if (HRadmin == "True" || MainAdmin == "True")
+                                        {
+                                            <li class="sidebar-item">
+                                                <a href="@Url.Action("EmpIndexIntership", "Template")" class="sidebar-link">
+                                                    <span class="hide-menu">
+                                                        Internship Letter
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
+                                @* For employee Appointment certificate *@
+                                @{if (Session["MainAdmin"] != null || Session["HrAdmin"] != null)
+                                    {
+                                        string HRadmin = Session["HrAdmin"].ToString();
+                                        string MainAdmin = Session["MainAdmin"].ToString();
+                                        if (HRadmin == "True" || MainAdmin == "True")
+                                        {
+                                            <li class="sidebar-item">
+                                                <a href="@Url.Action("IndexEmpAppoint", "Template")" class="sidebar-link">
+                                                    <span class="hide-menu">
+                                                        Appointment Letter
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
+                                @{if (Session["ISVPHR"] != null || Session["HrAdmin"] != null)
+                                    {
+                                        string ISVP = Session["ISVPHR"].ToString();
+                                        string MainAdmin = Session["MainAdmin"].ToString();
+                                        if (ISVP == "True" || MainAdmin == "True")
+                                        {
+                                            <li class="sidebar-item">
+                                                <a href="@Url.Action("ConsultantRequest", "Dashboard")" class="sidebar-link">
+                                                    <span class="hide-menu">
+                                                        Consultant slips
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
+                            </ul>
+                        </li>
+                        @*Authoriser End Menu*@
+                        @*Consultant Corener*@
+                        <li class="list-divider"></li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link has-arrow" href="javascript:void(0)"
+                               aria-expanded="false">
+                                <i class="fas fa-user-md"></i><span class="hide-menu">Consultant Corner</span>
+                            </a>
+                            <ul aria-expanded="false" class="collapse first-level base-level-line">
+                                @{if (Session["ViewActiveEmp"] != null)
+                                    {
+                                        string ViewActive = Session["ViewActiveEmp"].ToString();
+                                        string ConsultantActive = "NA";
+                                        if (Session["ConsultantActive"] != null)
+                                        {
+                                            ConsultantActive = Session["ConsultantActive"].ToString();
+                                        }
+                                        if (ViewActive == "True" || ConsultantActive == "True")
+                                        {
+                                            if (ViewActive == "True" || ConsultantActive == "True")
+                                            {
+                                                <li class="sidebar-item">
+                                                    <a href="@Url.Action("Index", "Consultant")" class="sidebar-link">
+                                                        <span class="hide-menu">
+                                                            Active Consultants
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                            }
+                                            if (ViewActive == "True")
+                                            {
+                                                <li class="sidebar-item">
+                                                    <a href="@Url.Action("UploadConsultantDoc", "Consultant")" class="sidebar-link">
+                                                        <span class="hide-menu">
+                                                            Upload
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                            }
+                                            if (ViewActive == "True")
+                                            {
+                                                <li class="sidebar-item">
+                                                    <a href="@Url.Action("UploadedConsult", "Consultant")" class="sidebar-link">
+                                                        <span class="hide-menu">
+                                                            Completes Upload
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                            }
+                                            if (ViewActive == "True")
+                                            {
+                                                <li class="sidebar-item">
+                                                    <a href="@Url.Action("LeftIndex", "Consultant")" class="sidebar-link">
+                                                        <span class="hide-menu">
+                                                            Left Consultants
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                            }
+                                            if (ViewActive == "True")
+                                            {
+                                                <li class="sidebar-item">
+                                                    <a href="@Url.Action("ViewConsultantExpAll", "Consultant")" class="sidebar-link">
+                                                        <span class="hide-menu">
+                                                            Exp Letter
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
+
+                            </ul>
+                        </li>
+
+                        @*Leave Master Menu*@
+                        <li class="list-divider"></li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link has-arrow" href="javascript:void(0)"
+                               aria-expanded="false">
+                                <i class="fas fa-laptop"></i><span class="hide-menu">Leave Corner</span>
+                            </a>
+                            <ul aria-expanded="false" class="collapse first-level base-level-line">
+                                @{if (Session["MainAdmin"] != null || Session["HrAdmin"] != null)
+                                    {
+                                        string isAdmin = Session["MainAdmin"].ToString();
+                                        string isHRAdmin = Session["HrAdmin"].ToString();
+                                        string isHOD = Session["DeptHOD"].ToString();
+                                        if (isAdmin == "True")
+                                        {
+                                            <li class="sidebar-item">
+                                                <a href="@Url.Action("TypeIndex", "Leave")" class="sidebar-link">
+                                                    <span class="hide-menu">
+                                                        Leave Master
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        }
+                                        if (isAdmin == "True" || isHRAdmin == "True" || isHOD == "True")
+                                        {
+                                            <li class="sidebar-item">
+                                                <a href="@Url.Action("ApprovedLeave", "Dashboard")" class="sidebar-link">
+                                                    <span class="hide-menu">
+                                                        Approved Leave
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        }
+                                        if (isAdmin == "True" || isHRAdmin == "True" || isHOD == "True")
+                                        {
+                                            <li class="sidebar-item">
+                                                <a href="@Url.Action("LeaveStatus", "Dashboard")" class="sidebar-link">
+                                                    <span class="hide-menu">
+                                                        Leave Status
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        }
+                                        if (isAdmin == "True" || isHRAdmin == "True" || isHOD == "True")
+                                        {
+                                            <li class="sidebar-item">
+                                                <a href="@Url.Action("LeaveReport", "Dashboard")" class="sidebar-link">
+                                                    <span class="hide-menu">
+                                                        Leave Report
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Html.RenderAction("_SessionError1", "Home");
+                                    }
+                                }
+                            </ul>
+                        </li>
+                        @*Accounts Start Menu*@
+                        <li class="list-divider"></li>
+                        @{if (Session["Report1"] != null || Session["Report2"] != null)
+                            {
+                                string R1 = Session["Report1"].ToString();
+                                string R2 = Session["Report2"].ToString();
+                                if (R1 == "True" || R2 == "True")
+                                {
+                                    <li class="sidebar-item">
+                                        <a class="sidebar-link has-arrow" href="javascript:void(0)"
+                                           aria-expanded="false">
+                                            <i class="icon-notebook"></i><span class="hide-menu">Accounts Corner </span>
+                                        </a>
+                                        <ul aria-expanded="false" class="collapse  first-level base-level-line">
+
+                                            <li class="sidebar-item">
+                                                <a href="@Url.Action("AccountView", "Accounts")" class="sidebar-link">
+                                                    <span class="hide-menu">
+                                                        Datewise joining
+                                                    </span>
+                                                </a>
+                                            </li>
+                                            @*<li class="sidebar-item">
+                                                    <a href="@Url.Action("DeactiveView", "Accounts")" class="sidebar-link">
+                                                        <span class="hide-menu">
+                                                            Left Employee
+                                                        </span>
+                                                    </a>
+                                                </li>*@
+                                            <li class="sidebar-item">
+                                                <a href="@Url.Action("ActiveData", "Accounts")" class="sidebar-link">
+                                                    <span class="hide-menu">
+                                                        Active List
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                }
+                            }
+                        }
+
+                        @*DNB Start Menu*@
+
+                        @{if (Session["DNBCORNER"] != null || Session["DNBCORNER"] != null)
+                            {
+                                string FEEStructure = "False";
+                                string FEEVerification = "False";
+                                string DNBReporting = "False";
+
+                                string DNBACCESS = Session["DNBCORNER"].ToString();
+                                if (Session["FEE-STRUCTURE"] != null)
+                                {
+                                    FEEStructure = Session["FEE-STRUCTURE"].ToString();
+                                }
+                                if (Session["FEE-VERIFICATION"] != null)
+                                {
+                                    FEEVerification = Session["FEE-VERIFICATION"].ToString();
+                                }
+                                if (Session["DNB-REPORTING"] != null)
+                                {
+                                    DNBReporting = Session["DNB-REPORTING"].ToString();
+                                }
+                                if (DNBACCESS == "True")
+                                {
+
+                                    <li class="sidebar-item">
+                                        <a class="sidebar-link has-arrow" href="javascript:void(0)"
+                                           aria-expanded="false">
+                                            <i class="icon-user"></i><span class="hide-menu">DNB Corner </span>
+                                        </a>
+                                        <ul aria-expanded="false" class="collapse  first-level base-level-line">
+                                            @if (FEEStructure == "True")
+                                            {
+                                                <li class="sidebar-item">
+                                                    <a href="@Url.Action("DNbEmpList", "DNB")" class="sidebar-link">
+                                                        <span class="hide-menu">
+                                                            Fee structure
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                            }
+                                            @if (FEEVerification == "True")
+                                            {
+                                                <li class="sidebar-item">
+                                                    <a href="@Url.Action("FeeVerification", "DNB")" class="sidebar-link">
+                                                        <span class="hide-menu">
+                                                            Fee verification
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                            }
+                                            @if (DNBReporting == "True")
+                                            {
+                                                <li class="sidebar-item">
+                                                    <a href="@Url.Action("", "DNB")" class="sidebar-link">
+                                                        <span class="hide-menu">
+                                                            Reporting
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                            }
+                                        </ul>
+
+                                    </li>
+                                }
+                            }
+                        }
+                    </ul>
+                </nav>
+                <!-- End Sidebar navigation -->
             </div>
-
-            <!-- FOOTER -->
-            <footer class="py-4 px-8 border-t border-slate-100 dark:border-midnight-800 text-center text-xs text-slate-400 bg-white dark:bg-midnight-900 transition-colors">
-                <div class="flex items-center justify-center space-x-2">
-                    <span>&copy; @DateTime.Now.Year Indus Group</span>
-                    <span class="text-slate-200 dark:text-midnight-800">|</span>
-                    <a href="http://indussoftwareservices.com/" class="text-primary-600 dark:text-primary-400 font-bold hover:underline">Indus Software Services</a>
-                    <span class="text-slate-200 dark:text-midnight-800">|</span>
-                    <span>System v4.8</span>
-                </div>
+            <!-- End Sidebar scroll-->
+        </aside>
+        <!-- ============================================================== -->
+        <!-- End Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Page wrapper  -->
+        <!-- ============================================================== -->
+        <div class="page-wrapper">
+            <!-- ============================================================== -->
+            <!-- Bread crumb and right sidebar toggle -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- End Container fluid  -->
+            <!-- ============================================================== -->
+            <div>
+                @RenderBody()
+            </div>
+            <!-- ============================================================== -->
+            <!-- footer -->
+            <!-- ============================================================== -->
+            <footer class="footer text-center text-muted">
+                All Rights Reserved by Indus Group Designed and Developed by  <a href=@Url.Content("http://indussoftwareservices.com/") target="_blank">Indus Software Services.</a> Version-4.8_25.07.07
             </footer>
-        </main>
+            <!-- ============================================================== -->
+            <!-- End footer -->
+            <!-- ============================================================== -->
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Page wrapper  -->
+        <!-- ============================================================== -->
     </div>
+    <!-- ============================================================== -->
+    <!-- End Wrapper -->
+    <!-- ============================================================== -->
+    <!-- End Wrapper -->
+    <!-- ============================================================== -->
+    <!-- All Jquery -->
+    <!-- ============================================================== -->
+    <script src="/Content/assets/libs/jquery/jquery.min.js"></script>
+    <script src="~/Content/assets/libs/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="~/Content/assets/libs/popper.js/dist/esm/popper.min.js"></script>
+    <script src="~/Content/assets/libs/popper.js/dist/umd/popper.min.js"></script>
+    <script src="~/Content/assets/libs/popper.js/dist/popper.min.js"></script>
+    <script src="~/Content/assets/libs/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- apps -->
+    <!-- apps -->
+    <!--<script src="~/Content/dist/js/app-style-switcher.js"></script>-->
+    <script src="~/Content/dist/js/feather.min.js"></script>
+    <script src="~/Content/assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js"></script>
+    <script src="~/Content/dist/js/sidebarmenu.js"></script>
+    <script src="~/Content/dist/js/sidebarmenu.min.js"></script>
+    <!--Custom JavaScript -->
+    <script src="~/Content/dist/js/custom.min.js"></script>
+    <script src="~/Content/dist/js/custom.js"></script>
+    <script src="~/Content/dist/js/feather.min.js"></script>
+    <!--This page JavaScript -->
+    <script src="~/Content/assets/extra-libs/c3/d3.min.js"></script>
+    <script src="~/Content/assets/extra-libs/c3/c3.min.js"></script>
+    <script src="~/Content/assets/libs/chartist/dist/chartist.min.js"></script>
+    <script src="~/Content/assets/libs/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.min.js"></script>
+    <script src="~/Content/assets/extra-libs/jvector/jquery-jvectormap-2.0.2.min.js"></script>
+    <script src="~/Content/assets/extra-libs/jvector/jquery-jvectormap-world-mill-en.js"></script>
+    @*<script src="~/Content/dist/js/pages/dashboards/dashboard1.min.js"></script>*@
+    <!-- apps -->
+    <script src="~/Content/dist/js/app-style-switcher.js"></script>
+    <script src="~/Content/dist/js/feather.min.js"></script>
+    <script src="~/Content/dist/js/sidebarmenu.js"></script>
+    <script src="~/Content/assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js"></script>
+    <!--Date Tange Picker JS-->
+    <script src="~/Content/daterangepicker/daterangepicker.js"></script>
+    <!--Custom JavaScript-->
+    <script src="~/Content/dist/js/custom.min.js"></script>
+    @*validation query*@
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    @*Grid query*@
+    @*<script src="~/Scripts/jquery.jqGrid.js"></script>
+        <script src="~/Scripts/jquery.jqGrid.min.js"></script>*@
+    @*Datatables query*@
+    @*<script src="~/Content/DataTableUserDefine/DataTables-1.10.22/js/dataTables.bootstrap.js"></script>
+        <script src="~/Content/DataTableUserDefine/DataTables-1.10.22/js/dataTables.bootstrap.min.js"></script>
+        <script src="~/Content/DataTableUserDefine/DataTables-1.10.22/js/dataTables.bootstrap4.js"></script>
+        <script src="~/Content/DataTableUserDefine/DataTables-1.10.22/js/dataTables.bootstrap4.min.js"></script>
+        <script src="~/Content/DataTableUserDefine/DataTables-1.10.22/js/dataTables.foundation.js"></script>
+        <script src="~/Content/DataTableUserDefine/DataTables-1.10.22/js/dataTables.foundation.min.js"></script>
+        <script src="~/Content/DataTableUserDefine/DataTables-1.10.22/js/dataTables.jqueryui.js"></script>
+        <script src="~/Content/DataTableUserDefine/DataTables-1.10.22/js/dataTables.jqueryui.min.js"></script>
+        <script src="~/Content/DataTableUserDefine/DataTables-1.10.22/js/dataTables.semanticui.js"></script>
+        <script src="~/Content/DataTableUserDefine/DataTables-1.10.22/js/dataTables.semanticui.min.js"></script>
+        <script src="~/Content/DataTableUserDefine/DataTables-1.10.22/js/jquery.dataTables.js"></script>
+        <script src="~/Content/DataTableUserDefine/DataTables-1.10.22/js/jquery.dataTables.min.js"></script>
+        <script src="~/Content/DataTableUserDefine/datatables.js"></script>
+        <script src="~/Content/DataTableUserDefine/datatables.min.js"></script>*@
+    @*Date calender query*@
+    @*<script src="~/Content/assets/extra-libs/taskboard/js/jquery-ui.min.js"></script>*@
 
-    <!-- SCRIPTS -->
-    <script>
-        lucide.createIcons();
-
-        // Theme Toggle Logic
-        const html = document.documentElement;
-        const sunIcon = document.getElementById('sun-icon');
-        const moonIcon = document.getElementById('moon-icon');
-
-        const updateIcons = (isDark) => {
-            if (isDark) {
-                sunIcon.classList.remove('hidden');
-                moonIcon.classList.add('hidden');
-            } else {
-                sunIcon.classList.add('hidden');
-                moonIcon.classList.remove('hidden');
-            }
-        };
-
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            html.classList.add('dark');
-            updateIcons(true);
-        }
-
-        document.getElementById('theme-toggle').addEventListener('click', () => {
-            html.classList.toggle('dark');
-            const isDark = html.classList.contains('dark');
-            localStorage.theme = isDark ? 'dark' : 'light';
-            updateIcons(isDark);
-        });
-
-        // Sidebar Controls
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('-translate-x-full');
-            if (window.innerWidth >= 768) {
-                sidebar.classList.toggle('md:hidden');
-            }
-        }
-
-        function toggleSubmenu(id) {
-            const menu = document.getElementById(id);
-            const icon = document.getElementById(id + '-icon');
-            menu.classList.toggle('show');
-            icon.classList.toggle('rotate-90');
-        }
-    </script>
+    @*notify js references*@
+    @*<script src="~/Content/assets/libs/jquery/dist/notify.min.js"></script>*@
+    @Scripts.Render("~/bundles/jqueryval")
     @RenderSection("scripts", required: false)
+    <script>
+        setZoom(75); // Adjust the percentage as needed
+    </script>
 </body>
 </html>
+

@@ -246,6 +246,7 @@ namespace HRM.Controllers
                     // 5. Consumed Table Mapping
                     List<ConsumedLeaveMV> lvConsumedModel = new List<ConsumedLeaveMV>();
                     var raw = (getYourDetail.bitIsConsultant == true) ? hrentity.spGetConsumedConsultantLeave(empid).ToList().Select(x => new { x.leaveType, x.Leavecounter, x.decMaxDayPerYear, x.bitAllowYearHalfCheck }) : hrentity.spGetConsumedLeave(empid).ToList().Select(x => new { x.leaveType, x.Leavecounter, x.decMaxDayPerYear, x.bitAllowYearHalfCheck });
+                    //var raw1=
                     foreach (var r in raw) lvConsumedModel.Add(new ConsumedLeaveMV { LeaveType = r.leaveType, ConsumedCount = r.Leavecounter, IsHalfYearReached = r.bitAllowYearHalfCheck == true ? (r.Leavecounter >= (r.decMaxDayPerYear / 2)) : (r.Leavecounter >= r.decMaxDayPerYear) });
                     ViewBag.LeaveCounter = lvConsumedModel;
 

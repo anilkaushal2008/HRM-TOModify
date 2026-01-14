@@ -85,19 +85,11 @@ dab add "TblUserPermission" --source "[dbo].[tblUserPermission]" --fields.includ
 dab add "TblVpforward" --source "[dbo].[tblVPForward]" --fields.include "intid,fk_EmpID,dtForwarded,vchForwardBy,bitStatus,dtApproved,vchApprovedBy,bitCancel" --permissions "anonymous:*" 
 dab add "TblYearMaster" --source "[dbo].[tblYearMaster]" --fields.include "unID,vchYearName,dtStartDate,dtEndDate,bitIsActive" --permissions "anonymous:*" 
 @echo Adding views and tables without primary key
-@echo No primary key found for table/view 'tblBranchShiftMas', using first Id column (intid) as key field
-dab add "TblBranchShiftMaView" --source "[dbo].[tblBranchShiftMas]" --fields.include "intid,fk_empid,fk_oldBranchId,fk_newBranchId,dtShifted,vchShiftedBy,vchIpdUsed,vchHost,fk_UsedUserid" --source.type "view" --source.key-fields "intid" --permissions "anonymous:*" 
-@echo No primary key found for table/view 'tblDeletedData', using first Id column (TID) as key field
-dab add "TblDeletedDatumView" --source "[dbo].[tblDeletedData]" --fields.include "CLSN,Op,TID,begTime,TName,TSID" --source.type "view" --source.key-fields "TID" --permissions "anonymous:*" 
-@echo No primary key found for table/view 'tblDeleteRows', using first Id column (Transaction ID) as key field
-dab add "TblDeleteRowView" --source "[dbo].[tblDeleteRows]" --fields.include "Current LSN,Transaction ID,Operation,Context,AllocUnitName" --source.type "view" --source.key-fields "Transaction ID" --permissions "anonymous:*" 
 @echo Adding relationships
 dab update TblAssesmentQuestDetail --relationship TblAssQuestMa --target.entity TblAssQuestMa --cardinality one
 dab update TblAssQuestMa --relationship TblAssesmentQuestDetail --target.entity TblAssesmentQuestDetail --cardinality many
 dab update TblAssesmentQuestDetail --relationship TblUserMaster --target.entity TblUserMaster --cardinality one
 dab update TblUserMaster --relationship TblAssesmentQuestDetail --target.entity TblAssesmentQuestDetail --cardinality many
-dab update TblBranchShiftMa --relationship TblEmpAssesmentMa --target.entity TblEmpAssesmentMa --cardinality one
-dab update TblEmpAssesmentMa --relationship TblBranchShiftMa --target.entity TblBranchShiftMa --cardinality many
 dab update TblCity --relationship TblState --target.entity TblState --cardinality one
 dab update TblState --relationship TblCity --target.entity TblCity --cardinality many
 dab update TblConsultantDocDetail --relationship TblEmpAssesmentMa --target.entity TblEmpAssesmentMa --cardinality one
